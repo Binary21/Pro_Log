@@ -16,7 +16,7 @@ TokenList Lexer::tokenize(std::istream& input) {
     DictionarySetup(dictionary);
     
     string line = "";
-    string temp;
+    string temp = "";
 
     int lineValue = 1;
     // error check boolean
@@ -36,15 +36,16 @@ TokenList Lexer::tokenize(std::istream& input) {
             // entire loop
             else if (c == ':')
             {
+                // checks if string is empty, if not it adds it to the token list before
+                // addressing the new character
+                StringUpdate(temp, lineValue, tokenList);
                 if (i + 1 < line.length() && line[i + 1] == '-')
                 {
-                    StringUpdate(temp, lineValue, tokenList);
                     tokenList.emplace_back(TokenType::IMP, lineValue);
                     i++;
                 }
                 else
                 {
-                    StringUpdate(temp, lineValue, tokenList);
                     tokenList.emplace_back(TokenType::ERROR, lineValue);
                     error_break = true;
                     break;
@@ -81,6 +82,7 @@ TokenList Lexer::tokenize(std::istream& input) {
 // builds dictionary
 void Lexer::DictionarySetup(std::map<char, TokenType>& dictionary)
 {
+    // dictionary assignment
     dictionary['('] = TokenType::OPEN;
     dictionary[')'] = TokenType::CLOSE;
     dictionary['.'] = TokenType::END;
@@ -88,7 +90,7 @@ void Lexer::DictionarySetup(std::map<char, TokenType>& dictionary)
 }
 
 
-// adds strings to the token list
+// checks if string is empty, if not it adds it to the token list
 void Lexer::StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
 {
     if (!temp.empty())
