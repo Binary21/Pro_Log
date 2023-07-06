@@ -6,13 +6,14 @@ project(VTprolog CXX)
 
 # add source for library modules here
 set(LIB_SOURCE
-  Token.hpp Token.cpp
+  Token.hpp Token.cpp Lexer.cpp Lexer.hpp
 )
 
 # add source for library unit tests here
 set(LIB_TEST_SOURCE
   UnitTests.cpp
   TokenTests.cpp
+  LexerTests.cpp
 )
 
 # add source for tui modules here
@@ -86,17 +87,17 @@ else(Qt5_FOUND)
 endif()
 
 # executables without Qt dependency
-add_executable(unit_tests catch.hpp ${LIB_TEST_SOURCE} ${LIB_SOURCE})
+add_executable(unit_tests catch.hpp ${LIB_TEST_SOURCE} ${LIB_SOURCE} "Lexer.hpp")
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(unit_tests pthread)
 endif()
 
-add_executable(tui_test ${TUI_TEST_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE})
+add_executable(tui_test ${TUI_TEST_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE} "Lexer.hpp")
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(tui_test pthread)
 endif()
 
-add_executable(vtpl ${VTPL_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE})
+add_executable(vtpl ${VTPL_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE} "Lexer.hpp")
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(vtpl pthread)
 endif()
