@@ -23,7 +23,8 @@ TokenList Lexer::tokenize(std::istream& input) {
     bool error_break = false;
 
     // get each line from the input stream
-    while (getline(input, line)) {
+    while (getline(input, line)) 
+    {
         // parse each line itterably character by character
         for (size_t i = 0; i < line.length(); i++)
         {
