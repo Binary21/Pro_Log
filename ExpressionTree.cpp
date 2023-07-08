@@ -75,7 +75,7 @@ bool vtpl::isCompound(const ExpressionTreeNode& node)
 	return false;
 }
 
-size_t ExpressionTree::arity(const ExpressionTreeNode& node)
+size_t vtpl::arity(const ExpressionTreeNode& node)
 {
 	size_t childLength = node.children.size();
 	return childLength;
