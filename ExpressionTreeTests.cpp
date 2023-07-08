@@ -17,26 +17,26 @@ TEST_CASE("")
 	SECTION("Single Node")
 	{
 		ExpressionTree tree;
-		ExpressionTreeNode atom1 = tree.makeAtom("F");
+		ExpressionTreeNode atom1 = makeAtom("F");
 		REQUIRE(tree.toString() == "NONE");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::ATOM);
 	}
 	SECTION("Two Nodes")
 	{
 		ExpressionTree tree;
-		ExpressionTreeNode atom2 = tree.makeAtom("A");
+		ExpressionTreeNode atom2 = makeAtom("A");
 		std::list<ExpressionTreeNode> arguments = { atom2 };
-		ExpressionTreeNode atom1 = tree.makeCompound("F", arguments);
+		ExpressionTreeNode atom1 = makeCompound("F", arguments);
 		tree.setRootNode(atom1);
 		REQUIRE(tree.toString() == "F(A)");
 	}
 	SECTION("1 Parent node 2 Children nodes")
 	{
 		ExpressionTree tree;
-		ExpressionTreeNode atom2 = tree.makeAtom("A");
-		ExpressionTreeNode atom3 = tree.makeAtom("B");
+		ExpressionTreeNode atom2 = makeAtom("A");
+		ExpressionTreeNode atom3 = makeAtom("B");
 		std::list<ExpressionTreeNode> arguments = { atom2, atom3 };
-		ExpressionTreeNode atom1 = tree.makeCompound("F", arguments);
+		ExpressionTreeNode atom1 = makeCompound("F", arguments);
 		tree.setRootNode(atom1);
 		REQUIRE(tree.toString() == "F(A, B)");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::COMPOUND);
@@ -44,15 +44,15 @@ TEST_CASE("")
 	SECTION("1 Parent node 2 Children nodes")
 	{
 		ExpressionTree tree;
-		ExpressionTreeNode atomA = tree.makeAtom("A");
-		ExpressionTreeNode atomB = tree.makeAtom("B");
-		ExpressionTreeNode atomC = tree.makeAtom("C");
+		ExpressionTreeNode atomA = makeAtom("A");
+		ExpressionTreeNode atomB = makeAtom("B");
+		ExpressionTreeNode atomC = makeAtom("C");
 		std::list<ExpressionTreeNode> arguments = { atomB, atomC };
-		ExpressionTreeNode atomH = tree.makeCompound("H", arguments);
+		ExpressionTreeNode atomH = makeCompound("H", arguments);
 		arguments = { atomA };
-		ExpressionTreeNode atomG = tree.makeCompound("G", arguments);
+		ExpressionTreeNode atomG = makeCompound("G", arguments);
 		arguments = { atomG, atomH };
-		ExpressionTreeNode atomF = tree.makeCompound("F", arguments);
+		ExpressionTreeNode atomF = makeCompound("F", arguments);
 		tree.setRootNode(atomF);
 		REQUIRE(tree.toString() == "F(G(A), H(B, C))");
 		REQUIRE(atomF.type == ExpressionTreeNodeType::COMPOUND);
@@ -61,9 +61,9 @@ TEST_CASE("")
 	SECTION("Emplace Test")
 	{
 		ExpressionTree tree;
-		ExpressionTreeNode atomA = tree.makeAtom("A");
-		ExpressionTreeNode atomB = tree.makeAtom("B");
-		ExpressionTreeNode atomC = tree.makeAtom("C");
+		ExpressionTreeNode atomA = makeAtom("A");
+		ExpressionTreeNode atomB = makeAtom("B");
+		ExpressionTreeNode atomC = makeAtom("C");
 		atomA.children.emplace_back(atomB);
 		atomA.children.emplace_back(atomC);
 		tree.setRootNode(atomA);

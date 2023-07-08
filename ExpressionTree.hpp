@@ -29,10 +29,6 @@ namespace vtpl {
         ExpressionTree();
         std::string toString();
 
-        ExpressionTreeNode makeAtom(const std::string& value);
-        ExpressionTreeNode makeVariable(const std::string& value);
-        ExpressionTreeNode makeCompound(const std::string& predicate, const std::list<ExpressionTreeNode>& arguments);
-
         static size_t arity(const ExpressionTreeNode& node);
         void setRootNode(const ExpressionTreeNode& node);
 
@@ -46,6 +42,10 @@ namespace vtpl {
     bool isAtom(const ExpressionTreeNode& node);
     bool isVariable(const ExpressionTreeNode& node);
     bool isCompound(const ExpressionTreeNode& node);
+
+    ExpressionTreeNode makeAtom(const std::string& value);
+    ExpressionTreeNode makeVariable(const std::string& value);
+    ExpressionTreeNode makeCompound(const std::string& predicate, const std::list<ExpressionTreeNode>& arguments);
 
 } // namespace vtpl
 
