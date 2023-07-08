@@ -5,6 +5,7 @@
 #include <list>
 #include <ostream>
 #include <string>
+#include <functional>
 
 namespace vtpl {
 
@@ -15,35 +16,39 @@ namespace vtpl {
         COMPOUND
     };
 
+    
+
     struct ExpressionTreeNode {
         ExpressionTreeNodeType type;
         std::string contents;
         std::list<ExpressionTreeNode> children;
 
+        
+
         ExpressionTreeNode() : type(ExpressionTreeNodeType::NONE), contents("") {}
         ExpressionTreeNode(ExpressionTreeNodeType t, const std::string& c) : type(t), contents(c) {}
+
+        bool operator==(const ExpressionTreeNode rhs) const;
     };
 
-    class ExpressionTreeNodeHasher
+    struct ExpressionTreeNodeHasher
     {
-        std::size_t operator()(const vtpl::ExpressionTreeNode& node) const;
+        std::size_t operator()(const ExpressionTreeNode& node) const;
     };
 
     class ExpressionTree {
     public:
         ExpressionTree();
-        std::string toString() const;
-        bool operator==(const ExpressionTree rhs) const;
-        
+        std::string toString();
         void setRootNode(const ExpressionTreeNode& node);
-        
 
     private:
-        
-        std::string toStringHelper(const ExpressionTreeNode& node) const;
+        std::string toStringHelper(const ExpressionTreeNode& node);
+
         ExpressionTreeNode rootNode;
-        
+       
     };
+    std::string treeToString(const ExpressionTreeNode& node);
     bool isNone(const ExpressionTreeNode& node);
     bool isAtom(const ExpressionTreeNode& node);
     bool isVariable(const ExpressionTreeNode& node);
@@ -54,9 +59,6 @@ namespace vtpl {
     ExpressionTreeNode makeCompound(const std::string& predicate, const std::list<ExpressionTreeNode>& arguments);
 
     size_t arity(const ExpressionTreeNode& node);
-
-    std::string treeToString(const ExpressionTreeNode& node);
-
 
 } // namespace vtpl
 

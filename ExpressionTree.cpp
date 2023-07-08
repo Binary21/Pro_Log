@@ -51,7 +51,7 @@ bool vtpl::isNone(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::NONE)
 		return true;
-	return false;;
+	return false;
 }
 
 bool vtpl::isAtom(const ExpressionTreeNode& node)
@@ -81,20 +81,25 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 	return childLength;
 }
 
-bool vtpl::ExpressionTree::operator==(const ExpressionTree rhs) const
+string ExpressionTree::toString()
 {
-	return this->toString() == rhs.toString();
-}
-
-
-
-std::string ExpressionTree::toString() const
-{
-	std::string output = toStringHelper(rootNode);
+	string output = toStringHelper(rootNode);
+	cout << output << endl;
 	return output;
 }
 
-std::string vtpl::ExpressionTree::toStringHelper(const ExpressionTreeNode& node) const
+bool ExpressionTreeNode::operator==(const ExpressionTreeNode rhs) const
+{
+	if (type != rhs.type)
+		return false;
+	if (contents != rhs.contents)
+		return false;
+	if (children != rhs.children)
+		return false;
+	return true;
+}
+
+string ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
 {
 	string result;
 	if (isNone(node))
@@ -122,37 +127,23 @@ std::string vtpl::ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
 	}
 	return result;
 }
-std::string vtpl::treeToString(const ExpressionTreeNode& node)
-{
-	std::string result;
-	switch (node.type) {
-	case vtpl::ExpressionTreeNodeType::NONE:
-		result += "NONE";
-		break;
-	case vtpl::ExpressionTreeNodeType::ATOM:
-		result += "ATOM " + node.contents;
-		break;
-	case vtpl::ExpressionTreeNodeType::VARIABLE:
-		result += "VARIABLE " + node.contents;
-		break;
-	case vtpl::ExpressionTreeNodeType::COMPOUND:
-		result += "COMPOUND " + node.contents + " [";
-		for (const auto& child : node.children) {
-			result += treeToString(child) + ", ";
-		}
-		result += "]";
-		break;
-	}
-	return result;
-}
-void vtpl::ExpressionTree::setRootNode(const ExpressionTreeNode& node)
+
+void ExpressionTree::setRootNode(const ExpressionTreeNode& node)
 {
 	rootNode = node;
 }
 
-std::size_t vtpl::ExpressionTreeNodeHasher::operator()(const vtpl::ExpressionTreeNode& node) const
+std::size_t ExpressionTreeNodeHasher::operator()(const ExpressionTreeNode& node) const
 {
-	std::string node_str = treeToString(node);
-	std::hash<std::string> str_hash;
-	return str_hash(node_str);
+	std::string tree_string = treeToString(node);
+	return std::hash<std::string>{}(tree_string);
+}
+
+std::string vtpl::treeToString(const ExpressionTreeNode& node) 
+{
+	std::string result = node.contents;
+	for (const auto& child : node.children) {
+		result += "(" + treeToString(child) + ")";
+	}
+	return result;
 }

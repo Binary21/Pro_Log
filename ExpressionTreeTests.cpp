@@ -72,19 +72,11 @@ TEST_CASE("")
 
 	SECTION("Equal operator")
 	{
-		ExpressionTree tree1, tree2;
 		ExpressionTreeNode atom1A= makeAtom("A");
-		ExpressionTreeNode atom1B = makeAtom("B");
 		ExpressionTreeNode atom2A = makeAtom("A");
-		ExpressionTreeNode atom2B = makeAtom("B");
-		list<ExpressionTreeNode> argument1 = { atom1A, atom1B };
-		list<ExpressionTreeNode> argument2 = { atom2A, atom2B };
-
-		ExpressionTreeNode atom1C = makeCompound("F", argument1);
-		ExpressionTreeNode atom2C = makeCompound("F", argument2);
-		tree1.setRootNode(atom1C);
-		tree2.setRootNode(atom2C);
-		REQUIRE(tree1 == tree2);
+		REQUIRE(atom1A == atom2A);
+		ExpressionTreeNodeHasher hasher;
+		REQUIRE(hasher(atom1A) == hasher(atom2A));
 	}
 
 }
