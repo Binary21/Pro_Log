@@ -18,7 +18,7 @@ TEST_CASE("")
 	{
 		ExpressionTree tree;
 		ExpressionTreeNode atom1 = makeAtom("F");
-		REQUIRE(tree.toString() == "NONE");
+		REQUIRE(atom1.toString() == "F");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::ATOM);
 	}
 	SECTION("Two Nodes")
@@ -28,7 +28,7 @@ TEST_CASE("")
 		std::list<ExpressionTreeNode> arguments = { atom2 };
 		ExpressionTreeNode atom1 = makeCompound("F", arguments);
 		tree.setRootNode(atom1);
-		REQUIRE(tree.toString() == "F(A)");
+		REQUIRE(atom1.toString() == "F(A)");
 	}
 	SECTION("1 Parent node 2 Children nodes")
 	{
@@ -38,7 +38,7 @@ TEST_CASE("")
 		std::list<ExpressionTreeNode> arguments = { atom2, atom3 };
 		ExpressionTreeNode atom1 = makeCompound("F", arguments);
 		tree.setRootNode(atom1);
-		REQUIRE(tree.toString() == "F(A, B)");
+		REQUIRE(atom1.toString() == "F(A, B)");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::COMPOUND);
 	}
 	SECTION("1 Parent node 2 Children nodes")
@@ -54,7 +54,7 @@ TEST_CASE("")
 		arguments = { atomG, atomH };
 		ExpressionTreeNode atomF = makeCompound("F", arguments);
 		tree.setRootNode(atomF);
-		REQUIRE(tree.toString() == "F(G(A), H(B, C))");
+		REQUIRE(atomF.toString() == "F(G(A), H(B, C))");
 		REQUIRE(atomF.type == ExpressionTreeNodeType::COMPOUND);
 		REQUIRE(isCompound(atomF));
 	}
@@ -67,7 +67,7 @@ TEST_CASE("")
 		atomA.children.emplace_back(atomB);
 		atomA.children.emplace_back(atomC);
 		tree.setRootNode(atomA);
-		tree.toString();
+		atomA.toString();
 	}
 
 	SECTION("Equal operator")
@@ -78,5 +78,8 @@ TEST_CASE("")
 		ExpressionTreeNodeHasher hasher;
 		REQUIRE(hasher(atom1A) == hasher(atom2A));
 	}
+
+	ExpressionTreeNode atom = makeAtom("A");
+	REQUIRE(atom.toString() == "A");
 
 }

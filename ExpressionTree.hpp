@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <list>
-#include <ostream>
+#include <iostream>
 #include <string>
 #include <functional>
 
@@ -22,7 +22,7 @@ namespace vtpl {
         ExpressionTreeNodeType type;
         std::string contents;
         std::list<ExpressionTreeNode> children;
-
+        std::string toString();
         
 
         ExpressionTreeNode() : type(ExpressionTreeNodeType::NONE), contents("") {}
@@ -39,11 +39,10 @@ namespace vtpl {
     class ExpressionTree {
     public:
         ExpressionTree();
-        std::string toString();
+        
         void setRootNode(const ExpressionTreeNode& node);
 
     private:
-        std::string toStringHelper(const ExpressionTreeNode& node);
 
         ExpressionTreeNode rootNode;
        

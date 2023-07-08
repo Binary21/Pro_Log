@@ -81,26 +81,9 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 	return childLength;
 }
 
-string ExpressionTree::toString()
+string ExpressionTreeNode::toString()
 {
-	string output = toStringHelper(rootNode);
-	cout << output << endl;
-	return output;
-}
-
-bool ExpressionTreeNode::operator==(const ExpressionTreeNode rhs) const
-{
-	if (type != rhs.type)
-		return false;
-	if (contents != rhs.contents)
-		return false;
-	if (children != rhs.children)
-		return false;
-	return true;
-}
-
-string ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
-{
+	ExpressionTreeNode node = *this;
 	string result;
 	if (isNone(node))
 	{
@@ -114,18 +97,29 @@ string ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
 	{
 		result += node.contents + "(";
 		bool firstArgument = true;
-		for (const ExpressionTreeNode& child : node.children)
+		for (ExpressionTreeNode& child : node.children)
 		{
 			if (!firstArgument)
 			{
 				result += ", ";
 			}
-			result += toStringHelper(child);
+			result += child.toString();
 			firstArgument = false;
 		}
 		result += ")";
 	}
 	return result;
+}
+
+bool ExpressionTreeNode::operator==(const ExpressionTreeNode rhs) const
+{
+	if (type != rhs.type)
+		return false;
+	if (contents != rhs.contents)
+		return false;
+	if (children != rhs.children)
+		return false;
+	return true;
 }
 
 void ExpressionTree::setRootNode(const ExpressionTreeNode& node)
