@@ -3,7 +3,8 @@
 #include <string>
 #include <iostream>
 
-
+using namespace vtpl;
+using namespace std;
 
 ExpressionTree::ExpressionTree()
 {
@@ -15,6 +16,17 @@ ExpressionTreeNode ExpressionTree::makeAtom(const string& value)
 	ExpressionTreeNode atom;
 	atom.type = ExpressionTreeNodeType::ATOM;
 	atom.contents = value;
+
+	if (!atom.children.empty())
+	{
+		atom.type = ExpressionTreeNodeType::COMPOUND;
+	}
+
+	if (atom.contents.empty())
+	{
+		atom.type = ExpressionTreeNodeType::NONE;
+	}
+
 	return atom;
 }
 
@@ -35,28 +47,28 @@ ExpressionTreeNode ExpressionTree::makeCompound(const string& predicate, const l
 	return compound;
 }
 
-bool ExpressionTree::isNone(const ExpressionTreeNode& node) 
+bool vtpl::isNone(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::NONE)
 		return true;
 	return false;
 }
 
-bool ExpressionTree::isAtom(const ExpressionTreeNode& node)
+bool vtpl::isAtom(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::ATOM)
 		return true;
 	return false;
 }
 
-bool ExpressionTree::isVariable(const ExpressionTreeNode& node)
+bool vtpl::isVariable(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::VARIABLE)
 		return true;
 	return false;
 }
 
-bool ExpressionTree::isCompound(const ExpressionTreeNode& node)
+bool vtpl::isCompound(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::COMPOUND)
 		return true;
@@ -110,3 +122,4 @@ void ExpressionTree::setRootNode(const ExpressionTreeNode& node)
 {
 	rootNode = node;
 }
+

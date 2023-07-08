@@ -56,5 +56,18 @@ TEST_CASE("")
 		tree.setRootNode(atomF);
 		REQUIRE(tree.toString() == "F(G(A), H(B, C))");
 		REQUIRE(atomF.type == ExpressionTreeNodeType::COMPOUND);
+		REQUIRE(isCompound(atomF));
 	}
+	SECTION("Emplace Test")
+	{
+		ExpressionTree tree;
+		ExpressionTreeNode atomA = tree.makeAtom("A");
+		ExpressionTreeNode atomB = tree.makeAtom("B");
+		ExpressionTreeNode atomC = tree.makeAtom("C");
+		atomA.children.emplace_back(atomB);
+		atomA.children.emplace_back(atomC);
+		tree.setRootNode(atomA);
+		tree.toString();
+	}
+
 }
