@@ -51,7 +51,7 @@ bool vtpl::isNone(const ExpressionTreeNode& node)
 {
 	if (node.type == ExpressionTreeNodeType::NONE)
 		return true;
-	return false;
+	return false;;
 }
 
 bool vtpl::isAtom(const ExpressionTreeNode& node)
@@ -81,15 +81,20 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 	return childLength;
 }
 
-string ExpressionTree::toString() 
+bool vtpl::ExpressionTree::operator==(const ExpressionTree rhs) const
 {
-	string output = toStringHelper(rootNode);
-	cout << output << endl;
-	return output;
+	return this->toString() == rhs.toString();
 }
 
 
-string ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
+
+std::string ExpressionTree::toString() const
+{
+	std::string output = toStringHelper(rootNode);
+	return output;
+}
+
+std::string vtpl::ExpressionTree::toStringHelper(const ExpressionTreeNode& node) const
 {
 	string result;
 	if (isNone(node))
@@ -117,9 +122,37 @@ string ExpressionTree::toStringHelper(const ExpressionTreeNode& node)
 	}
 	return result;
 }
-
-void ExpressionTree::setRootNode(const ExpressionTreeNode& node)
+std::string vtpl::treeToString(const ExpressionTreeNode& node)
+{
+	std::string result;
+	switch (node.type) {
+	case vtpl::ExpressionTreeNodeType::NONE:
+		result += "NONE";
+		break;
+	case vtpl::ExpressionTreeNodeType::ATOM:
+		result += "ATOM " + node.contents;
+		break;
+	case vtpl::ExpressionTreeNodeType::VARIABLE:
+		result += "VARIABLE " + node.contents;
+		break;
+	case vtpl::ExpressionTreeNodeType::COMPOUND:
+		result += "COMPOUND " + node.contents + " [";
+		for (const auto& child : node.children) {
+			result += treeToString(child) + ", ";
+		}
+		result += "]";
+		break;
+	}
+	return result;
+}
+void vtpl::ExpressionTree::setRootNode(const ExpressionTreeNode& node)
 {
 	rootNode = node;
 }
 
+std::size_t vtpl::ExpressionTreeNodeHasher::operator()(const vtpl::ExpressionTreeNode& node) const
+{
+	std::string node_str = treeToString(node);
+	std::hash<std::string> str_hash;
+	return str_hash(node_str);
+}

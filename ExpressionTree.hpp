@@ -24,20 +24,26 @@ namespace vtpl {
         ExpressionTreeNode(ExpressionTreeNodeType t, const std::string& c) : type(t), contents(c) {}
     };
 
+    class ExpressionTreeNodeHasher
+    {
+        std::size_t operator()(const vtpl::ExpressionTreeNode& node) const;
+    };
+
     class ExpressionTree {
     public:
         ExpressionTree();
-        std::string toString();
-
+        std::string toString() const;
+        bool operator==(const ExpressionTree rhs) const;
         
         void setRootNode(const ExpressionTreeNode& node);
+        
 
     private:
-        std::string toStringHelper(const ExpressionTreeNode& node);
-
+        
+        std::string toStringHelper(const ExpressionTreeNode& node) const;
         ExpressionTreeNode rootNode;
+        
     };
-
     bool isNone(const ExpressionTreeNode& node);
     bool isAtom(const ExpressionTreeNode& node);
     bool isVariable(const ExpressionTreeNode& node);
@@ -48,6 +54,9 @@ namespace vtpl {
     ExpressionTreeNode makeCompound(const std::string& predicate, const std::list<ExpressionTreeNode>& arguments);
 
     size_t arity(const ExpressionTreeNode& node);
+
+    std::string treeToString(const ExpressionTreeNode& node);
+
 
 } // namespace vtpl
 
