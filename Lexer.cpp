@@ -7,7 +7,7 @@
 
 using namespace std;
 
-TokenList Lexer::tokenize(std::istream& input) {
+vtpl::TokenList vtpl::Lexer::tokenize(std::istream& input) {
     // intanciate return object
     TokenList tokenList;
 
@@ -81,7 +81,7 @@ TokenList Lexer::tokenize(std::istream& input) {
 }
 
 // builds dictionary
-void Lexer::DictionarySetup(std::map<char, TokenType>& dictionary)
+void vtpl::Lexer::DictionarySetup(std::map<char, TokenType>& dictionary)
 {
     // dictionary assignment
     dictionary['('] = TokenType::OPEN;
@@ -92,7 +92,7 @@ void Lexer::DictionarySetup(std::map<char, TokenType>& dictionary)
 
 
 // checks if string is empty, if not it adds it to the token list
-void Lexer::StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
+void vtpl::Lexer::StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
 {
     if (!temp.empty())
     {

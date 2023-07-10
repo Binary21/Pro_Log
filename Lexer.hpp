@@ -17,7 +17,9 @@
 #include <map>
 #include "Token.hpp"
 
-using namespace vtpl;
+namespace vtpl {
+
+
 
 class Lexer {
 public:
@@ -28,6 +30,7 @@ private:
 	void StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList);
 };
 
+};
 
 
 #endif
