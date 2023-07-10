@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include "Lexer.hpp"
+#include "Token.hpp"
 
 namespace vtpl {
 

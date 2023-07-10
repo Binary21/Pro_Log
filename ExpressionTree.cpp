@@ -1,3 +1,5 @@
+#include "Lexer.hpp"
+#include "Token.hpp"
 #include "ExpressionTree.hpp"
 #include <map>
 #include <string>

@@ -6,7 +6,12 @@ project(VTprolog CXX)
 
 # add source for library modules here
 set(LIB_SOURCE
-  Token.hpp Token.cpp Lexer.cpp Lexer.hpp ExpressionTree.cpp ExpressionTree.hpp
+  Token.hpp 
+  Token.cpp 
+  Lexer.cpp 
+  Lexer.hpp 
+  ExpressionTree.cpp 
+  ExpressionTree.hpp
 )
 
 # add source for library unit tests here

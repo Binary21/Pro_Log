@@ -29,7 +29,7 @@ BOOTSTRAP
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
-  config.vm.boot_timeout = 600
+  config.vm.boot_timeout = 6000
   
   config.vm.provider "virtualbox" do |vb|
      vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
