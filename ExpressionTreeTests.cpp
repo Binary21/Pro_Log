@@ -14,6 +14,18 @@ using namespace std;
 
 TEST_CASE("") 
 {
+	SECTION("Empty Node")
+	{
+		ExpressionTreeNode atom;
+		REQUIRE(isNone(atom));
+
+
+
+		// member function that does both of these things
+		// never actuall call emplace_back
+		//atom.children.emplace_back(atom2);
+		//atom.type = ExpressionTreeNodeType::COMPOUND;
+	}
 	SECTION("Single Node")
 	{
 		ExpressionTree tree;
@@ -38,7 +50,7 @@ TEST_CASE("")
 		std::list<ExpressionTreeNode> arguments = { atom2, atom3 };
 		ExpressionTreeNode atom1 = makeCompound("F", arguments);
 		tree.setRootNode(atom1);
-		REQUIRE(atom1.toString() == "F(A, B)");
+		REQUIRE(atom1.toString() == "F(A,B)");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::COMPOUND);
 	}
 	SECTION("1 Parent node 2 Children nodes")
@@ -54,7 +66,7 @@ TEST_CASE("")
 		arguments = { atomG, atomH };
 		ExpressionTreeNode atomF = makeCompound("F", arguments);
 		tree.setRootNode(atomF);
-		REQUIRE(atomF.toString() == "F(G(A), H(B, C))");
+		REQUIRE(atomF.toString() == "F(G(A),H(B,C))");
 		REQUIRE(atomF.type == ExpressionTreeNodeType::COMPOUND);
 		REQUIRE(isCompound(atomF));
 	}

@@ -13,7 +13,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
 
     // create and load dictionary
     map<char, TokenType> dictionary;
-    DictionarySetup(dictionary);
+    dictionarySetup(dictionary);
     
     string line = "";
     string temp = "";
@@ -39,7 +39,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
             {
                 // checks if string is empty, if not it adds it to the token list before
                 // addressing the new character
-                StringUpdate(temp, lineValue, tokenList);
+                stringUpdate(temp, lineValue, tokenList);
                 if (i + 1 < line.length() && line[i + 1] == '-')
                 {
                     tokenList.emplace_back(TokenType::IMP, lineValue);
@@ -64,7 +64,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
             // token list
             else if (dictionary.count(c))
             {
-                StringUpdate(temp, lineValue, tokenList);
+                stringUpdate(temp, lineValue, tokenList);
                 tokenList.emplace_back(dictionary[c], lineValue);
             }
         }
@@ -73,7 +73,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
         if (error_break)
             break;
         // add the last string in the line to the token list
-        StringUpdate(temp, lineValue, tokenList);
+        stringUpdate(temp, lineValue, tokenList);
         lineValue++;
     }
 
@@ -81,7 +81,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
 }
 
 // builds dictionary
-void vtpl::DictionarySetup(std::map<char, TokenType>& dictionary)
+void vtpl::dictionarySetup(std::map<char, TokenType>& dictionary)
 {
     // dictionary assignment
     dictionary['('] = TokenType::OPEN;
@@ -92,7 +92,7 @@ void vtpl::DictionarySetup(std::map<char, TokenType>& dictionary)
 
 
 // checks if string is empty, if not it adds it to the token list
-void vtpl::StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
+void vtpl::stringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
 {
     if (!temp.empty())
     {

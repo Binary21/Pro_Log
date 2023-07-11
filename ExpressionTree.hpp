@@ -26,7 +26,6 @@ namespace vtpl {
         std::list<ExpressionTreeNode> children;
         std::string toString();
         
-
         ExpressionTreeNode() : type(ExpressionTreeNodeType::NONE), contents("") {}
         ExpressionTreeNode(ExpressionTreeNodeType t, const std::string& c) : type(t), contents(c) {}
 
@@ -41,7 +40,6 @@ namespace vtpl {
     class ExpressionTree {
     public:
         ExpressionTree();
-        
         void setRootNode(const ExpressionTreeNode& node);
 
     private:

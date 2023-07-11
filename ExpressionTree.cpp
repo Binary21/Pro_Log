@@ -103,7 +103,7 @@ string ExpressionTreeNode::toString()
 		{
 			if (!firstArgument)
 			{
-				result += ", ";
+				result += ",";
 			}
 			result += child.toString();
 			firstArgument = false;

@@ -21,8 +21,8 @@ namespace vtpl {
 
 	TokenList tokenize(std::istream&);
 
-	void DictionarySetup(std::map<char, TokenType>&);
-	void StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList);
+	void dictionarySetup(std::map<char, TokenType>&);
+	void stringUpdate(std::string& temp, int& lineValue, TokenList& tokenList);
 
 class Lexer {
 public:
