@@ -82,4 +82,5 @@ TEST_CASE("")
 	ExpressionTreeNode atom = makeAtom("A");
 	REQUIRE(atom.toString() == "A");
 
+
 }

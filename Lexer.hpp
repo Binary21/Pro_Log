@@ -19,15 +19,17 @@
 
 namespace vtpl {
 
+	TokenList tokenize(std::istream&);
 
+	void DictionarySetup(std::map<char, TokenType>&);
+	void StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList);
 
 class Lexer {
 public:
-	TokenList tokenize(std::istream&);
+	
 
 private:
-	void DictionarySetup(std::map<char, TokenType>&);
-	void StringUpdate(std::string& temp, int& lineValue, TokenList& tokenList);
+	
 };
 
 };

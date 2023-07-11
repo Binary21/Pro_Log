@@ -18,7 +18,7 @@ TEST_CASE("Test empty stream", "[Lexer]") {
     std::string input = "";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 0);
   }
@@ -27,7 +27,7 @@ TEST_CASE("Test empty stream", "[Lexer]") {
     std::string input = "    \t    \r      ";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 0);
   }
@@ -38,7 +38,7 @@ TEST_CASE("test one string", "[Lexer]") {
   std::string input = "hello";
   std::istringstream iss(input);
 
-  TokenList tl = lexer.tokenize(iss);
+  TokenList tl = tokenize(iss);
 
   REQUIRE(tl.size() == 1);
 
@@ -51,7 +51,7 @@ TEST_CASE("test simple strings, one per line", "[Lexer]") {
   std::string input = "this\nis\na\nsequence\nof\nlines\n";
   std::istringstream iss(input);
 
-  TokenList tl = lexer.tokenize(iss);
+  TokenList tl = tokenize(iss);
 
   REQUIRE(tl.size() == 6);
   REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -75,7 +75,7 @@ example% with an inline comment
 
   std::istringstream iss(input);
 
-  TokenList tl = lexer.tokenize(iss);
+  TokenList tl = tokenize(iss);
 
   REQUIRE(tl.size() == 1);
   REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -91,7 +91,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "student.";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 2);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -105,7 +105,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "person(bob).";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 5);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -122,7 +122,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "person ( sue ) . \n";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 5);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -139,7 +139,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "person\n(\nsally\n)\n.\n";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 5);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -156,7 +156,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "person(bob:).";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 4);
     REQUIRE(tl.back().type() == TokenType::ERROR);
@@ -167,7 +167,7 @@ TEST_CASE("test fact lexing", "[Lexer]") {
     std::string input = "person(bob).\nperson(sue)";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 9);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -191,7 +191,7 @@ TEST_CASE("Test rules", "[Lexer]") {
     std::string input = "mortal(X) :- person(X).";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 10);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -215,7 +215,7 @@ mortal(X) :- person(X).
 )";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 30);
     REQUIRE(tl.back().type() != TokenType::ERROR);
@@ -259,7 +259,7 @@ mortal(X) :- person(X).
 )";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 15);
     REQUIRE(tl.back().type() == TokenType::ERROR);
@@ -289,7 +289,7 @@ mortal(X) :- person(X).
 )";
     std::istringstream iss(input);
 
-    TokenList tl = lexer.tokenize(iss);
+    TokenList tl = tokenize(iss);
 
     REQUIRE(tl.size() == 15);
     REQUIRE(tl.back().type() == TokenType::ERROR);
@@ -318,7 +318,7 @@ TEST_CASE("Test compound lexing", "[Lexer]") {
   std::string input = "a( b, c , ";
   std::istringstream iss(input);
 
-  TokenList tl = lexer.tokenize(iss);
+  TokenList tl = tokenize(iss);
 
   REQUIRE(tl.size() == 6);
   REQUIRE(tl.back().type() != TokenType::ERROR);
