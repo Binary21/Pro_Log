@@ -16,17 +16,15 @@ ExpressionTree::ExpressionTree()
 ExpressionTreeNode vtpl::makeAtom(const string& value)
 {
 	ExpressionTreeNode atom;
-	atom.type = ExpressionTreeNodeType::ATOM;
 	atom.contents = value;
 
-	if (!atom.children.empty())
-	{
-		atom.type = ExpressionTreeNodeType::COMPOUND;
-	}
-
-	if (atom.contents.empty())
+	if (atom.contents.empty() || isupper(atom.contents[0]))
 	{
 		atom.type = ExpressionTreeNodeType::NONE;
+	}
+	else
+	{
+		atom.type = ExpressionTreeNodeType::ATOM;
 	}
 
 	return atom;
@@ -35,17 +33,37 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 ExpressionTreeNode vtpl::makeVariable(const string& value)
 {
 	ExpressionTreeNode variable;
-	variable.type = ExpressionTreeNodeType::VARIABLE;
+	
 	variable.contents = value;
+
+	if (variable.contents.empty() || islower(variable.contents[0]))
+	{
+		variable.type = ExpressionTreeNodeType::NONE;
+	}
+	else
+	{
+		variable.type = ExpressionTreeNodeType::VARIABLE;
+	}
+
 	return variable;
 }
 
 ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<ExpressionTreeNode>& arguments)
 {
 	ExpressionTreeNode compound;
-	compound.type = ExpressionTreeNodeType::COMPOUND;
+	
 	compound.contents = predicate;
 	compound.children = arguments;
+
+	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0)
+	{
+		compound.type = ExpressionTreeNodeType::NONE;
+	}
+	else
+	{
+		compound.type = ExpressionTreeNodeType::COMPOUND;
+	}
+
 	return compound;
 }
 
