@@ -26,4 +26,15 @@ TEST_CASE("")
 		REQUIRE(true);
 
 	}
+	SECTION("")
+	{
+		string input = "bob()";
+		pair<ParseError, ExpressionTreeNode> error = parseExpression(input);
+		error.first.isSet();
+		error.first.message();
+		//ExpressionTreeNode tree = parseExpression(t1);
+		//tree.toString();
+		REQUIRE(true);
+
+	}
 }

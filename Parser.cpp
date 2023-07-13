@@ -1,5 +1,6 @@
 #include "Parser.hpp"
 
+#include <sstream>
 #include <string>
 #include <iostream>
 
@@ -89,7 +90,6 @@ string ParseError::message()
 
 pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const string& input)
 {
-	// use tokenizer to create a tokenlist then call all my helper functions
-	pair<ParseError, ExpressionTreeNode> temp;
-	return temp;
+	istringstream iss(input);
+	return parseExpression(tokenize(iss));
 }
