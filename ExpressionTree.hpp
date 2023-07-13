@@ -18,8 +18,6 @@ namespace vtpl {
         COMPOUND
     };
 
-    
-
     struct ExpressionTreeNode {
         ExpressionTreeNodeType type;
         std::string contents;
@@ -47,6 +45,7 @@ namespace vtpl {
         ExpressionTreeNode rootNode;
        
     };
+
     std::string treeToString(const ExpressionTreeNode& node);
     bool isNone(const ExpressionTreeNode& node);
     bool isAtom(const ExpressionTreeNode& node);

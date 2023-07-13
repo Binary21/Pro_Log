@@ -12,6 +12,8 @@ set(LIB_SOURCE
   Lexer.hpp 
   ExpressionTree.cpp 
   ExpressionTree.hpp
+  Parser.cpp
+  Parser.hpp
 )
 
 # add source for library unit tests here
@@ -20,6 +22,7 @@ set(LIB_TEST_SOURCE
   TokenTests.cpp
   LexerTests.cpp
   ExpressionTreeTests.cpp
+  ParserTests.cpp
 )
 
 # add source for tui modules here
