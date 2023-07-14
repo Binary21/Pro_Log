@@ -25,8 +25,9 @@ private:
 
 namespace vtpl {
 	pair<ParseError, ExpressionTreeNode> parseExpression(const TokenList& tokens);
-	ExpressionTreeNode parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error);
-	list<ExpressionTreeNode> parseChildren(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error);
+	ExpressionTreeNode parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth);
+	list<ExpressionTreeNode> parseChildren(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth);
+	void dictionarySetup(std::map<TokenType, char>&);
 
 
 	pair<ParseError, ExpressionTreeNode> parseExpression(const string& input);
