@@ -12,29 +12,54 @@ using namespace vtpl;
 
 TEST_CASE("")
 {
-	SECTION("")
+	pair<ParseError, ExpressionTreeNode> tree;
+	SECTION("Atom only")
 	{
-		string input = "bob()";
-		istringstream iss(input);
-
-		TokenList t1 = tokenize(iss);
-		pair<ParseError, ExpressionTreeNode> error = parseExpression(t1);
-		error.first.isSet();
-		error.first.message();
-		//ExpressionTreeNode tree = parseExpression(t1);
-		//tree.toString();
-		REQUIRE(true);
-
+		string input = "(f)";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f)");
 	}
-	SECTION("")
-	{
-		string input = "bob()";
-		pair<ParseError, ExpressionTreeNode> error = parseExpression(input);
-		error.first.isSet();
-		error.first.message();
-		//ExpressionTreeNode tree = parseExpression(t1);
-		//tree.toString();
-		REQUIRE(true);
 
+	SECTION("unary predicate - fact")
+	{
+		string input = "(a(b))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(b))");
+	}
+
+	SECTION("unary predicate - fact")
+	{
+		string input = "(a(X))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(X))");
+	}
+
+	SECTION("binary predicate - variable")
+	{
+		string input = "(a(b,X))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(b,X))");
+	}
+
+	SECTION("arbitrary tree 1")
+	{
+		string input = "(a(b(c,d),c,e(f,g,h)))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(b(c,d),c,e(f,g,h)))");
+	}
+
+	SECTION("arbitrary tree 2")
+	{
+		string input = "(a(b(c(Y,e),f),X))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(b(c(Y,e),f),X))");
+	}
+
+	SECTION("parse list of expressions")
+	{
+		string input = "(a(b(c(Y,e),f),X))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(a(b(c(Y,e),f),X))");
+		REQUIRE(tree.first.isSet() == false);
 	}
 }

@@ -11,7 +11,6 @@ using namespace vtpl;
 using namespace std;
 
 
-
 TEST_CASE("") 
 {
 	SECTION("Empty Node")
@@ -30,7 +29,7 @@ TEST_CASE("")
 	{
 		ExpressionTree tree;
 		ExpressionTreeNode atom1 = makeAtom("f");
-		REQUIRE(atom1.toString() == "f");
+		REQUIRE(atom1.toStringHelper() == "f");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::ATOM);
 	}
 	SECTION("Two Nodes")
@@ -40,7 +39,7 @@ TEST_CASE("")
 		std::list<ExpressionTreeNode> arguments = { atom2 };
 		ExpressionTreeNode atom1 = makeCompound("f", arguments);
 		tree.setRootNode(atom1);
-		REQUIRE(atom1.toString() == "f(a)");
+		REQUIRE(atom1.toStringHelper() == "f(a)");
 	}
 	SECTION("1 Parent node 2 Children nodes")
 	{
@@ -50,7 +49,7 @@ TEST_CASE("")
 		std::list<ExpressionTreeNode> arguments = { atom2, atom3 };
 		ExpressionTreeNode atom1 = makeCompound("f", arguments);
 		tree.setRootNode(atom1);
-		REQUIRE(atom1.toString() == "f(a,b)");
+		REQUIRE(atom1.toStringHelper() == "f(a,b)");
 		REQUIRE(atom1.type == ExpressionTreeNodeType::COMPOUND);
 	}
 	SECTION("1 Parent node 2 Children nodes")
@@ -66,7 +65,7 @@ TEST_CASE("")
 		arguments = { atomG, atomH };
 		ExpressionTreeNode atomF = makeCompound("f", arguments);
 		tree.setRootNode(atomF);
-		REQUIRE(atomF.toString() == "f(g(a),h(b,c))");
+		REQUIRE(atomF.toStringHelper() == "f(g(a),h(b,c))");
 		REQUIRE(atomF.type == ExpressionTreeNodeType::COMPOUND);
 		REQUIRE(isCompound(atomF));
 	}
@@ -81,7 +80,9 @@ TEST_CASE("")
 	}
 
 	ExpressionTreeNode atom = makeAtom("a");
-	REQUIRE(atom.toString() == "a");
+	REQUIRE(atom.toStringHelper() == "a");
 
-
+	ExpressionTreeNode variable = makeVariable("X");
+	REQUIRE(variable.toStringHelper() == "X");
 }
+
