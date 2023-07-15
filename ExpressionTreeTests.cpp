@@ -84,5 +84,9 @@ TEST_CASE("")
 
 	ExpressionTreeNode variable = makeVariable("X");
 	REQUIRE(variable.toStringHelper() == "X");
+
+	ExpressionTreeNode root;
+	root.type = ExpressionTreeNodeType::ROOT;
+	REQUIRE(isNone(root) == false);
 }
 

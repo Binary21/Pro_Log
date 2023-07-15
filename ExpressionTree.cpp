@@ -33,7 +33,7 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 ExpressionTreeNode vtpl::makeVariable(const string& value)
 {
 	ExpressionTreeNode variable;
-	
+
 	variable.contents = value;
 
 	if (variable.contents.empty() || islower(variable.contents[0]))
@@ -51,7 +51,7 @@ ExpressionTreeNode vtpl::makeVariable(const string& value)
 ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<ExpressionTreeNode>& arguments)
 {
 	ExpressionTreeNode compound;
-	
+
 	compound.contents = predicate;
 	compound.children = arguments;
 
@@ -138,6 +138,19 @@ string ExpressionTreeNode::toStringHelper()
 		}
 		result += ")";
 	}
+	else
+	{
+		bool firstArgument = true;
+		for (ExpressionTreeNode& child : node.children)
+		{
+			if (!firstArgument)
+			{
+				result += ",";
+			}
+			result += child.toStringHelper();
+			firstArgument = false;
+		}
+	}
 	return result;
 }
 
@@ -163,7 +176,7 @@ std::size_t ExpressionTreeNodeHasher::operator()(const ExpressionTreeNode& node)
 	return std::hash<std::string>{}(tree_string);
 }
 
-std::string vtpl::treeToString(const ExpressionTreeNode& node) 
+std::string vtpl::treeToString(const ExpressionTreeNode& node)
 {
 	std::string result = node.contents;
 	for (const auto& child : node.children) {

@@ -15,7 +15,8 @@ namespace vtpl {
         NONE,
         ATOM,
         VARIABLE,
-        COMPOUND
+        COMPOUND,
+        ROOT
     };
 
     struct ExpressionTreeNode {

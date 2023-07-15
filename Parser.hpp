@@ -12,8 +12,8 @@ using namespace std;
 
 class ParseError {
 public:
-	void set (const char * str = nullptr);
-	void set (const char* str, const vtpl::Token token);
+	void set(const char* str = nullptr);
+	void set(const char* str, const vtpl::Token token);
 
 	bool isSet() const noexcept;
 

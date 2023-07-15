@@ -16,7 +16,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
 	end--;
-	
+
 	if (current->type() == TokenType::OPEN)
 	{
 		if (end->type() == TokenType::CLOSE)
@@ -25,12 +25,22 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		}
 		current++;
 	}
+	ExpressionTreeNode rooter;
+	rooter.type = ExpressionTreeNodeType::ROOT;
+
 	root = parseList(current, end, error, depth, diffinput);
-	if (current != end)
+	if (current != end && current->type() != TokenType::COMMA)
 	{
 		error.set("error", *current);
 	}
-	return { error, root };
+	rooter.children = { root };
+	while (current->type() == TokenType::COMMA && depth == 0)
+	{
+		current++;
+		root = parseList(current, end, error, depth, diffinput);
+		rooter.children.emplace_back(root);
+	}
+	return { error, rooter };
 }
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
@@ -41,7 +51,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 	}
 	if (current->type() == TokenType::CLOSE && depth <= 0 && current != end)
 	{
-
+		
 		error.set("Missmatched Parenthesis", *current);
 		depth--;
 		if (isupper(value[0]))
@@ -85,7 +95,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		{
 			error.set("incorrenct comma location", *current);
 			if (isupper(value[0]))
-			{ 
+			{
 				return makeVariable(value);
 			}
 			return makeAtom(value);
@@ -119,7 +129,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 			}
 		}
 	}
-	
+
 	if (current != end) {
 		current++;
 		depth--;

@@ -77,12 +77,13 @@ TEST_CASE("Correct Tree formation")
 		REQUIRE(tree.second.toString() == "(a(b,c,d))");
 		REQUIRE(tree.first.isSet() == true);
 	}
+	
 }
 
 TEST_CASE("Error Tree formation")
 {
 	pair<ParseError, ExpressionTreeNode> tree;
-	
+
 	SECTION("Single atom")
 	{
 		string input = "(f)";
@@ -173,7 +174,7 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.first.isSet() == false);
 		tree.first.message();
 	}
-	/**
+
 	// Failed
 	SECTION("unary predicate - variable")
 	{
@@ -225,9 +226,9 @@ TEST_CASE("Error Tree formation")
 		string input = "(f(a),g(b),h(c))";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(f(a),g(b),h(c))");
-		REQUIRE(tree.first.isSet() == false);
 		tree.first.message();
-	}
+		REQUIRE(tree.first.isSet() == false);
+	}/**
 	// Failed
 	SECTION("parse complicated expression")
 	{
