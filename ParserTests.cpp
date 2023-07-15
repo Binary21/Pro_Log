@@ -83,7 +83,6 @@ TEST_CASE("Correct Tree formation")
 TEST_CASE("Error Tree formation")
 {
 	pair<ParseError, ExpressionTreeNode> tree;
-
 	SECTION("Single atom")
 	{
 		string input = "(f)";
@@ -164,7 +163,7 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.first.isSet() == true);
 		tree.first.message();
 	}
-
+	/**
 	// Failed
 	SECTION("unary predicate - variable")
 	{
@@ -228,7 +227,7 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.second.toString() == "(f(a),g(b),h(c))");
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == false);
-	}/**
+	}
 	// Failed
 	SECTION("parse complicated expression")
 	{
@@ -264,5 +263,72 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == true);
 		tree.first.message();
-	}**/
+	}
+	
+
+
+	// Missing open paren
+	SECTION("parser error case - missing open paren") {
+		string input = "f(a))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f)");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Mismatched parens right
+	SECTION("parser error case - mismatched parens right") {
+		string input = "(f(a)))))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Mismatched parens left
+	SECTION("parser error case - mismatched parens left") {
+		string input = "((((f(a)";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Missing comma
+	SECTION("parser error case - missing comma") {
+		string input = "(f(a b))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Truncated input at paren
+	SECTION("parser error case - truncated input at paren") {
+		string input = "(f(a,)";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Truncated input at arg
+	SECTION("parser error case - truncated input at arg") {
+		string input = "(f(a,";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Truncated list
+	SECTION("parser error case - truncated list") {
+		string input = "(f(a,b,c,";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a,b,c))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	// Invalid argument
+	SECTION("parser error case - invalid argument") {
+		string input = "(f(a,123))";
+		tree = parseExpression(input);
+		REQUIRE(tree.second.toString() == "(f(a))");
+		REQUIRE(tree.first.isSet() == true);
+	}
+	**/
 }

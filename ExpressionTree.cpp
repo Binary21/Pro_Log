@@ -18,7 +18,7 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 	ExpressionTreeNode atom;
 	atom.contents = value;
 
-	if (atom.contents.empty() || isupper(atom.contents[0]))
+	if (atom.contents.empty() || isupper(atom.contents[0]) || !isalpha(atom.contents[0]))
 	{
 		atom.type = ExpressionTreeNodeType::NONE;
 	}
@@ -36,7 +36,7 @@ ExpressionTreeNode vtpl::makeVariable(const string& value)
 
 	variable.contents = value;
 
-	if (variable.contents.empty() || islower(variable.contents[0]))
+	if (variable.contents.empty() || islower(variable.contents[0]) || !isalpha(variable.contents[0]))
 	{
 		variable.type = ExpressionTreeNodeType::NONE;
 	}
@@ -55,7 +55,7 @@ ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<Expres
 	compound.contents = predicate;
 	compound.children = arguments;
 
-	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0)
+	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0 || !isalpha(compound.contents[0]))
 	{
 		compound.type = ExpressionTreeNodeType::NONE;
 	}
@@ -103,7 +103,7 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 
 string ExpressionTreeNode::toString()
 {
-	return ("(" + toStringHelper() + ")");
+	return toStringHelper();
 }
 
 string ExpressionTreeNode::toStringHelper()
@@ -141,6 +141,7 @@ string ExpressionTreeNode::toStringHelper()
 	else
 	{
 		bool firstArgument = true;
+		result += "(";
 		for (ExpressionTreeNode& child : node.children)
 		{
 			if (!firstArgument)
@@ -150,6 +151,7 @@ string ExpressionTreeNode::toStringHelper()
 			result += child.toStringHelper();
 			firstArgument = false;
 		}
+		result += ")";
 	}
 	return result;
 }

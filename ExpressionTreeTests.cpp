@@ -25,6 +25,11 @@ TEST_CASE("")
 		//atom.children.emplace_back(atom2);
 		//atom.type = ExpressionTreeNodeType::COMPOUND;
 	}
+	SECTION("Invalid atom and node")
+	{
+		ExpressionTreeNode atom = makeAtom("2");
+		REQUIRE(isNone(atom));
+	}
 	SECTION("Single Node")
 	{
 		ExpressionTree tree;
