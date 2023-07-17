@@ -122,7 +122,7 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 
 string ExpressionTreeNode::toString()
 {
-	return toStringHelper();
+	return "(" + toStringHelper() + ")";
 }
 
 string ExpressionTreeNode::toStringHelper()

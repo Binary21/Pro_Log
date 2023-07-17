@@ -30,19 +30,19 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		}
 		current++;
 	}
-	ExpressionTreeNode rooter;
-	rooter.type = ExpressionTreeNodeType::ROOT;
+	//ExpressionTreeNode rooter;
+	//rooter.type = ExpressionTreeNodeType::ROOT;
 
 	root = parseList(current, end, error, depth, diffinput);
 	if (current != end && current->type() != TokenType::COMMA)
 	{
 		error.set("error", *current);
 	}
-	rooter.children = { root };
+	//rooter.children = { root };
 	if (current == end && depth == 0)
 	{
-		rooter.children = { root };
-		return { error, rooter };
+		//rooter.children = { root };
+		return { error, root };
 	}
 		
 	while (current->type() == TokenType::COMMA && depth == 0)
@@ -56,13 +56,13 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 			}
 		}
 		root = parseList(current, end, error, depth, diffinput);
-		rooter.children.emplace_back(root);
+		//rooter.children.emplace_back(root);
 	}
 	if (current != end || depth != 0)
 	{
 		error.set("error trailing parenthesis", *current);
 	}
-	return { error, rooter };
+	return { error, root };
 }
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
