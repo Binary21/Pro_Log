@@ -56,7 +56,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 	if (current != end) {
 		current++;
 	}
-	if (current->type() == TokenType::STRING)
+	if (current->type() == TokenType::STRING && current != end)
 	{
 		error.set("Missing Comma", *current);
 		if (isupper(value[0]))

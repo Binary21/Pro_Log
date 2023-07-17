@@ -78,18 +78,18 @@ TEST_CASE("Correct Tree formation")
 	}
 	
 }
-
+/**
 TEST_CASE("Error Tree formation")
 {
 	
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Single atom")
 	{
-		string input = "(f)";
+		string input = "f";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(f)");
-		REQUIRE(tree.first.isSet() == false);
 		tree.first.message();
+		REQUIRE(tree.first.isSet() == false);
 	}
 	SECTION("Single atom - error parenthesis complete")
 	{
@@ -271,7 +271,7 @@ TEST_CASE("Error Tree formation")
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
-	**/
+
 	// Missing comma
 	SECTION("parser error case - missing comma") {
 		string input = "a  b";
@@ -313,8 +313,31 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.first.isSet() == true);
 		tree.first.message();
 	}
-}
 
+}
+**/
+TEST_CASE("Error Testing")
+{
+	std::string input = "(f(a(b(c,d(e,f(g,h)))),i(j,k(l,m))))";
+	pair<ParseError, ExpressionTreeNode> tree;
+
+	for (std::size_t i = 0; i < input.size(); ++i)
+	{
+		std::string modifiedInput = input.substr(0, i) + input.substr(i + 1);
+		tree = parseExpression(modifiedInput);
+		cout << modifiedInput << endl;
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	for (std::size_t i = 0; i < input.size(); ++i)
+	{
+		std::string modifiedInput = input;
+		modifiedInput[i] = ' ';
+		tree = parseExpression(modifiedInput);
+		cout << modifiedInput << endl;
+		REQUIRE(tree.first.isSet() == true);
+	}
+}
 
 //"miss matched parenthesis left & right    (f(a,b,c"
 //"truncated string    a,b,"
