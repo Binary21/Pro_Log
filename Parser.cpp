@@ -23,6 +23,10 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		{
 			diffinput = true;
 		}
+		else
+		{
+			error.set("Missing close parenthesis", *end);
+		}
 		current++;
 	}
 	ExpressionTreeNode rooter;
@@ -45,20 +49,29 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
-	cout << value << endl;
+	cout << "value: " << value << endl;
 	if (current != end) {
 		current++;
+		cout << "current: " << current->value() << endl;
 	}
-	if (current->type() == TokenType::CLOSE && depth <= 0 && current != end)
+	if (current->type() == TokenType::STRING)
+	{
+		error.set("Missing Comma", *current);
+		current++;
+	}
+	if (current->type() == TokenType::CLOSE && current != end)
 	{
 		
-		error.set("Missmatched Parenthesis", *current);
-		depth--;
-		if (isupper(value[0]))
+		if (depth < 0)
 		{
-			return makeVariable(value);
+			depth--;
+			error.set("Missmatched Parenthesis", *current);
+			if (isupper(value[0]))
+			{
+				return makeVariable(value);
+			}
+			return makeAtom(value);
 		}
-		return makeAtom(value);
 	}
 	if (current == end || current->type() != TokenType::OPEN) {
 		if (isupper(value[0]))
@@ -80,6 +93,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		depth++;
 		if (current != end) {
 			current++;
+			cout << "value" << current->value() << endl;
 		}
 		if (current == end || current->type() == TokenType::CLOSE)
 		{
@@ -119,7 +133,8 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	list<ExpressionTreeNode> children;
 	while (current != end && current->type() != TokenType::CLOSE) {
-		children.push_back(parseList(current, end, error, depth, diffinput));
+		ExpressionTreeNode value = parseList(current, end, error, depth, diffinput);
+		children.push_back(value);
 		if (current != end && current->type() == TokenType::COMMA) {
 			current++;
 			if (current == end || current->type() != TokenType::STRING)

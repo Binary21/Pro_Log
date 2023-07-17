@@ -82,6 +82,7 @@ TEST_CASE("Correct Tree formation")
 
 TEST_CASE("Error Tree formation")
 {
+	
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Single atom")
 	{
@@ -163,7 +164,6 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.first.isSet() == true);
 		tree.first.message();
 	}
-	/**
 	// Failed
 	SECTION("unary predicate - variable")
 	{
@@ -264,9 +264,6 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.first.isSet() == true);
 		tree.first.message();
 	}
-	
-
-	**/
 	// Missing open paren
 	SECTION("parser error case - missing open paren") {
 		string input = "(f a))";
@@ -274,7 +271,6 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == true);
 	}
-	/**
 	// Mismatched parens right
 	SECTION("parser error case - mismatched parens right") {
 		string input = "(f(a)))))";
@@ -298,7 +294,7 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.second.toString() == "(f(a))");
 		REQUIRE(tree.first.isSet() == true);
 	}
-
+	/**
 	// Truncated input at paren
 	SECTION("parser error case - truncated input at paren") {
 		string input = "(f(a,)";
@@ -330,5 +326,4 @@ TEST_CASE("Error Tree formation")
 		REQUIRE(tree.second.toString() == "(f(a))");
 		REQUIRE(tree.first.isSet() == true);
 	}
-	**/
-}
+**/}
