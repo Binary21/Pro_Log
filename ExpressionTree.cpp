@@ -24,7 +24,7 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 		return atom;
 	}
 
-	for (int i = 1; i < atom.contents.size(); i++)
+	for (size_t i = 1; i < atom.contents.size(); i++)
 	{
 		if (!isalnum(atom.contents[i]) && atom.contents[i] != '_')
 		{
@@ -48,7 +48,7 @@ ExpressionTreeNode vtpl::makeVariable(const string& value)
 		return variable;
 	}
 
-	for (int i = 1; i < variable.contents.size(); i++)
+	for (size_t i = 1; i < variable.contents.size(); i++)
 	{
 		if (!isalnum(variable.contents[i]) && variable.contents[i] != '_')
 		{
@@ -73,7 +73,7 @@ ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<Expres
 		return compound;
 	}
 
-	for (int i = 1; i < compound.contents.size(); i++)
+	for (size_t i = 1; i < compound.contents.size(); i++)
 	{
 		if (!isalnum(compound.contents[i]) && compound.contents[i] != '_')
 		{
