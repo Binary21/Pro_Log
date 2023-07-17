@@ -55,29 +55,18 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 				error.set("Extra trailing comma", *current);
 			}
 		}
-		cout << "current in while loop: " << current->value() << endl;
 		root = parseList(current, end, error, depth, diffinput);
 		rooter.children.emplace_back(root);
 	}
-	if (current == end)
+	if (current != end || depth != 0)
 	{
-		cout << "not end: " << depth << endl;
-	}
-	if (current != end)
-	{
-		cout << "end" << endl;
-		error.set("Error", *current);
-	}
-	if (depth != 0)
-	{
-		error.set("error", *current);
+		error.set("error trailing parenthesis", *current);
 	}
 	return { error, rooter };
 }
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
-	cout << "value: " << value << endl;
 	if (current->type() == TokenType::ERROR)
 		error.set("Error, invalid argument type", *current);
 	if (current != end) {
@@ -94,14 +83,14 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		}
 		return makeAtom(value);
 	}
-	if (current == end || current->type() != TokenType::OPEN) {
+	else if (current == end || current->type() != TokenType::OPEN) {
 		if (isupper(value[0]))
 		{
 			return makeVariable(value);
 		}
 		return makeAtom(value);
 	}
-	if (current->type() == TokenType::CLOSE && depth <= 0)
+	else if (current->type() == TokenType::CLOSE && depth <= 0)
 	{
 		error.set("Missmatched Parenthesis", *current);
 		if (isupper(value[0]))
@@ -112,15 +101,12 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 	}
 	else {
 		depth++;
-		cout << "depth: " << depth << endl;
 		if (current != end) {
 			current++;
-			cout << "value" << current->value() << endl;
 		}
 		if (current == end || current->type() == TokenType::CLOSE)
 		{
 			depth--;
-			cout << "depth: " << depth << endl;
 			error.set("Missmatched Parenthesis", *current);
 			if (isupper(value[0]))
 			{
@@ -128,7 +114,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			}
 			return makeAtom(value);
 		}
-		if (current->type() == TokenType::COMMA)
+		else if (current->type() == TokenType::COMMA)
 		{
 			error.set("incorrenct comma location", *current);
 			if (isupper(value[0]))
@@ -137,7 +123,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			}
 			return makeAtom(value);
 		}
-		if (current->type() == TokenType::OPEN && depth > 0)
+		else if (current->type() == TokenType::OPEN && depth > 0)
 		{
 			error.set("incorrenct comma location", *current);
 			if (isupper(value[0]))
@@ -162,7 +148,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 		{
 			error.set("error", *current);
 		}
-		if (current != end && current->type() == TokenType::COMMA) {
+		else if (current != end && current->type() == TokenType::COMMA) {
 			current++;
 			if (current == end || current->type() != TokenType::STRING)
 			{
@@ -175,7 +161,6 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 	if (current != end) {
 		current++;
 		depth--;
-		cout << "depth: " << depth << endl;
 	}
 	else if (diffinput)
 	{
@@ -202,13 +187,11 @@ void ParseError::set(const char* str, const Token token)
 // returns if there was an error
 bool ParseError::isSet() const noexcept
 {
-	cout << "Error type: " << error << endl;
 	return error;
 }
 // tells us the actual error message (error message is set in "void ParseError::set(const char* str = nullptr)"
 string ParseError::message()
 {
-	cout << errorMessage << endl;
 	return errorMessage;
 }
 

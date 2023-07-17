@@ -90,7 +90,6 @@ TEST_CASE("Error Testing")
 	{
 		std::string modifiedInput = input;
 		modifiedInput[i] = ' ';
-		cout << modifiedInput << endl;
 		tree = parseExpression(modifiedInput);
 		REQUIRE(tree.first.isSet() == true);
 	}
@@ -117,7 +116,6 @@ TEST_CASE("Error Testing")
 
 	string input2 = "a(a())";
 	tree = parseExpression(input2);
-	cout << tree.second.toString() << endl;
 	tree.first.message();
 	REQUIRE(tree.first.isSet() == true);
 	
