@@ -16,7 +16,7 @@ TEST_CASE("Correct Tree formation")
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
-		string input = "(f)";
+		string input = "f";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == false);
@@ -24,7 +24,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("unary predicate - fact")
 	{
-		string input = "(a(b))";
+		string input = "a(b)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b))");
 		REQUIRE(tree.first.isSet() == false);
@@ -32,7 +32,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("unary predicate - fact")
 	{
-		string input = "(a(X))";
+		string input = "a(X)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(X))");
 		REQUIRE(tree.first.isSet() == false);
@@ -40,7 +40,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("binary predicate - variable")
 	{
-		string input = "(a(b,X))";
+		string input = "a(b,X)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b,X))");
 		REQUIRE(tree.first.isSet() == false);
@@ -48,7 +48,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("arbitrary tree 1")
 	{
-		string input = "(a(b(c,d),c,e(f,g,h)))";
+		string input = "a(b(c,d),c,e(f,g,h))";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b(c,d),c,e(f,g,h)))");
 		REQUIRE(tree.first.isSet() == false);
@@ -56,7 +56,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("arbitrary tree 2")
 	{
-		string input = "(a(b(c(Y,e),f),X))";
+		string input = "a(b(c(Y,e),f),X)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b(c(Y,e),f),X))");
 		REQUIRE(tree.first.isSet() == false);
@@ -64,7 +64,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("parse list of expressions")
 	{
-		string input = "(a(b(c(Y,e),f),X))";
+		string input = "a(b(c(Y,e),f),X)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b(c(Y,e),f),X))");
 		REQUIRE(tree.first.isSet() == false);
@@ -72,7 +72,7 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("parse list of expressions")
 	{
-		string input = "(a(b,c,d,))";
+		string input = "a(b,c,d,)";
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
@@ -81,17 +81,48 @@ TEST_CASE("Correct Tree formation")
 
 TEST_CASE("Error Testing")
 {
+	
 	std::string input = "(f(a(b(c,d(e,f(g,h)))),i(j,k(l,m))))";
 	pair<ParseError, ExpressionTreeNode> tree;
+	
 
 	for (std::size_t i = 0; i < input.size(); ++i)
 	{
 		std::string modifiedInput = input;
 		modifiedInput[i] = ' ';
-		tree = parseExpression(modifiedInput);
 		cout << modifiedInput << endl;
-		cout << tree.second.toString() << endl;
+		tree = parseExpression(modifiedInput);
 		REQUIRE(tree.first.isSet() == true);
 	}
 
+	for (std::size_t i = 0; i < input.size(); ++i)
+	{
+		if (i > 0 && i < input.size() - 1 && input[i] == ','
+			&& std::isalpha(input[i - 1]) && std::isalpha(input[i + 1])) {
+			continue;
+		}
+		std::string modifiedInput = input.substr(0, i) + input.substr(i + 1);
+		tree = parseExpression(modifiedInput);
+		REQUIRE(tree.first.isSet() == true);
+	}
+	
+	// major issues
+	
+	string input22 = "(a,b,c,)";
+	tree = parseExpression(input22);
+	REQUIRE(tree.first.isSet() == true);
+
+	
+	// does not pass
+
+	string input2 = "a(a())";
+	tree = parseExpression(input2);
+	cout << tree.second.toString() << endl;
+	tree.first.message();
+	REQUIRE(tree.first.isSet() == true);
+	
+	
 }
+//  truncated list a,b,c,
+//  invalid argument
+

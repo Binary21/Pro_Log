@@ -7,6 +7,7 @@
 using namespace std;
 using namespace vtpl;
 
+
 pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& tokens)
 {
 	ParseError error;
@@ -15,8 +16,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-	
-	
+
 	if (current->type() == TokenType::OPEN)
 	{
 		end--;
@@ -39,9 +39,22 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		error.set("error", *current);
 	}
 	rooter.children = { root };
+	if (current == end && depth == 0)
+	{
+		rooter.children = { root };
+		return { error, rooter };
+	}
+		
 	while (current->type() == TokenType::COMMA && depth == 0)
 	{
-		current++;
+		if (current->type() == TokenType::COMMA)
+		{
+			current++;
+			if (current == end)
+			{
+				error.set("Extra trailing comma", *current);
+			}
+		}
 		cout << "current in while loop: " << current->value() << endl;
 		root = parseList(current, end, error, depth, diffinput);
 		rooter.children.emplace_back(root);
@@ -65,9 +78,13 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
 	cout << "value: " << value << endl;
+	if (current->type() == TokenType::ERROR)
+		error.set("Error, invalid argument type", *current);
 	if (current != end) {
 		current++;
 	}
+	if (current == end)
+		return makeAtom(value);
 	if (current->type() == TokenType::STRING && current != end)
 	{
 		error.set("Missing Comma", *current);
@@ -141,11 +158,6 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 	while (current != end && current->type() != TokenType::CLOSE) {
 		ExpressionTreeNode value = parseList(current, end, error, depth, diffinput);
 		children.push_back(value);
-		if(value.contents == "a")
-		{
-			cout << "contenst = a" << endl;
-			cout << "current: " << current->value() << endl;
-		}
 		if (current != end && current->type() == TokenType::STRING)
 		{
 			error.set("error", *current);
@@ -172,6 +184,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 	}
 	return children;
 }
+
 
 // sets the error bool to true when there is an error
 void ParseError::set(const char* str)

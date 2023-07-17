@@ -14,7 +14,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
     // create and load dictionary
     map<char, TokenType> dictionary;
     dictionarySetup(dictionary);
-    
+
     string line = "";
     string temp = "";
 
@@ -23,7 +23,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
     bool error_break = false;
 
     // get each line from the input stream
-    while (getline(input, line)) 
+    while (getline(input, line))
     {
         // parse each line itterably character by character
         for (size_t i = 0; i < line.length(); i++)
@@ -59,11 +59,17 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
                 temp += c;
             }
 
+            else if (isdigit(c))
+            {
+                if (temp.empty())
+                    tokenList.emplace_back(TokenType::ERROR, lineValue);
+            }
+
             else if (isspace(c))
             {
                 stringUpdate(temp, lineValue, tokenList);
             }
-            
+
             // checks if our character is any of these: , . ( or )
             // if so returns it responding value and adds it to the
             // token list
