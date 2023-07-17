@@ -36,7 +36,7 @@ ExpressionTreeNode vtpl::makeVariable(const string& value)
 
 	variable.contents = value;
 
-	if (variable.contents.empty() || islower(variable.contents[0]) || !isalpha(variable.contents[0]))
+	if (variable.contents.empty() || islower(variable.contents[0]))
 	{
 		variable.type = ExpressionTreeNodeType::NONE;
 	}
@@ -55,7 +55,7 @@ ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<Expres
 	compound.contents = predicate;
 	compound.children = arguments;
 
-	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0 || !isalpha(compound.contents[0]))
+	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0)
 	{
 		compound.type = ExpressionTreeNodeType::NONE;
 	}

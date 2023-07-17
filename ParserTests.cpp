@@ -266,15 +266,15 @@ TEST_CASE("Error Tree formation")
 	}
 	
 
-
+	**/
 	// Missing open paren
 	SECTION("parser error case - missing open paren") {
-		string input = "f(a))";
+		string input = "(f a))";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == true);
 	}
-
+	/**
 	// Mismatched parens right
 	SECTION("parser error case - mismatched parens right") {
 		string input = "(f(a)))))";

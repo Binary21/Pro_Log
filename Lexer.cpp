@@ -58,6 +58,11 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
             {
                 temp += c;
             }
+
+            else if (isspace(c))
+            {
+                stringUpdate(temp, lineValue, tokenList);
+            }
             
             // checks if our character is any of these: , . ( or )
             // if so returns it responding value and adds it to the
