@@ -18,52 +18,71 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 	ExpressionTreeNode atom;
 	atom.contents = value;
 
-	if (atom.contents.empty() || isupper(atom.contents[0]) || !isalpha(atom.contents[0]))
+	if (atom.contents.empty() || !islower(atom.contents[0]))
 	{
 		atom.type = ExpressionTreeNodeType::NONE;
-	}
-	else
-	{
-		atom.type = ExpressionTreeNodeType::ATOM;
+		return atom;
 	}
 
+	for (int i = 1; i < atom.contents.size(); i++)
+	{
+		if (!isalnum(atom.contents[i]) && atom.contents[i] != '_')
+		{
+			atom.type = ExpressionTreeNodeType::NONE;
+			return atom;
+		}
+	}
+
+	atom.type = ExpressionTreeNodeType::ATOM;
 	return atom;
 }
 
 ExpressionTreeNode vtpl::makeVariable(const string& value)
 {
 	ExpressionTreeNode variable;
-
 	variable.contents = value;
 
-	if (variable.contents.empty() || islower(variable.contents[0]))
+	if (variable.contents.empty() || (!isupper(variable.contents[0]) && variable.contents[0] != '_'))
 	{
 		variable.type = ExpressionTreeNodeType::NONE;
-	}
-	else
-	{
-		variable.type = ExpressionTreeNodeType::VARIABLE;
+		return variable;
 	}
 
+	for (int i = 1; i < variable.contents.size(); i++)
+	{
+		if (!isalnum(variable.contents[i]) && variable.contents[i] != '_')
+		{
+			variable.type = ExpressionTreeNodeType::NONE;
+			return variable;
+		}
+	}
+
+	variable.type = ExpressionTreeNodeType::VARIABLE;
 	return variable;
 }
 
 ExpressionTreeNode vtpl::makeCompound(const string& predicate, const list<ExpressionTreeNode>& arguments)
 {
 	ExpressionTreeNode compound;
-
 	compound.contents = predicate;
 	compound.children = arguments;
 
-	if (compound.contents.empty() || isupper(compound.contents[0]) || arguments.size() == 0)
+	if (compound.contents.empty() || !islower(compound.contents[0]) || arguments.empty())
 	{
 		compound.type = ExpressionTreeNodeType::NONE;
-	}
-	else
-	{
-		compound.type = ExpressionTreeNodeType::COMPOUND;
+		return compound;
 	}
 
+	for (int i = 1; i < compound.contents.size(); i++)
+	{
+		if (!isalnum(compound.contents[i]) && compound.contents[i] != '_')
+		{
+			compound.type = ExpressionTreeNodeType::NONE;
+			return compound;
+		}
+	}
+
+	compound.type = ExpressionTreeNodeType::COMPOUND;
 	return compound;
 }
 

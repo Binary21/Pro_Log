@@ -44,6 +44,10 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		root = parseList(current, end, error, depth, diffinput);
 		rooter.children.emplace_back(root);
 	}
+	if (depth < 0)
+	{
+		error.set("error", *current);
+	}
 	return { error, rooter };
 }
 
@@ -60,20 +64,6 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			return makeVariable(value);
 		}
 		return makeAtom(value);
-	}
-	if (current->type() == TokenType::CLOSE && current != end)
-	{
-		
-		if (depth < 0)
-		{
-			depth--;
-			error.set("Missmatched Parenthesis", *current);
-			if (isupper(value[0]))
-			{
-				return makeVariable(value);
-			}
-			return makeAtom(value);
-		}
 	}
 	if (current == end || current->type() != TokenType::OPEN) {
 		if (isupper(value[0]))

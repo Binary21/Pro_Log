@@ -267,7 +267,7 @@ TEST_CASE("Error Tree formation")
 
 	// Mismatched parens left
 	SECTION("parser error case - mismatched parens left") {
-		string input = "((((f(a)";
+		string input = "a(b(c)";
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
@@ -306,4 +306,15 @@ TEST_CASE("Error Tree formation")
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
+	SECTION("parse complicated expression")
+	{
+		string input = "(f(a(b(c,d(e,f(g,h))),i(j,k(l,m))))";
+		tree = parseExpression(input);
+		REQUIRE(tree.first.isSet() == true);
+		tree.first.message();
+	}
 }
+
+
+//"miss matched parenthesis left & right    (f(a,b,c"
+//"truncated string    a,b,"
