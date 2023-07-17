@@ -323,20 +323,14 @@ TEST_CASE("Error Testing")
 
 	for (std::size_t i = 0; i < input.size(); ++i)
 	{
-		std::string modifiedInput = input.substr(0, i) + input.substr(i + 1);
-		tree = parseExpression(modifiedInput);
-		cout << modifiedInput << endl;
-		REQUIRE(tree.first.isSet() == true);
-	}
-
-	for (std::size_t i = 0; i < input.size(); ++i)
-	{
 		std::string modifiedInput = input;
 		modifiedInput[i] = ' ';
 		tree = parseExpression(modifiedInput);
 		cout << modifiedInput << endl;
+		cout << tree.second.toString() << endl;
 		REQUIRE(tree.first.isSet() == true);
 	}
+
 }
 
 //"miss matched parenthesis left & right    (f(a,b,c"

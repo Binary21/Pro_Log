@@ -15,10 +15,11 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-	end--;
-
+	
+	
 	if (current->type() == TokenType::OPEN)
 	{
+		end--;
 		if (end->type() == TokenType::CLOSE)
 		{
 			diffinput = true;
@@ -41,10 +42,20 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	while (current->type() == TokenType::COMMA && depth == 0)
 	{
 		current++;
+		cout << "current in while loop: " << current->value() << endl;
 		root = parseList(current, end, error, depth, diffinput);
 		rooter.children.emplace_back(root);
 	}
-	if (depth < 0)
+	if (current == end)
+	{
+		cout << "not end: " << depth << endl;
+	}
+	if (current != end)
+	{
+		cout << "end" << endl;
+		error.set("Error", *current);
+	}
+	if (depth != 0)
 	{
 		error.set("error", *current);
 	}
@@ -53,6 +64,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
+	cout << "value: " << value << endl;
 	if (current != end) {
 		current++;
 	}
@@ -83,6 +95,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 	}
 	else {
 		depth++;
+		cout << "depth: " << depth << endl;
 		if (current != end) {
 			current++;
 			cout << "value" << current->value() << endl;
@@ -90,6 +103,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		if (current == end || current->type() == TokenType::CLOSE)
 		{
 			depth--;
+			cout << "depth: " << depth << endl;
 			error.set("Missmatched Parenthesis", *current);
 			if (isupper(value[0]))
 			{
@@ -127,6 +141,15 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 	while (current != end && current->type() != TokenType::CLOSE) {
 		ExpressionTreeNode value = parseList(current, end, error, depth, diffinput);
 		children.push_back(value);
+		if(value.contents == "a")
+		{
+			cout << "contenst = a" << endl;
+			cout << "current: " << current->value() << endl;
+		}
+		if (current != end && current->type() == TokenType::STRING)
+		{
+			error.set("error", *current);
+		}
 		if (current != end && current->type() == TokenType::COMMA) {
 			current++;
 			if (current == end || current->type() != TokenType::STRING)
@@ -140,6 +163,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 	if (current != end) {
 		current++;
 		depth--;
+		cout << "depth: " << depth << endl;
 	}
 	else if (diffinput)
 	{
