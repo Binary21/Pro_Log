@@ -49,15 +49,17 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
-	cout << "value: " << value << endl;
 	if (current != end) {
 		current++;
-		cout << "current: " << current->value() << endl;
 	}
 	if (current->type() == TokenType::STRING)
 	{
 		error.set("Missing Comma", *current);
-		current++;
+		if (isupper(value[0]))
+		{
+			return makeVariable(value);
+		}
+		return makeAtom(value);
 	}
 	if (current->type() == TokenType::CLOSE && current != end)
 	{
