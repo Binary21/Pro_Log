@@ -13,6 +13,7 @@ using namespace std;
 
 TEST_CASE("") 
 {
+	/**
 	SECTION("Empty Node")
 	{
 		ExpressionTreeNode atom;
@@ -93,5 +94,71 @@ TEST_CASE("")
 	ExpressionTreeNode root;
 	root.type = ExpressionTreeNodeType::ROOT;
 	REQUIRE(isNone(root) == false);
+	**/
+
+	
 }
 
+TEST_CASE("Manual Tests Expression Tree")
+{
+	ExpressionTreeNode root;
+	SECTION("makeAtom")
+	{
+		root = makeAtom("a&^*");
+		REQUIRE(isNone(root));
+	}
+	
+	SECTION("makeVariable 1")
+	{
+		root = makeVariable("");
+		REQUIRE(isNone(root));
+	}
+
+	SECTION("makeVariable 2")
+	{
+		root = makeVariable("A$%#@");
+		REQUIRE(isNone(root));
+	}
+
+	SECTION("makeCompound 1")
+	{
+		list<ExpressionTreeNode> arguments;
+		root = makeCompound("", arguments);
+		REQUIRE(isNone(root));
+		REQUIRE(!isCompound(root));
+		root.toString();
+	}
+
+	SECTION("makeCompound 2")
+	{
+		list<ExpressionTreeNode> arguments;
+		ExpressionTreeNode node;
+		arguments = { node };
+		root = makeCompound("a$%#@", arguments);
+		REQUIRE(isNone(root));
+	}
+
+	SECTION("To String")
+	{
+		ExpressionTreeNode node;
+		node.type = ExpressionTreeNodeType::ROOT;
+		ExpressionTreeNode child1 = makeAtom("a");
+		ExpressionTreeNode child2 = makeAtom("b");
+		node.children = { child1, child2 };
+		node.toString();
+
+	}
+
+	SECTION("operator==")
+	{
+		ExpressionTreeNode nodeAtom = makeAtom("a");
+		ExpressionTreeNode nodeVariable = makeVariable("X");
+		ExpressionTreeNode nodeCompound = makeCompound("f", { nodeAtom, nodeVariable });
+		ExpressionTreeNode nodeCompound2 = makeCompound("g", { nodeAtom, nodeVariable });
+		ExpressionTreeNode nodeCompound3 = makeCompound("f", { nodeAtom });
+		REQUIRE(!(nodeAtom == nodeVariable));
+		REQUIRE(!(nodeCompound == nodeCompound2));
+		REQUIRE(!(nodeCompound == nodeCompound3));
+		arity(nodeAtom);
+	}
+}

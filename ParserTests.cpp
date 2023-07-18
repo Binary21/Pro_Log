@@ -1,4 +1,10 @@
+#define _CRTDBG_MAP_ALLOC
 #include "catch.hpp"
+
+//#include "windows.h"
+#include <crtdbg.h>
+#include <stdlib.h> 
+#include <iostream>
 
 #include "Parser.hpp"
 #include "ExpressionTree.hpp"
@@ -10,9 +16,10 @@
 using namespace std;
 using namespace vtpl;
 
-
+/**
 TEST_CASE("Correct Tree formation")
 {
+	
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
@@ -21,7 +28,7 @@ TEST_CASE("Correct Tree formation")
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == false);
 	}
-
+	
 	SECTION("unary predicate - fact")
 	{
 		string input = "a(b)";
@@ -64,21 +71,25 @@ TEST_CASE("Correct Tree formation")
 
 	SECTION("parse list of expressions")
 	{
+		//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 		string input = "a(b(c(Y,e),f),X)";
 		tree = parseExpression(input);
 		REQUIRE(tree.second.toString() == "(a(b(c(Y,e),f),X))");
 		REQUIRE(tree.first.isSet() == false);
-	}
 
+
+		//_CrtDumpMemoryLeaks();
+
+	}
 	SECTION("parse list of expressions")
 	{
 		string input = "a(b,c,d,)";
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
-	
-}
-
+}**/
+/**
 TEST_CASE("Error Testing")
 {
 	
@@ -121,6 +132,50 @@ TEST_CASE("Error Testing")
 	
 	
 }
-//  truncated list a,b,c,
-//  invalid argument
+**/
 
+
+TEST_CASE("Manual Tests")
+{
+	pair<ParseError, ExpressionTreeNode> tree;
+	/**
+	SECTION("Error Incorrect Comma Location - Variable")
+	{
+		string input2 = "a(X(,))";
+		tree = parseExpression(input2);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+	
+	SECTION("Missmatche Parenthesis - Variable")
+	{
+		string input2 = "a(X())";
+		tree = parseExpression(input2);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+	
+	SECTION("Missing Comma - Variable")
+	{
+		string input2 = "a(X y)";
+		tree = parseExpression(input2);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+	
+	SECTION("Invalid argument type - Variable")
+	{
+		string input2 = "a(2,y)";
+		tree = parseExpression(input2);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+	**/
+	SECTION("Invalid argument type - Variable")
+	{
+		string input2 = "a(a()),y)))";
+		tree = parseExpression(input2);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+}

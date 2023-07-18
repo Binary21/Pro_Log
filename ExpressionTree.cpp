@@ -18,6 +18,7 @@ ExpressionTreeNode vtpl::makeAtom(const string& value)
 	ExpressionTreeNode atom;
 	atom.contents = value;
 
+
 	if (atom.contents.empty() || !islower(atom.contents[0]))
 	{
 		atom.type = ExpressionTreeNodeType::NONE;
@@ -122,7 +123,7 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 
 string ExpressionTreeNode::toString()
 {
-	return "(" + toStringHelper() + ")";
+	return toStringHelper();
 }
 
 string ExpressionTreeNode::toStringHelper()
