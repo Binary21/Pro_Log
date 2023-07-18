@@ -4,7 +4,6 @@
   add them to one of the unit test files *Tests.cpp.
  */
 
-#define _CRTDBG_MAP_ALLOC
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include <crtdbg.h>
+

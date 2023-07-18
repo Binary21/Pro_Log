@@ -112,7 +112,6 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		else if (current->type() == TokenType::COMMA)
 		{
 			error.set("incorrenct comma location", *current);
-			cout << isupper(value[0]) << value[0] << endl;
 			if (isupper(value[0]))
 			{
 				return makeVariable(value);

@@ -1,10 +1,4 @@
-#define _CRTDBG_MAP_ALLOC
 #include "catch.hpp"
-
-//#include "windows.h"
-#include <crtdbg.h>
-#include <stdlib.h> 
-#include <iostream>
 
 #include "Parser.hpp"
 #include "ExpressionTree.hpp"
@@ -16,7 +10,7 @@
 using namespace std;
 using namespace vtpl;
 
-/**
+
 TEST_CASE("Correct Tree formation")
 {
 	
@@ -88,8 +82,7 @@ TEST_CASE("Correct Tree formation")
 		tree = parseExpression(input);
 		REQUIRE(tree.first.isSet() == true);
 	}
-}**/
-/**
+}
 TEST_CASE("Error Testing")
 {
 	
@@ -132,13 +125,12 @@ TEST_CASE("Error Testing")
 	
 	
 }
-**/
+
 
 
 TEST_CASE("Manual Tests")
 {
 	pair<ParseError, ExpressionTreeNode> tree;
-	/**
 	SECTION("Error Incorrect Comma Location - Variable")
 	{
 		string input2 = "a(X(,))";
@@ -170,7 +162,7 @@ TEST_CASE("Manual Tests")
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == true);
 	}
-	**/
+
 	SECTION("Invalid argument type - Variable")
 	{
 		string input2 = "a(a()),y)))";
