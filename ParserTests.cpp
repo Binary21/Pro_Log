@@ -162,10 +162,9 @@ TEST_CASE("Manual Tests")
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == true);
 	}
-
 	SECTION("Invalid argument type - Variable")
 	{
-		string input2 = "a(a()),y)))";
+		string input2 = "a(a(";
 		tree = parseExpression(input2);
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == true);
