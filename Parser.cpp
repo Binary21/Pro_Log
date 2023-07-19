@@ -204,11 +204,11 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const string& input)
 	istringstream iss(input);
 	return parseExpression(tokenize(iss));
 }
-pair<ParseError, ExpressionTreeNode> parseQuery(const TokenList& tokens)
+pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 {
 	return parseExpression(tokens);
 }
-pair<ParseError, ExpressionTreeNode> parseQuery(const string& input)
+pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const string& input)
 {
 	istringstream iss(input);
 	return parseExpression(tokenize(iss));
