@@ -173,27 +173,29 @@ TEST_CASE("Parse Query Tests")
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
-		string input = "f.";
+		string input = "f . ";
 		tree = parseQuery(input);
 		REQUIRE(tree.first.isSet() == false);
 	}
 
 	SECTION("unary predicate - fact")
 	{
-		string input = "a(b).";
-		tree = parseQuery(input);
+		string input = "a(b) . ";
+		istringstream iss(input);
+		TokenList t1 = tokenize(iss);
+		tree = parseQuery(t1);
 		REQUIRE(tree.first.isSet() == false);
 	}
 
 	SECTION("unary predicate - fact")
 	{
-		string input = "a(X).";
+		string input = "a(X) . ";
 		tree = parseQuery(input);
 		REQUIRE(tree.first.isSet() == false);
 	}
 	SECTION("binary predicate - variable")
 	{
-		string input = "a.";
+		string input = "g(b,c). ";
 		tree = parseQuery(input);
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == false);
@@ -217,7 +219,7 @@ TEST_CASE("Parse Query Tests")
 
 	SECTION("arbitrary tree 1")
 	{
-		string input = "a(b(c,d),c,e(f,g,h)).";
+		string input = "a(b(c,d),c,e(f,g,h)) .";
 		istringstream iss(input);
 		TokenList t1 = tokenize(iss);
 		tree = parseQuery(t1);

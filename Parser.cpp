@@ -228,8 +228,8 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const string& input)
 {
 	ParseError error;
 	ExpressionTreeNode root;
-	string sendIn = input;
-	if (input[input.size() - 1] == '.')
+	string sendIn = input.substr(0, input.find_last_not_of(' ') + 1);
+	if (sendIn[sendIn.size() - 1] == '.')
 	{
 		sendIn.pop_back();
 		istringstream iss(sendIn);
