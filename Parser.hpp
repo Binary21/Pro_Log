@@ -32,6 +32,8 @@ namespace vtpl {
 	void dictionarySetup(std::map<TokenType, char>&);
 
 	pair<ParseError, ExpressionTreeNode> parseExpression(const string& input);
+	std::pair<ParseError, ExpressionTreeNode> parseQuery(const TokenList& tokens);
+	std::pair<ParseError, ExpressionTreeNode> parseQuery(const string& input);
 
 };
 
