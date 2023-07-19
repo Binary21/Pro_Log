@@ -206,10 +206,40 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const string& input)
 }
 pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 {
-	return parseExpression(tokens);
+	ParseError error;
+	ExpressionTreeNode root;
+	bool diffinput = false;
+	int depth = 0;
+	TokenList::const_iterator current = tokens.begin();
+	TokenList::const_iterator end = tokens.end();
+	end--;
+	if (end->type() == TokenType::END)
+	{
+		root = parseList(current, end, error, depth, diffinput);
+		return { error, root };
+	}
+	else
+	{
+		error.set("Error with Query");
+		return { error, root };
+	}
 }
 pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const string& input)
 {
-	istringstream iss(input);
-	return parseExpression(tokenize(iss));
+	ParseError error;
+	ExpressionTreeNode root;
+	string sendIn = input;
+	if (input[input.size() - 1] == '.')
+	{
+		sendIn.pop_back();
+		istringstream iss(sendIn);
+
+		return parseExpression(tokenize(iss));
+	}
+	else
+	{
+		error.set("Error with Query");
+	}
+	return { error, root };
+	
 }

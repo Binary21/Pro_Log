@@ -13,7 +13,7 @@ using namespace std;
 
 TEST_CASE("") 
 {
-	/**
+
 	SECTION("Empty Node")
 	{
 		ExpressionTreeNode atom;
@@ -94,8 +94,6 @@ TEST_CASE("")
 	ExpressionTreeNode root;
 	root.type = ExpressionTreeNodeType::ROOT;
 	REQUIRE(isNone(root) == false);
-	**/
-
 	
 }
 
@@ -162,3 +160,4 @@ TEST_CASE("Manual Tests Expression Tree")
 		arity(nodeAtom);
 	}
 }
+

@@ -4,12 +4,11 @@
 #include "ExpressionTree.hpp"
 #include "Lexer.hpp"
 
-#include <sstream>
+#include <sstream>b
 #include <string>
 
 using namespace std;
 using namespace vtpl;
-
 
 TEST_CASE("Correct Tree formation")
 {
@@ -126,8 +125,6 @@ TEST_CASE("Error Testing")
 	
 }
 
-
-
 TEST_CASE("Manual Tests")
 {
 	pair<ParseError, ExpressionTreeNode> tree;
@@ -164,9 +161,66 @@ TEST_CASE("Manual Tests")
 	}
 	SECTION("Invalid argument type - Variable")
 	{
-		string input2 = "a(a(";
+		string input2 = "f(a,b";
 		tree = parseExpression(input2);
 		tree.first.message();
 		REQUIRE(tree.first.isSet() == true);
+	}
+}
+
+TEST_CASE("Parse Query Tests")
+{
+	pair<ParseError, ExpressionTreeNode> tree;
+	SECTION("Atom only")
+	{
+		string input = "f.";
+		tree = parseQuery(input);
+		REQUIRE(tree.first.isSet() == false);
+	}
+
+	SECTION("unary predicate - fact")
+	{
+		string input = "a(b).";
+		tree = parseQuery(input);
+		REQUIRE(tree.first.isSet() == false);
+	}
+
+	SECTION("unary predicate - fact")
+	{
+		string input = "a(X).";
+		tree = parseQuery(input);
+		REQUIRE(tree.first.isSet() == false);
+	}
+	SECTION("binary predicate - variable")
+	{
+		string input = "a.";
+		tree = parseQuery(input);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == false);
+	}
+	SECTION("binary predicate - variable")
+	{
+		string input = "a.)";
+		tree = parseQuery(input);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+	SECTION("binary predicate - variable")
+	{
+		string input = "a.)";
+		istringstream iss(input);
+		TokenList t1 = tokenize(iss);
+		tree = parseQuery(t1);
+		tree.first.message();
+		REQUIRE(tree.first.isSet() == true);
+	}
+
+	SECTION("arbitrary tree 1")
+	{
+		string input = "a(b(c,d),c,e(f,g,h)).";
+		istringstream iss(input);
+		TokenList t1 = tokenize(iss);
+		tree = parseQuery(t1);
+		REQUIRE(tree.first.isSet() == false);
 	}
 }
