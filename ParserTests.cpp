@@ -4,7 +4,7 @@
 #include "ExpressionTree.hpp"
 #include "Lexer.hpp"
 
-#include <sstream>b
+#include <sstream>
 #include <string>
 
 using namespace std;
