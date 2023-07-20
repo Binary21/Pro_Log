@@ -1,5 +1,3 @@
-#include "KnowledgeBase.hpp"
-
 #include <string>
 #include <iostream>
 #include "KnowledgeBase.hpp"
@@ -9,19 +7,21 @@ using namespace std;
 
 void vtpl::KnowledgeBase::tell(const Clause& clause)
 {
+	clauses.push_back(clause);
 }
 
 size_t vtpl::KnowledgeBase::size() const
 {
-	return size_t();
+	return clauses.size();
 }
 
 vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::begin() const
 {
-	return Iterator();
+	
+	return clauses.begin();
 }
 
 vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::end() const
 {
-	return Iterator();
+	return clauses.end;
 }
