@@ -23,5 +23,5 @@ vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::begin() const
 
 vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::end() const
 {
-	return clauses.end;
+	return clauses.end();
 }

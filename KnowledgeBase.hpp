@@ -44,6 +44,9 @@ public:
 
 	// get an iterator one-past the last caluse
 	Iterator end() const;
+
+private:
+	vector<Clause>clauses;
 };
 };
 
