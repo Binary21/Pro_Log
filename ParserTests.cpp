@@ -12,7 +12,7 @@ using namespace vtpl;
 
 TEST_CASE("Correct Tree formation")
 {
-	
+
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
@@ -21,7 +21,7 @@ TEST_CASE("Correct Tree formation")
 		REQUIRE(tree.second.toString() == "(f)");
 		REQUIRE(tree.first.isSet() == false);
 	}
-	
+
 	SECTION("unary predicate - fact")
 	{
 		string input = "a(b)";
@@ -84,13 +84,14 @@ TEST_CASE("Correct Tree formation")
 }
 TEST_CASE("Error Testing")
 {
-	
+
 	std::string input = "(f(a(b(c,d(e,f(g,h)))),i(j,k(l,m))))";
 	pair<ParseError, ExpressionTreeNode> tree;
-	
+
 
 	for (std::size_t i = 0; i < input.size(); ++i)
 	{
+		
 		std::string modifiedInput = input;
 		modifiedInput[i] = ' ';
 		tree = parseExpression(modifiedInput);

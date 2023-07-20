@@ -41,6 +41,8 @@ namespace vtpl {
 
 	pair< TokenList::const_iterator, TokenList::const_iterator> Delimiter(TokenList::const_iterator current, TokenList::const_iterator it);
 
+	string printString(TokenList::const_iterator& current);
+
 };
 
 #endif

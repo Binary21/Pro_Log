@@ -29,6 +29,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
         for (size_t i = 0; i < line.length(); i++)
         {
             char c = line[i];
+            cout << c << endl;
             // exit line if commented
             if (c == '%')
                 break;
@@ -111,3 +112,5 @@ void vtpl::stringUpdate(std::string& temp, int& lineValue, TokenList& tokenList)
         temp = "";
     }
 }
+
+

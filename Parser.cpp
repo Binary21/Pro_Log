@@ -21,7 +21,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-
+	cout << printString(current) << endl;
 	if (current->type() == TokenType::OPEN)
 	{
 		end--;
@@ -36,8 +36,8 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		current++;
 	}
 	ExpressionTreeNode rooter;
+	cout << printString(current) << endl;
 	rooter.type = ExpressionTreeNodeType::ROOT;
-
 	root = parseList(current, end, error, depth, diffinput);
 	if (current != end && current->type() != TokenType::COMMA)
 	{
@@ -89,6 +89,7 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		{
 			return makeVariable(value);
 		}
+		cout << current->value() << endl;
 		return makeAtom(value);
 	}
 	else if (current == end || current->type() != TokenType::OPEN) {
@@ -225,10 +226,29 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 	}
 
 	end--;
+	ExpressionTreeNode rooter;
 	if (end->type() == TokenType::END)
 	{
 		root = parseList(current, end, error, depth, diffinput);
-		return { error, root };
+		if (current != end && current->type() != TokenType::COMMA)
+		{
+			error.set("error");
+		}
+		rooter.children = { root };
+		while (current->type() == TokenType::COMMA && depth == 0)
+		{
+			if (current->type() == TokenType::COMMA)
+			{
+				current++;
+				if (current == end)
+				{
+					error.set("Extra trailing comma");
+				}
+			}
+			root = parseList(current, end, error, depth, diffinput);
+			rooter.children.emplace_back(root);
+		}
+		return { error, rooter };
 	}
 	else
 	{
@@ -283,12 +303,11 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 	end--;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
-		cout << it->value() << endl;
+		cout << "current value: " << printString(current) << endl;
+		cout << "it value: " << printString(it) << endl;
 		if (it->type() == TokenType::END)
 		{
 			auto delimiter = Delimiter(current, it);
-			if (it->type() == TokenType::END)
-				cout << "carrier pidgeon" << endl;
 
 			TokenList headTokens(current, delimiter.first);
 			head = parseExpression(headTokens);
@@ -301,6 +320,8 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 				cout << body.second.toString() << endl;
 				clause.body = body.second;
 			}
+			else if (it != end)
+				it++;
 
 			if (head.first.isSet() || body.first.isSet())
 			{
@@ -308,6 +329,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			}
 
 			knowldgeBase.tell(clause);
+			
 			if(it != end)
 				current = it;
 			if(current->type() == TokenType::STRING)
@@ -324,3 +346,17 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const strin
 	return parseKnowledgeBase(tokenize(iss));
 }
 
+string vtpl::printString(TokenList::const_iterator& current)
+{
+	if (current->type() == TokenType::CLOSE)
+		return "(";
+	if (current->type() == TokenType::OPEN)
+		return ")";
+	if (current->type() == TokenType::COMMA)
+		return ",";
+	if (current->type() == TokenType::STRING)
+		return current->value();
+	if (current->type() == TokenType::END)
+		return ".";
+	return " ";
+}

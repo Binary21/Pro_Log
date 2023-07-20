@@ -11,6 +11,7 @@
 using namespace vtpl;
 
 Lexer lexer;
+
 TEST_CASE("Test empty stream", "[Lexer]") {
 
   SECTION("empty stream") {
