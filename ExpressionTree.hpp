@@ -23,8 +23,8 @@ namespace vtpl {
         ExpressionTreeNodeType type;
         std::string contents;
         std::list<ExpressionTreeNode> children;
-        std::string toString();
-        std::string toStringHelper();
+        std::string toString() const;
+        std::string toStringHelper() const;
         
         ExpressionTreeNode() : type(ExpressionTreeNodeType::NONE), contents("") {}
         ExpressionTreeNode(ExpressionTreeNodeType t, const std::string& c) : type(t), contents(c) {}

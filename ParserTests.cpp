@@ -227,12 +227,3 @@ TEST_CASE("Parse Query Tests")
 	}
 }
 
-TEST_CASE("Parse KnowledgeBase")
-{
-	tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
-	string input = "h(X,Y) :- f(X),g(b,Y). ";
-	istringstream iss(input);
-	TokenList t1 = tokenize(iss);
-	knowledgeBase = parseKnowledgeBase(t1);
-	REQUIRE(!std::get<0>(knowledgeBase).isSet());
-}

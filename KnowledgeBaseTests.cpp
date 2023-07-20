@@ -20,5 +20,6 @@ TEST_CASE("Parse KnowledgeBase")
 	istringstream iss(input);
 	TokenList t1 = tokenize(iss);
 	knowledgeBase = parseKnowledgeBase(t1);
+	cout << "head: " << std::get<1>(knowledgeBase).begin()->head.toString() << " body: " << std::get<1>(knowledgeBase).begin()->body.toString() << endl;
 	REQUIRE(!std::get<0>(knowledgeBase).isSet());
 }

@@ -121,12 +121,12 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 	return childLength;
 }
 
-string ExpressionTreeNode::toString()
+string ExpressionTreeNode::toString() const
 {
 	return toStringHelper();
 }
 
-string ExpressionTreeNode::toStringHelper()
+string ExpressionTreeNode::toStringHelper() const
 {
 	ExpressionTreeNode node = *this;
 	string result;
