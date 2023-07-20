@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <tuple>
+#include <algorithm>
 
 
 using namespace std;
