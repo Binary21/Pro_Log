@@ -15,7 +15,6 @@
 #include "Lexer.hpp"
 #include "ExpressionTree.hpp"
 #include "Token.hpp"
-#include "Parser.hpp"
 
 using namespace std;
 namespace vtpl {
@@ -37,7 +36,7 @@ public:
 	void tell(const Clause& clause);
 
 	// return the number of clauses in the database
-	size_t size() const;
+	size_t size() const; 
 
 	// get an interator to the first clause
 	Iterator begin() const;

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <tuple>
 
 
 using namespace std;
@@ -206,12 +207,22 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const string& input)
 }
 pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 {
+	cout << "Address of tokens in parseQuery: " << &tokens << endl;
 	ParseError error;
 	ExpressionTreeNode root;
 	bool diffinput = false;
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
+
+	for (Token token : tokens)
+	{
+		if (token.type() == TokenType::END)
+		{
+			cout << "this pidgeon crazy" << endl;
+		}
+	}
+
 	end--;
 	if (end->type() == TokenType::END)
 	{
@@ -243,3 +254,72 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const string& input)
 	return { error, root };
 	
 }
+
+pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(TokenList::const_iterator current, TokenList::const_iterator it)
+{
+	auto delimiter = std::find_if(current, it,
+		[](const Token& token) { return token.type() == TokenType::IMP; });
+
+	// If IMP not found, return the end iterator
+	if (delimiter == it) {
+		return { it, it };
+	}
+	else {
+		return { delimiter, next(delimiter) };
+	}
+}
+
+std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const TokenList& tokens)
+{
+	Clause clause;
+	ParseError error;
+	KnowledgeBase knowldgeBase;
+	pair<ParseError, ExpressionTreeNode> head;
+	pair<ParseError, ExpressionTreeNode> body;
+
+	TokenList::const_iterator current = tokens.begin();
+	TokenList::const_iterator end = tokens.end();
+	end--;
+	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
+	{
+		cout << it->value() << endl;
+		if (it->type() == TokenType::END)
+		{
+			auto delimiter = Delimiter(current, it);
+			if (it->type() == TokenType::END)
+				cout << "carrier pidgeon" << endl;
+
+			TokenList headTokens(current, delimiter.first);
+			head = parseExpression(headTokens);
+			cout << head.second.toString() << endl;
+			clause.head = head.second;
+			if (delimiter.first != delimiter.second)
+			{
+				TokenList bodyTokens(delimiter.second, next(it));
+				body = parseQuery(bodyTokens);
+				cout << body.second.toString() << endl;
+				clause.body = body.second;
+			}
+
+			if (head.first.isSet() || body.first.isSet())
+			{
+				error.set("an error occurred and the KnowledgeBase may be incomplete");
+			}
+
+			knowldgeBase.tell(clause);
+			if(it != end)
+				current = it;
+			if(current->type() == TokenType::STRING)
+				cout << "shaboogy" << endl;
+		}
+	}
+
+	return { error, knowldgeBase };
+}
+
+std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const string& input)
+{
+	istringstream iss(input);
+	return parseKnowledgeBase(tokenize(iss));
+}
+

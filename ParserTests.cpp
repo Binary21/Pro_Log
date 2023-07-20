@@ -3,7 +3,7 @@
 #include "Parser.hpp"
 #include "ExpressionTree.hpp"
 #include "Lexer.hpp"
-
+#include "KnowledgeBase.hpp"
 #include <sstream>
 #include <string>
 
@@ -173,7 +173,7 @@ TEST_CASE("Parse Query Tests")
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
-		string input = "f . ";
+		string input = "f.";
 		tree = parseQuery(input);
 		REQUIRE(tree.first.isSet() == false);
 	}
@@ -225,4 +225,14 @@ TEST_CASE("Parse Query Tests")
 		tree = parseQuery(t1);
 		REQUIRE(tree.first.isSet() == false);
 	}
+}
+
+TEST_CASE("Parse KnowledgeBase")
+{
+	tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+	string input = "h(X,Y) :- f(X),g(b,Y). ";
+	istringstream iss(input);
+	TokenList t1 = tokenize(iss);
+	knowledgeBase = parseKnowledgeBase(t1);
+	REQUIRE(!std::get<0>(knowledgeBase).isSet());
 }

@@ -5,7 +5,9 @@
 #include <iostream>
 #include "Lexer.hpp"
 #include "ExpressionTree.hpp"
+#include "KnowledgeBase.hpp"
 #include "Token.hpp"
+#include <tuple>
 
 using namespace std;
 
@@ -33,6 +35,11 @@ namespace vtpl {
 	pair<ParseError, ExpressionTreeNode> parseExpression(const string& input);
 	std::pair<ParseError, ExpressionTreeNode> parseQuery(const TokenList& tokens);
 	std::pair<ParseError, ExpressionTreeNode> parseQuery(const string& input);
+
+	std::tuple<ParseError, vtpl::KnowledgeBase> parseKnowledgeBase(const TokenList& tokens);
+	std::tuple<ParseError, vtpl::KnowledgeBase> parseKnowledgeBase(const string& input);
+
+	pair< TokenList::const_iterator, TokenList::const_iterator> Delimiter(TokenList::const_iterator current, TokenList::const_iterator it);
 
 };
 
