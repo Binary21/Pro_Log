@@ -315,7 +315,9 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 	TokenList::const_iterator delimiter1 = tokens.begin();
 	TokenList::const_iterator delimiter2 = tokens.end();
 	bool delimiterHit = false;
-	end--;
+	if(end != current)
+		end--;
+	//cout << printString(end) << endl;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
 		cout << "current value: " << printString(current) << endl;

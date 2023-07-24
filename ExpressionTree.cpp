@@ -133,7 +133,7 @@ string ExpressionTreeNode::toStringHelper() const
 
 	if (isNone(node))
 	{
-		result += "NONE";
+		result += "";
 	}
 	else if (isAtom(node))
 	{

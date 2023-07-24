@@ -9,13 +9,14 @@
 #include "KnowledgeBase.hpp"
 #include <sstream>
 #include <string>
+#include "test_config.hpp"
+#include <fstream>
 
 using namespace vtpl;
 using namespace std;
 
 TEST_CASE("Parse KnowledgeBase")
 {
-	
 	SECTION("Correct input - tokens")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
@@ -285,5 +286,30 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify that the parser returns the expected parsing error
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
+	}
+	// head is an expression list
+	// if the head is malformed f(x,f,)
+
+	// Test "parse simple likes knowledgebase" failed. parse test likes.pro
+
+	//  Test ""Test parse KB from string" failed. parse test likes.pro as string
+
+	SECTION("Invalid head clause")
+	{
+		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). \n likes(bill, movies). \n likes(sally, movies). \n likes(bob, pizza).";
+		knowledgeBase = parseKnowledgeBase(input);
+
+		// Verify that the parser returns the expected parsing error
+		REQUIRE(!std::get<0>(knowledgeBase).isSet());
+	}
+
+	SECTION("")
+	{
+		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+		string input = TEST_FILE_DIR + "/ likes.pro";
+		ifstream likes(input);
+		TokenList t1 = tokenize(likes);
+		knowledgeBase = parseKnowledgeBase(t1);
 	}
 }
