@@ -339,7 +339,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			head = parseExpression(headTokens);
 			cout << head.second.toString() << endl;
 			clause.head = head.second.children.front();
-			if (delimiter2 != tokens.end())
+			if (delimiter2 != tokens.end() && delimiterHit)
 			{
 				TokenList bodyTokens(delimiter2, next(it));
 				for (Token token : bodyTokens)
@@ -351,6 +351,8 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 				cout << body.second.toString() << endl;
 				clause.body = body.second;
 			}
+			else
+				clause.body.type = ExpressionTreeNodeType::NONE;
 
 			if (head.first.isSet() || body.first.isSet())
 			{
@@ -365,6 +367,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 				current = it;
 				current++;
 				cout << "current the issue " << printString(current) << endl;
+				delimiterHit = false;
 			}
 				
 			if(current->type() == TokenType::STRING)

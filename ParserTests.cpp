@@ -9,10 +9,10 @@
 
 using namespace std;
 using namespace vtpl;
-/**
+
 TEST_CASE("Correct Tree formation")
 {
-
+	
 	pair<ParseError, ExpressionTreeNode> tree;
 	SECTION("Atom only")
 	{
@@ -226,6 +226,8 @@ TEST_CASE("Parse Query Tests")
 		tree = parseQuery(t1);
 		REQUIRE(tree.first.isSet() == false);
 	}
+
+	
+
 }
 
-**/

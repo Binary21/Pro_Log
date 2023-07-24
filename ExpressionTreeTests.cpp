@@ -9,7 +9,7 @@
 
 using namespace vtpl;
 using namespace std;
-/**
+
 
 TEST_CASE("") 
 {
@@ -161,4 +161,3 @@ TEST_CASE("Manual Tests Expression Tree")
 	}
 }
 
-**/

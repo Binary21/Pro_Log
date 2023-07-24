@@ -11,7 +11,7 @@
 using namespace vtpl;
 
 Lexer lexer;
-/**
+
 TEST_CASE("Test empty stream", "[Lexer]") {
 
   SECTION("empty stream") {
@@ -331,4 +331,3 @@ TEST_CASE("Test compound lexing", "[Lexer]") {
   REQUIRE(*(++it) == Token(TokenType::STRING, 1, "c"));
   REQUIRE(*(++it) == Token(TokenType::COMMA, 1));
 }
-**/
