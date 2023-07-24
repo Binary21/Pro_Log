@@ -307,7 +307,7 @@ pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(Token
 
 std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const TokenList& tokens)
 {
-	Clause clause;
+	
 	ParseError error;
 	KnowledgeBase knowldgeBase;
 	pair<ParseError, ExpressionTreeNode> head;
@@ -329,6 +329,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 		//cout << "delimiter2: " << printString(delimiter2) << endl;
 		if (it->type() == TokenType::END)
 		{
+			Clause clause;
 			//auto delimiter = Delimiter(current, it);
 			TokenList headTokens;
 

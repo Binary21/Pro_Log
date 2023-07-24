@@ -307,19 +307,58 @@ TEST_CASE("Parse KnowledgeBase")
 	SECTION("Invalid head clause")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
-		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). \n likes(bill, movies). \n likes(sally, movies). \n likes(bob, pizza).";
+		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z).  \n likes(bill, movies). \n likes(sally, movies). \n likes(bob, pizza).";
 		knowledgeBase = parseKnowledgeBase(input);
 
+		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
+		REQUIRE(it->head.toString() == "friends(X,Y)");
+		REQUIRE(it->body.toString() == "(likes(X,Z),likes(Y,Z))");
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(bill,movies)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(sally,movies)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(bob,pizza)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
 		// Verify that the parser returns the expected parsing error
 		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
-
 	SECTION("")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
-		string input = TEST_FILE_DIR + "/ likes.pro";
+		string input = TEST_FILE_DIR + "/likes.pro";
 		ifstream likes(input);
 		TokenList t1 = tokenize(likes);
+		cout << "print out" << endl;
 		knowledgeBase = parseKnowledgeBase(t1);
+
+		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
+		REQUIRE(it->head.toString() == "friends(X,Y)");
+		REQUIRE(it->body.toString() == "(likes(X,Z),likes(Y,Z))");
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(bill,movies)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(sally,movies)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
+
+		++it;
+		REQUIRE(it->head.toString() == "likes(bob,pizza)");
+		REQUIRE(it->body.toString() == "");
+		REQUIRE(isNone(it->body));
+		// Verify that the parser returns the expected parsing error
+		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
 }
