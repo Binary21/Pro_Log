@@ -59,6 +59,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 	while (current->type() == TokenType::COMMA && depth == 0)
 	{
+		
 		if (current->type() == TokenType::COMMA)
 		{
 			current++;
@@ -69,6 +70,8 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		}
 		root = parseList(current, end, error, depth, diffinput);
 		rooter.children.emplace_back(root);
+		if (current == end)
+			break;
 	}
 	if (current != end || depth != 0)
 	{
@@ -344,7 +347,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			}
 			cout << endl;
 			head = parseExpression(headTokens);
-			if (head.first.isSet())
+			if (head.first.isSet() || head.second.children.size() > 1)
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
 				return { error, knowldgeBase };

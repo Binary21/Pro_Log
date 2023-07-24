@@ -287,6 +287,16 @@ TEST_CASE("Parse KnowledgeBase")
 		// Verify that the parser returns the expected parsing error
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
+
+	SECTION("Head made up of expression list")
+	{
+		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+		string input = "g(p,k),g(q,z) :- g(z,k).";
+		knowledgeBase = parseKnowledgeBase(input);
+
+		// Verify that the parser returns the expected parsing error
+		REQUIRE(std::get<0>(knowledgeBase).isSet());
+	}
 	// head is an expression list
 	// if the head is malformed f(x,f,)
 
