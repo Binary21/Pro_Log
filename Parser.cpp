@@ -363,10 +363,6 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 		if (it->type() == TokenType::IMP)
 		{
 			delimiter1 = it;
-			if (delimiter1 != tokens.begin())
-			{
-				delimiter1;
-			}
 			delimiter2 = it;
 			if (delimiter2 != tokens.end())
 			{
