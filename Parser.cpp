@@ -21,7 +21,12 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-	cout << printString(current) << endl;
+	//cout << printString(current) << endl;
+	if (current == end)
+	{
+		error.set("Invalid Head");
+		return { error, root };
+	}
 	if (current->type() == TokenType::OPEN)
 	{
 		end--;
@@ -337,6 +342,11 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			}
 			cout << endl;
 			head = parseExpression(headTokens);
+			if (head.first.isSet())
+			{
+				error.set("an error occurred and the KnowledgeBase may be incomplete");
+				return { error, knowldgeBase };
+			}
 			cout << head.second.toString() << endl;
 			clause.head = head.second.children.front();
 			if (delimiter2 != tokens.end() && delimiterHit)
@@ -351,10 +361,8 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 				cout << body.second.toString() << endl;
 				clause.body = body.second;
 			}
-			else
-				clause.body.type = ExpressionTreeNodeType::NONE;
 
-			if (head.first.isSet() || body.first.isSet())
+			if (body.first.isSet())
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
 				return { error, knowldgeBase };

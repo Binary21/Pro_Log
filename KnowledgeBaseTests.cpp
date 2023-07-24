@@ -275,26 +275,15 @@ TEST_CASE("Parse KnowledgeBase")
 		++it;
 		REQUIRE(it->head.toString() == "likes(anna,sushi)");
 		REQUIRE(isNone(it->body));
-	}
-		SECTION("Test parse KB from string - Multiple clauses with a rule")
+	}	
+
+	SECTION("Invalid head clause")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
-		string input = "p(X, Y) :- q(X, Y). \n q(a, b).";
+		string input = " :- g(z,k).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
-		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
-
-		// Verify the number of clauses in the knowledge base
-		REQUIRE(std::get<1>(knowledgeBase).size() == 2);
-
-		// Verify the clauses and their contents
-		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "p(X,Y)");
-		REQUIRE(it->body.toString() == "(q(X,Y))");
-
-		++it;
-		REQUIRE(it->head.toString() == "q(a,b)");
-		REQUIRE(isNone(it->body));
+		// Verify that the parser returns the expected parsing error
+		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 }
