@@ -21,7 +21,6 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-	//cout << printString(current) << endl;
 	if (current == end)
 	{
 		error.set("Invalid Head");
@@ -41,7 +40,6 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		current++;
 	}
 	ExpressionTreeNode rooter;
-	cout << printString(current) << endl;
 	rooter.type = ExpressionTreeNodeType::ROOT;
 	root = parseList(current, end, error, depth, diffinput);
 	if (current != end && current->type() != TokenType::COMMA)
@@ -83,7 +81,6 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
-	cout << value << endl;
 	if (current->type() == TokenType::ERROR)
 		error.set("Error, invalid argument type");
 	if (current != end) {
@@ -98,7 +95,6 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		{
 			return makeVariable(value);
 		}
-		cout << current->value() << endl;
 		return makeAtom(value);
 	}
 	else if (current == end || current->type() != TokenType::OPEN) {
@@ -151,10 +147,6 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			return makeAtom(value);
 		}
 		list<ExpressionTreeNode> compound = parseChildren(current, end, error, depth, diffinput);
-		for (ExpressionTreeNode node : compound)
-		{
-			cout << node.contents << endl;
-		}
 		if (compound.size() == 0)
 			return makeAtom(value);
 		return makeCompound(value, compound);
@@ -223,21 +215,12 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const string& input)
 }
 pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 {
-	cout << "Address of tokens in parseQuery: " << &tokens << endl;
 	ParseError error;
 	ExpressionTreeNode root;
 	bool diffinput = false;
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-
-	for (Token token : tokens)
-	{
-		if (token.type() == TokenType::END)
-		{
-			cout << "this pidgeon crazy" << endl;
-		}
-	}
 
 	end--;
 	ExpressionTreeNode rooter;
@@ -320,13 +303,8 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 	bool delimiterHit = false;
 	if(end != current)
 		end--;
-	//cout << printString(end) << endl;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
-		cout << "current value: " << printString(current) << endl;
-		cout << "it value: " << printString(it) << endl;
-		//cout << "delimiter1: " << printString(delimiter1) << endl;
-		//cout << "delimiter2: " << printString(delimiter2) << endl;
 		if (it->type() == TokenType::END)
 		{
 			Clause clause;
@@ -341,30 +319,17 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			{
 				headTokens = TokenList(current, it);
 			}
-
-			for (Token token : headTokens)
-			{
-				cout << printString(token);
-			}
-			cout << endl;
 			head = parseExpression(headTokens);
 			if (head.first.isSet() || head.second.children.size() > 1)
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
 				return { error, knowldgeBase };
 			}
-			cout << head.second.toString() << endl;
 			clause.head = head.second.children.front();
 			if (delimiter2 != tokens.end() && delimiterHit)
 			{
 				TokenList bodyTokens(delimiter2, next(it));
-				for (Token token : bodyTokens)
-				{
-					cout << printString(token);
-				}
-				cout << endl;
 				body = parseQuery(bodyTokens);
-				cout << body.second.toString() << endl;
 				clause.body = body.second;
 			}
 
@@ -380,12 +345,8 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			{
 				current = it;
 				current++;
-				cout << "current the issue " << printString(current) << endl;
 				delimiterHit = false;
 			}
-				
-			if(current->type() == TokenType::STRING)
-				cout << "shaboogy" << endl;
 		}
 		if (it->type() == TokenType::IMP)
 		{
