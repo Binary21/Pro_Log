@@ -75,6 +75,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
 	string value = current->value();
+	cout << value << endl;
 	if (current->type() == TokenType::ERROR)
 		error.set("Error, invalid argument type");
 	if (current != end) {
@@ -142,6 +143,10 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			return makeAtom(value);
 		}
 		list<ExpressionTreeNode> compound = parseChildren(current, end, error, depth, diffinput);
+		for (ExpressionTreeNode node : compound)
+		{
+			cout << node.contents << endl;
+		}
 		if (compound.size() == 0)
 			return makeAtom(value);
 		return makeCompound(value, compound);
@@ -227,6 +232,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 
 	end--;
 	ExpressionTreeNode rooter;
+	rooter.type = ExpressionTreeNodeType::ROOT;
 	if (end->type() == TokenType::END)
 	{
 		root = parseList(current, end, error, depth, diffinput);
@@ -297,25 +303,39 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 	KnowledgeBase knowldgeBase;
 	pair<ParseError, ExpressionTreeNode> head;
 	pair<ParseError, ExpressionTreeNode> body;
-
+	
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
+	TokenList::const_iterator delimiter1 = tokens.end();
+	TokenList::const_iterator delimiter2 = tokens.end();
 	end--;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
-		cout << "current value: " << printString(current) << endl;
-		cout << "it value: " << printString(it) << endl;
+		//cout << "current value: " << printString(current) << endl;
+		//cout << "it value: " << printString(it) << endl;
+		//cout << "delimiter1: " << printString(delimiter1) << endl;
+		//cout << "delimiter2: " << printString(delimiter2) << endl;
 		if (it->type() == TokenType::END)
 		{
-			auto delimiter = Delimiter(current, it);
+			//auto delimiter = Delimiter(current, it);
 
-			TokenList headTokens(current, delimiter.first);
+			TokenList headTokens(current, delimiter1);
+			for (Token token : headTokens)
+			{
+				cout << printString(token);
+			}
+			cout << endl;
 			head = parseExpression(headTokens);
 			cout << head.second.toString() << endl;
-			clause.head = head.second;
-			if (delimiter.first != delimiter.second)
+			clause.head = head.second.children.front();
+			if (delimiter2 != tokens.end())
 			{
-				TokenList bodyTokens(delimiter.second, next(it));
+				TokenList bodyTokens(delimiter2, next(it));
+				for (Token token : bodyTokens)
+				{
+					cout << printString(token);
+				}
+				cout << endl;
 				body = parseQuery(bodyTokens);
 				cout << body.second.toString() << endl;
 				clause.body = body.second;
@@ -330,10 +350,28 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 
 			knowldgeBase.tell(clause);
 			
-			if(it != end)
+			if (it != end)
+			{
 				current = it;
+				current++;
+				//cout << "current the issue " << printString(current) << endl;
+			}
+				
 			if(current->type() == TokenType::STRING)
 				cout << "shaboogy" << endl;
+		}
+		if (it->type() == TokenType::IMP)
+		{
+			delimiter1 = it;
+			if (delimiter1 != tokens.begin())
+			{
+				delimiter1;
+			}
+			delimiter2 = it;
+			if (delimiter2 != tokens.end())
+			{
+				delimiter2++;
+			}
 		}
 	}
 
@@ -349,14 +387,29 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const strin
 string vtpl::printString(TokenList::const_iterator& current)
 {
 	if (current->type() == TokenType::CLOSE)
-		return "(";
-	if (current->type() == TokenType::OPEN)
 		return ")";
+	if (current->type() == TokenType::OPEN)
+		return "(";
 	if (current->type() == TokenType::COMMA)
 		return ",";
 	if (current->type() == TokenType::STRING)
 		return current->value();
 	if (current->type() == TokenType::END)
+		return ".";
+	return " ";
+}
+
+string vtpl::printString(Token& token)
+{
+	if (token.type() == TokenType::CLOSE)
+		return ")";
+	if (token.type() == TokenType::OPEN)
+		return "(";
+	if (token.type() == TokenType::COMMA)
+		return ",";
+	if (token.type() == TokenType::STRING)
+		return token.value();
+	if (token.type() == TokenType::END)
 		return ".";
 	return " ";
 }
