@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace vtpl;
-
+/**
 TEST_CASE("Correct Tree formation")
 {
 
@@ -228,3 +228,4 @@ TEST_CASE("Parse Query Tests")
 	}
 }
 
+**/

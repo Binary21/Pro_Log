@@ -167,6 +167,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 			if (current == end || current->type() != TokenType::STRING)
 			{
 				error.set("Invalid Argument After Comma");
+				return children;
 			}
 		}
 	}
@@ -306,20 +307,30 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 	
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
-	TokenList::const_iterator delimiter1 = tokens.end();
+	TokenList::const_iterator delimiter1 = tokens.begin();
 	TokenList::const_iterator delimiter2 = tokens.end();
+	bool delimiterHit = false;
 	end--;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
-		//cout << "current value: " << printString(current) << endl;
-		//cout << "it value: " << printString(it) << endl;
+		cout << "current value: " << printString(current) << endl;
+		cout << "it value: " << printString(it) << endl;
 		//cout << "delimiter1: " << printString(delimiter1) << endl;
 		//cout << "delimiter2: " << printString(delimiter2) << endl;
 		if (it->type() == TokenType::END)
 		{
 			//auto delimiter = Delimiter(current, it);
+			TokenList headTokens;
 
-			TokenList headTokens(current, delimiter1);
+			if (delimiterHit)
+			{
+				headTokens = TokenList(current, delimiter1);
+			}
+			else
+			{
+				headTokens = TokenList(current, it);
+			}
+
 			for (Token token : headTokens)
 			{
 				cout << printString(token);
@@ -340,12 +351,11 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 				cout << body.second.toString() << endl;
 				clause.body = body.second;
 			}
-			else if (it != end)
-				it++;
 
 			if (head.first.isSet() || body.first.isSet())
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
+				return { error, knowldgeBase };
 			}
 
 			knowldgeBase.tell(clause);
@@ -354,7 +364,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			{
 				current = it;
 				current++;
-				//cout << "current the issue " << printString(current) << endl;
+				cout << "current the issue " << printString(current) << endl;
 			}
 				
 			if(current->type() == TokenType::STRING)
@@ -368,9 +378,11 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			{
 				delimiter2++;
 			}
+			delimiterHit = true;
 		}
 	}
-
+	if(knowldgeBase.size() == 0)
+		error.set("an error occurred and the KnowledgeBase may be incomplete");
 	return { error, knowldgeBase };
 }
 

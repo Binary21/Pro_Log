@@ -55,7 +55,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
             }
 
             // checks if our character is an alphabet and adds to temporary string if so
-            else if (isalpha(c))
+            else if (isalpha(c) || c == '_')
             {
                 temp += c;
             }
