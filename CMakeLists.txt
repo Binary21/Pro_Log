@@ -16,6 +16,8 @@ set(LIB_SOURCE
   Parser.hpp
   KnowledgeBase.cpp
   KnowledgeBase.hpp
+  Unification.cpp
+  Unification.hpp
 )
 
 # add source for library unit tests here
@@ -26,6 +28,7 @@ set(LIB_TEST_SOURCE
   ExpressionTreeTests.cpp
   ParserTests.cpp
   KnowledgeBaseTests.cpp
+  UnificationTests.cpp
 )
 
 # add source for tui modules here
