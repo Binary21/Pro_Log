@@ -60,7 +60,7 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 	else if (isVariable(X))
 	{
 		if (!subst.substitution.lookup(X).empty())
-			unifyVar(subst.substitution.lookup(X).front(), Y, subst);
+			subst.substitution.insert(X, Y);
 		else
 			subst.substitution.insert(X, Y);
 	}
@@ -81,6 +81,8 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 
 		while (current_x != X.children.end())
 		{
+			cout << "current X: " << current_x->toString() << endl;
+			cout << "current X: " << current_y->toString() << endl;
 			unify(*current_x, *current_y, subst);
 			++current_x;
 			++current_y;
