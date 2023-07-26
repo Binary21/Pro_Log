@@ -52,16 +52,23 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 
 	cout << "X: " << X.toString() << endl;
 	cout << "Y: " << Y.toString() << endl;
-
-	if (isVariable(X))
+	if (subst.failed == true)
+		return;
+	else if (X == Y)
+		return;
+	// else if isvariable(x) then return unify-var(x,y,s)
+	else if (isVariable(X))
 	{
 		if (!subst.substitution.lookup(X).empty())
 			unifyVar(subst.substitution.lookup(X).front(), Y, subst);
 		else
 			subst.substitution.insert(X, Y);
 	}
+	// else if isvariable(y) then return unify-var(y,x,s)
 	else if (isVariable(Y))
 		unify(Y, X, subst);
+
+	// else if iscompound(x) and ifcompound(y) then return unify(x.args, y.args, unify(x.op, y.op, s))
 	else if (isCompound(X) && isCompound(Y))
 	{
 		if (X.contents != Y.contents || X.children.size() != Y.children.size())
@@ -78,6 +85,12 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 			++current_x;
 			++current_y;
 		}
+		return;
+	}
+	else
+	{
+		subst.failed = true;
+		return;
 	}
 }
 
