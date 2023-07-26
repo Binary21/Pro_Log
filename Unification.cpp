@@ -39,29 +39,40 @@ Substitution::ConstIteratorType vtpl::Substitution::constEnd() const {
 
 void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, UnificationResult& subst)
 {
-	cout << "X: " << x.toString() << endl;
-	cout << "Y: " << y.toString() << endl;
-
-	if (isVariable(x))
+	ExpressionTreeNode X = x;
+	ExpressionTreeNode Y = y;
+	if (x.type == ExpressionTreeNodeType::ROOT)
 	{
-		if (!subst.substitution.lookup(x).empty())
-			unifyVar(subst.substitution.lookup(x).front(), y, subst);
-		else
-			subst.substitution.insert(x, y);
+		X = x.children.front();
 	}
-	else if (isVariable(y))
-		unify(y, x, subst);
-	else if (isCompound(x) && isCompound(y))
+	if (y.type == ExpressionTreeNodeType::ROOT)
 	{
-		if (x.contents != y.contents || x.children.size() != y.children.size())
+		Y = y.children.front();
+	}
+
+	cout << "X: " << X.toString() << endl;
+	cout << "Y: " << Y.toString() << endl;
+
+	if (isVariable(X))
+	{
+		if (!subst.substitution.lookup(X).empty())
+			unifyVar(subst.substitution.lookup(X).front(), Y, subst);
+		else
+			subst.substitution.insert(X, Y);
+	}
+	else if (isVariable(Y))
+		unify(Y, X, subst);
+	else if (isCompound(X) && isCompound(Y))
+	{
+		if (X.contents != Y.contents || X.children.size() != Y.children.size())
 		{
 			subst.failed = true;
 			return;
 		}
-		auto current_x = x.children.begin();
-		auto current_y = y.children.begin();
+		auto current_x = X.children.begin();
+		auto current_y = Y.children.begin();
 
-		while (current_x != x.children.end())
+		while (current_x != X.children.end())
 		{
 			unify(*current_x, *current_y, subst);
 			++current_x;

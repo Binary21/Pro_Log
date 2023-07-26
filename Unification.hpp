@@ -27,9 +27,11 @@ namespace vtpl {
 		ConstIteratorType constBegin() const;
 		ConstIteratorType constEnd() const;
 
+		SubstitutionData data;
+
 	private:
 
-		SubstitutionData data;
+		
 	};
 
 	struct UnificationResult
