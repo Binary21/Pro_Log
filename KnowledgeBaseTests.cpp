@@ -289,12 +289,6 @@ TEST_CASE("Parse KnowledgeBase")
 		// Verify that the parser returns the expected parsing error
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
-	// head is an expression list
-	// if the head is malformed f(x,f,)
-
-	// Test "parse simple likes knowledgebase" failed. parse test likes.pro
-
-	//  Test ""Test parse KB from string" failed. parse test likes.pro as string
 
 	SECTION("Invalid head clause")
 	{
