@@ -263,4 +263,18 @@ TEST_CASE("")
 		REQUIRE(result.failed == false);
 		REQUIRE(result.substitution.data.size() == 1);
 	}
+	SECTION("test unify variable multiple times", "[unify]") {
+		// Test case for multiple assignments to the same variable
+		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("f(a,X1)");
+		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("f(Y1,a)");
+		makeVariable("X1");
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.lookup(makeVariable("X1")).front() == makeAtom("a"));
+		REQUIRE(result.substitution.lookup(makeVariable("Y1")).front() == makeAtom("a"));
+		REQUIRE(result.substitution.lookup(makeVariable("Y1")).size() == 1);
+		REQUIRE(result.substitution.lookup(makeVariable("X1")).size() == 1);
+	}
 }

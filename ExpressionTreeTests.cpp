@@ -13,7 +13,7 @@ using namespace std;
 
 TEST_CASE("") 
 {
-
+	
 	SECTION("Empty Node")
 	{
 		ExpressionTreeNode atom;

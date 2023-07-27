@@ -50,8 +50,6 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 		Y = y.children.front();
 	}
 
-	cout << "X: " << X.toString() << endl;
-	cout << "Y: " << Y.toString() << endl;
 	if (subst.failed == true)
 		return;
 	else if (X == Y)
@@ -76,8 +74,6 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 
 		while (current_x != X.children.end())
 		{
-			cout << "current X: " << current_x->toString() << endl;
-			cout << "current X: " << current_y->toString() << endl;
 			unify(*current_x, *current_y, subst);
 			++current_x;
 			++current_y;

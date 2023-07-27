@@ -28,6 +28,7 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
         // parse each line itterably character by character
         for (size_t i = 0; i < line.length(); i++)
         {
+            
             char c = line[i];
             // exit line if commented
             if (c == '%')
@@ -54,15 +55,19 @@ vtpl::TokenList vtpl::tokenize(std::istream& input) {
             }
 
             // checks if our character is an alphabet and adds to temporary string if so
-            else if (isalpha(c) || c == '_')
-            {
-                temp += c;
-            }
+            
 
             else if (isdigit(c))
             {
                 if (temp.empty())
                     tokenList.emplace_back(TokenType::ERROR, lineValue);
+                else
+                    temp += c;
+            }
+
+            else if (isalpha(c) || c == '_')
+            {
+                temp += c;
             }
 
             else if (isspace(c))
