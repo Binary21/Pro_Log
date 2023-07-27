@@ -59,11 +59,15 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 	// else if isvariable(x) then return unify-var(x,y,s)
 	else if (isVariable(X))
 	{
+		unifyVar(X, Y, subst);
+	}
+	/**else if (isVariable(X))
+	{
 		if (!subst.substitution.lookup(X).empty())
-			subst.substitution.insert(X, Y);
+			unifyVar(subst.substitution.lookup(X).front(), Y, subst);
 		else
 			subst.substitution.insert(X, Y);
-	}
+	}**/
 	// else if isvariable(y) then return unify-var(y,x,s)
 	else if (isVariable(Y))
 		unify(Y, X, subst);
@@ -98,12 +102,34 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 
 void vtpl::unifyVar(const ExpressionTreeNode& var, const ExpressionTreeNode& x, UnificationResult& subst)
 {
+	auto lookup_var = subst.substitution.lookup(var);
+	if (!lookup_var.empty())
+	{
+		unify(lookup_var.front(), x, subst);
+	}
+	else
+	{
+		auto lookup_x = subst.substitution.lookup(x);
+		if (!lookup_x.empty())
+		{
+			unify(var, lookup_x.front(), subst);
+		}
+		else
+			subst.substitution.insert(var, x);
+	}
+	/**
 	if (!subst.substitution.lookup(var).empty())
 	{
-		unify(var, x, subst);
+		unify(subst.substitution.lookup(var).front(), x, subst);
 	}
 	else if (!subst.substitution.lookup(x).empty())
 	{
-		unify(var, x, subst);
+		unify(subst.substitution.lookup(x).front(), var, subst);
 	}
+	else if (subst.substitution.lookup(var).empty())
+	{
+		subst.substitution.insert(var, x);
+		return;
+	}
+	**/
 }

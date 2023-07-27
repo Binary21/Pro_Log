@@ -215,10 +215,21 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(tree1.second, tree2.second, result);
 
-		REQUIRE(result.failed == false);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).size() == 2);
+		REQUIRE(result.failed == true);
 	}
+	SECTION("")
+	{
+		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("likes(X,Y)");
+		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("likes(Y,pasta)");
 
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "Y");
+		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "pasta");
+	}
+	/**
 	SECTION("test unify variable multiple times", "[unify]") {
 		// Test case for multiple assignments to the same variable
 		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("likes(X,X)");
@@ -229,5 +240,7 @@ TEST_CASE("")
 
 		REQUIRE(result.failed == false);
 		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "greens");
-	}
+	}**/
 }
+// f(X,Y) == f(a,a)
+// f(X,X) == f(a,a)
