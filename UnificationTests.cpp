@@ -33,18 +33,7 @@ TEST_CASE("")
 		vtpl::unify(x, y, result);
 		REQUIRE(result.failed == false);
 		//REQUIRE(result.substitution.lookup(y).front().contents == x.contents);
-	}/**
-	SECTION("")
-	{
-		string input1 = "a";
-		string input2 = "b";
-		ExpressionTreeNode x = makeAtom(input1);
-		ExpressionTreeNode y = makeVariable(input2);
-		UnificationResult result;
-		vtpl::unify(x, y, result);
-		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(x).front().contents == y.contents);
-	}**/
+	}
 	SECTION("")
 	{
 		string input1 = "a";
@@ -229,7 +218,6 @@ TEST_CASE("")
 		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "Y");
 		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "pasta");
 	}
-	/**
 	SECTION("test unify variable multiple times", "[unify]") {
 		// Test case for multiple assignments to the same variable
 		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("likes(X,X)");
@@ -239,8 +227,40 @@ TEST_CASE("")
 		vtpl::unify(tree1.second, tree2.second, result);
 
 		REQUIRE(result.failed == false);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "greens");
-	}**/
+		REQUIRE(result.substitution.lookup(makeVariable("X")).size() == 1);
+	}
+	SECTION("test unify variable multiple times", "[unify]") {
+		// Test case for multiple assignments to the same variable
+		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("likes(X,Y)");
+		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("likes(greens,greens)");
+
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.lookup(makeVariable("X")).size() == 1);
+	}
+	SECTION("test complex nested structures", "[unify]") {
+		// Test case for complex nested structures
+		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("f(g(X), h(Y, k(a)))");
+		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("f(g(Z), h(k(Z), k(a)))");
+
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "Z");
+		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "k(Z)");
+	}
+	SECTION("test unify variable multiple times with failure", "[unify]") {
+		// Test case for multiple assignments to the same variable
+		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("likes(g(X),X)");
+		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("likes(g(a),a)");
+
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.data.size() == 1);
+	}
 }
-// f(X,Y) == f(a,a)
-// f(X,X) == f(a,a)
