@@ -267,7 +267,6 @@ TEST_CASE("")
 		// Test case for multiple assignments to the same variable
 		pair<ParseError, ExpressionTreeNode> tree1 = parseExpression("f(a,X1)");
 		pair<ParseError, ExpressionTreeNode> tree2 = parseExpression("f(Y1,a)");
-		makeVariable("X1");
 		UnificationResult result;
 		vtpl::unify(tree1.second, tree2.second, result);
 

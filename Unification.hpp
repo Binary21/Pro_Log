@@ -30,7 +30,6 @@ namespace vtpl {
 		SubstitutionData data;
 
 	private:
-		int size();
 		
 	};
 
