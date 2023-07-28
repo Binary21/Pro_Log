@@ -18,6 +18,9 @@ set(LIB_SOURCE
   KnowledgeBase.hpp
   Unification.cpp
   Unification.hpp
+  KnowledgeBaseUtility.cpp
+  KnowledgeBaseUtility.hpp
+  
 )
 
 # add source for library unit tests here
@@ -29,6 +32,7 @@ set(LIB_TEST_SOURCE
   ParserTests.cpp
   KnowledgeBaseTests.cpp
   UnificationTests.cpp
+  KnowledgeBaseUtilityTests.cpp
 )
 
 # add source for tui modules here
@@ -102,17 +106,17 @@ else(Qt5_FOUND)
 endif()
 
 # executables without Qt dependency
-add_executable(unit_tests catch.hpp ${LIB_TEST_SOURCE} ${LIB_SOURCE} "KnowledgeBaseUtility.cpp" "KnowledgeBaseUtility.hpp" "KnowledgeBaseUtilityTests.cpp")
+add_executable(unit_tests catch.hpp ${LIB_TEST_SOURCE} ${LIB_SOURCE})
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(unit_tests pthread)
 endif()
 
-add_executable(tui_test ${TUI_TEST_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE} "KnowledgeBaseUtility.cpp" "KnowledgeBaseUtility.hpp" "KnowledgeBaseUtilityTests.cpp")
+add_executable(tui_test ${TUI_TEST_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE})
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(tui_test pthread)
 endif()
 
-add_executable(vtpl ${VTPL_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE} "KnowledgeBaseUtility.cpp" "KnowledgeBaseUtility.hpp" "KnowledgeBaseUtilityTests.cpp")
+add_executable(vtpl ${VTPL_SOURCE} ${TUI_SOURCE} ${LIB_SOURCE})
 if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(vtpl pthread)
 endif()
@@ -120,14 +124,14 @@ endif()
 # executables with Qt dependency
 if(Qt5_FOUND)
 
-  add_executable(gui_test ${GUI_TEST_SOURCE} ${GUI_SOURCE} ${LIB_SOURCE} "KnowledgeBaseUtility.cpp" "KnowledgeBaseUtility.hpp" "KnowledgeBaseUtilityTests.cpp")
+  add_executable(gui_test ${GUI_TEST_SOURCE} ${GUI_SOURCE} ${LIB_SOURCE})
   if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(gui_test Qt5::Widgets Qt5::Test pthread)
   else(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(gui_test Qt5::Widgets Qt5::Test)
   endif()
   
-  add_executable(vtpl-ide ${VTPLIDE_SOURCE} ${GUI_SOURCE} ${LIB_SOURCE} "KnowledgeBaseUtility.cpp" "KnowledgeBaseUtility.hpp" "KnowledgeBaseUtilityTests.cpp")
+  add_executable(vtpl-ide ${VTPLIDE_SOURCE} ${GUI_SOURCE} ${LIB_SOURCE})
   if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(vtpl-ide Qt5::Widgets pthread)
   else(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
