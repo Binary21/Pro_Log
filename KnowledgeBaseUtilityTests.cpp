@@ -15,7 +15,6 @@ using namespace std;
 
 TEST_CASE("")
 {
-	
 	SECTION("")
 	{
 		pair<ParseError, ExpressionTreeNode> tree1;
@@ -93,57 +92,6 @@ TEST_CASE("")
 		SubstitutionData substData;
 		standardizeApart(t1, substData);
 		REQUIRE(t1.toString() == "f(X_1)");
-	}/**
-	SECTION("")
-	{
-		tuple<ParseError, KnowledgeBase> knowledgeBase;
-		string input = "h(X,Y) :- f(X),g(b,Y). g(X,Y) :- b(Z,R).";
-		istringstream iss(input);
-		TokenList t1 = tokenize(iss);
-		knowledgeBase = parseKnowledgeBase(t1);
-		Clause result;
-		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		result = apart(*it);
-		REQUIRE(result.head.toString() == "(h(X_1,Y_1))");
-		REQUIRE(result.body.toString() == "(f(X_1),g(b,Y_1))");
-		it++;
-		
-		result = apart(*it);
-		REQUIRE(result.head.toString() == "(g(X_2,Y_2))");
-		REQUIRE(result.body.toString() == "(b(Z_1,R_1))");
-		
-		
 	}
 	
-	SECTION("")
-	{
-		tuple<ParseError, KnowledgeBase> knowledgeBase;
-		string input = "h(X,X).";
-		istringstream iss(input);
-		TokenList t1 = tokenize(iss);
-		knowledgeBase = parseKnowledgeBase(t1);
-		Clause result;
-		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		result = apart(*it);
-		REQUIRE(result.head.toString() == "(h(X_3,X_3))");
-	}
-	/**
-	SECTION("")
-	{
-		Substitution s1;
-		s1.insert(makeVariable("X"), makeAtom("a"));
-		s1.insert(makeVariable("Y"), makeAtom("b"));
-
-		Substitution s2;
-		s1.insert(makeAtom("X"), makeAtom("c"));
-		s1.insert(makeAtom("Y"), makeAtom("d"));
-
-		Substitution result = compose(s1, s2);
-
-		Substitution expected;
-		expected.insert(makeVariable("X"), makeAtom("c"));
-		expected.insert(makeVariable("Y"), makeAtom("d"));
-
-		REQUIRE(result.data == expected.data);
-	}**/
 }
