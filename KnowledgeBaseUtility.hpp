@@ -8,7 +8,7 @@ namespace vtpl {
 	ExpressionTreeNode apply(const ExpressionTreeNode& t, const Substitution& sub);
 	Clause apart(const Clause& clause);
 	Substitution compose(const Substitution& s1, const Substitution& s2);
-	void standardizeApart(ExpressionTreeNode& node, std::unordered_map<std::string, std::string>& dict);
+	void standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData);
 	static std::unordered_map<std::string, int> counterDict;
 	//static int counter = 0;
 }
