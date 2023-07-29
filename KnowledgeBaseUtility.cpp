@@ -3,9 +3,10 @@
 using namespace vtpl;
 using namespace std;
 
-ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& sub)
+ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitution& sub)
 {
 	ExpressionTreeNode T = t;
+	
 	if (t.type == ExpressionTreeNodeType::ROOT)
 	{
 		T = t.children.front();
@@ -26,12 +27,20 @@ ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& 
 		auto current = T.children.begin();
 		while (current != T.children.end())
 		{
-			application.children.push_back(apply(*current, sub));
+			application.children.push_back(applyHelper(*current, sub));
 			current++;
 		}
 		return application;
 	}
 	return t;
+}
+
+ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& sub)
+{
+	ExpressionTreeNode root;
+	root.type = ExpressionTreeNodeType::ROOT;
+	root.children = { applyHelper(t, sub) };
+	return root;
 }
 
 void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData)

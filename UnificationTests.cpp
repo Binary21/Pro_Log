@@ -156,7 +156,7 @@ TEST_CASE("")
 
 		REQUIRE(result.failed == false);
 		REQUIRE(result.substitution.data.size() == 1);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "(pizza)");
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "pizza");
 	}
 
 	SECTION("unify binary predicate with variables", "[unify]") {
@@ -168,8 +168,8 @@ TEST_CASE("")
 
 		REQUIRE(result.failed == false);
 		REQUIRE(result.substitution.data.size() == 2);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "(mary)");
-		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "(pizza)");
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "mary");
+		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "pizza");
 	}
 
 	// ... Add more test cases for other scenarios ...
@@ -215,8 +215,8 @@ TEST_CASE("")
 		vtpl::unify(tree1.second, tree2.second, result);
 
 		REQUIRE(result.failed == false);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "(Y)");
-		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "(pasta)");
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "Y");
+		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "pasta");
 	}
 	SECTION("test unify variable multiple times", "[unify]") {
 		// Test case for multiple assignments to the same variable
@@ -249,8 +249,8 @@ TEST_CASE("")
 		vtpl::unify(tree1.second, tree2.second, result);
 
 		REQUIRE(result.failed == false);
-		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "(Z)");
-		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "(k(Z))");
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "Z");
+		REQUIRE(result.substitution.lookup(makeVariable("Y")).front().toString() == "k(Z)");
 	}
 	SECTION("test unify variable multiple times with failure", "[unify]") {
 		// Test case for multiple assignments to the same variable
