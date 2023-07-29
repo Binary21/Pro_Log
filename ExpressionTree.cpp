@@ -123,7 +123,9 @@ size_t vtpl::arity(const ExpressionTreeNode& node)
 
 string ExpressionTreeNode::toString() const
 {
-	return toStringHelper();
+	if (isNone(*this))
+		return "";
+	return "(" + toStringHelper() + ")";
 }
 
 string ExpressionTreeNode::toStringHelper() const
@@ -131,11 +133,7 @@ string ExpressionTreeNode::toStringHelper() const
 	ExpressionTreeNode node = *this;
 	string result;
 
-	if (isNone(node))
-	{
-		result += "";
-	}
-	else if (isAtom(node))
+	if (isAtom(node))
 	{
 		result += node.contents;
 	}
@@ -161,7 +159,7 @@ string ExpressionTreeNode::toStringHelper() const
 	else
 	{
 		bool firstArgument = true;
-		result += "(";
+		//result += "(";
 		for (ExpressionTreeNode& child : node.children)
 		{
 			if (!firstArgument)
@@ -171,7 +169,7 @@ string ExpressionTreeNode::toStringHelper() const
 			result += child.toStringHelper();
 			firstArgument = false;
 		}
-		result += ")";
+		//result += ")";
 	}
 	return result;
 }

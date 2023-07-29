@@ -76,7 +76,6 @@ Substitution vtpl::compose(const Substitution& s1, const Substitution& s2)
 	for (auto it = s1.constBegin(); it != s1.constEnd(); it++)
 	{
 		ExpressionTreeNode k = it->first;
-		cout << k.toString() << endl;
 		ExpressionTreeNode v1 = it->second;
 
 

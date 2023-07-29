@@ -63,15 +63,15 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clauses and their contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "f");
+		REQUIRE(it->head.toString() == "(f)");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "g");
+		REQUIRE(it->head.toString() == "(g)");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "h");
+		REQUIRE(it->head.toString() == "(h)");
 		REQUIRE(isNone(it->body));
 	}
 	
@@ -89,7 +89,7 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "likes(X)");
+		REQUIRE(it->head.toString() == "(likes(X))");
 		REQUIRE(isNone(it->body));
 	}
 	
@@ -107,7 +107,7 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "likes(X,Y)");
+		REQUIRE(it->head.toString() == "(likes(X,Y))");
 		REQUIRE(isNone(it->body));
 	}
 	
@@ -125,7 +125,7 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "p");
+		REQUIRE(it->head.toString() == "(p)");
 		REQUIRE(it->body.toString() == "(q)");
 	}
 	
@@ -143,11 +143,11 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clauses and their contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "likes(john,pizza)");
+		REQUIRE(it->head.toString() == "(likes(john,pizza))");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(mary,ice_cream)");
+		REQUIRE(it->head.toString() == "(likes(mary,ice_cream))");
 		REQUIRE(isNone(it->body));
 	}
 	
@@ -195,7 +195,7 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "p");
+		REQUIRE(it->head.toString() == "(p)");
 		REQUIRE(it->body.toString() == "(q(X,Y))");
 	}
 
@@ -258,15 +258,15 @@ TEST_CASE("Parse KnowledgeBase")
 
 		// Verify the clauses and their contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "likes(john,pizza)");
+		REQUIRE(it->head.toString() == "(likes(john,pizza))");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(mary,ice_cream)");
+		REQUIRE(it->head.toString() == "(likes(mary,ice_cream))");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(anna,sushi)");
+		REQUIRE(it->head.toString() == "(likes(anna,sushi))");
 		REQUIRE(isNone(it->body));
 	}	
 
@@ -297,21 +297,21 @@ TEST_CASE("Parse KnowledgeBase")
 		knowledgeBase = parseKnowledgeBase(input);
 
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "friends(X,Y)");
+		REQUIRE(it->head.toString() == "(friends(X,Y))");
 		REQUIRE(it->body.toString() == "(likes(X,Z),likes(Y,Z))");
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(bill,movies)");
+		REQUIRE(it->head.toString() == "(likes(bill,movies))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(sally,movies)");
+		REQUIRE(it->head.toString() == "(likes(sally,movies))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(bob,pizza)");
+		REQUIRE(it->head.toString() == "(likes(bob,pizza))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 		// Verify that the parser returns the expected parsing error
@@ -326,21 +326,21 @@ TEST_CASE("Parse KnowledgeBase")
 		knowledgeBase = parseKnowledgeBase(t1);
 
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
-		REQUIRE(it->head.toString() == "friends(X,Y)");
+		REQUIRE(it->head.toString() == "(friends(X,Y))");
 		REQUIRE(it->body.toString() == "(likes(X,Z),likes(Y,Z))");
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(bill,movies)");
+		REQUIRE(it->head.toString() == "(likes(bill,movies))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(sally,movies)");
+		REQUIRE(it->head.toString() == "(likes(sally,movies))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 
 		++it;
-		REQUIRE(it->head.toString() == "likes(bob,pizza)");
+		REQUIRE(it->head.toString() == "(likes(bob,pizza))");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
 		// Verify that the parser returns the expected parsing error
