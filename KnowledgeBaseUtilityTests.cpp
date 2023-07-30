@@ -93,5 +93,37 @@ TEST_CASE("")
 		standardizeApart(t1, substData);
 		REQUIRE(t1.toString() == "f(X_1)");
 	}
-	
+	SECTION("Applying substitution to expression list")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeAtom("a"));
+		subst.insert(makeVariable("Y"), makeAtom("b"));
+
+		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+		string input = "f(X). g(Y).";
+		knowledgeBase = parseKnowledgeBase(input);
+		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
+		list<ExpressionTreeNode> result;
+		result.emplace_back(apply(it->head, subst));
+		it++;
+		result.emplace_back(apply(it->head, subst));
+		for (ExpressionTreeNode node : result)
+		{
+			cout << "result: " << node.toString() << endl;
+		}
+	}
+	SECTION("Applying substitution to expression list - further")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeAtom("a"));
+		subst.insert(makeVariable("Y"), makeAtom("b"));
+
+		pair<ParseError, ExpressionTreeNode> root;
+		string input = "f(X),g(Y)";
+		root = parseExpression(input);
+		ExpressionTreeNode result;
+		result = apply(root.second, subst);
+		cout << result.toString() << endl;
+
+	}
 }

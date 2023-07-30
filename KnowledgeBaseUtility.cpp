@@ -9,8 +9,22 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 	
 	if (t.type == ExpressionTreeNodeType::ROOT)
 	{
-		T = t.children.front();
+		ExpressionTreeNode result;
+		result.type = ExpressionTreeNodeType::ROOT;
+		for (ExpressionTreeNode node : t.children)
+		{
+			ExpressionTreeNode loopNode = applyHelper(node, sub);
+			cout << "Loop Node post substitution: " << loopNode.toString() << endl;;
+			result.children.emplace_back(loopNode);
+		}
+		for (ExpressionTreeNode node : result.children)
+		{
+			cout << "nodes within application: " << node.toString() << endl;
+		}
+		return result;
+
 	}
+	cout << "current node: " << T.toString() << endl;
 	ExpressionTreeNode application;
 	if (isVariable(T))
 	{
@@ -37,9 +51,12 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 
 ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& sub)
 {
+	ExpressionTreeNode result = applyHelper(t, sub);
+	if (result.type == ExpressionTreeNodeType::ROOT)
+		return result;
 	ExpressionTreeNode root;
 	root.type = ExpressionTreeNodeType::ROOT;
-	root.children = { applyHelper(t, sub) };
+	root.children = { result };
 	return root;
 }
 
