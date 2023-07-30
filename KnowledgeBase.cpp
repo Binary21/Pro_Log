@@ -17,7 +17,7 @@ size_t vtpl::KnowledgeBase::size() const
 
 vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::begin() const
 {
-	
+
 	return clauses.begin();
 }
 

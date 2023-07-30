@@ -1,4 +1,3 @@
-
 #include "Parser.hpp"
 #include <stdlib.h>
 #include <sstream>
@@ -14,7 +13,7 @@ using namespace vtpl;
 
 pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& tokens)
 {
-	
+
 	ParseError error;
 	ExpressionTreeNode root;
 	bool diffinput = false;
@@ -57,7 +56,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 	while (current->type() == TokenType::COMMA && depth == 0)
 	{
-		
+
 		if (current->type() == TokenType::COMMA)
 		{
 			current++;
@@ -75,7 +74,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	{
 		error.set("error trailing parenthesis");
 	}
-	
+
 	return { error, rooter };
 }
 
@@ -113,9 +112,9 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 		{
 			error.set("Truncated input");
 			if (isupper(value[0]))
-				{
-					return makeVariable(value);
-				}
+			{
+				return makeVariable(value);
+			}
 			return makeAtom(value);
 		}
 		if (current->type() == TokenType::CLOSE)
@@ -271,7 +270,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const string& input)
 		error.set("Error with Query");
 	}
 	return { error, root };
-	
+
 }
 
 pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(TokenList::const_iterator current, TokenList::const_iterator it)
@@ -290,18 +289,18 @@ pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(Token
 
 std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const TokenList& tokens)
 {
-	
+
 	ParseError error;
 	KnowledgeBase knowldgeBase;
 	pair<ParseError, ExpressionTreeNode> head;
 	pair<ParseError, ExpressionTreeNode> body;
-	
+
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
 	TokenList::const_iterator delimiter1 = tokens.begin();
 	TokenList::const_iterator delimiter2 = tokens.end();
 	bool delimiterHit = false;
-	if(end != current)
+	if (end != current)
 		end--;
 	for (TokenList::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
 	{
@@ -340,7 +339,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			}
 
 			knowldgeBase.tell(clause);
-			
+
 			if (it != end)
 			{
 				current = it;
@@ -359,7 +358,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			delimiterHit = true;
 		}
 	}
-	if(knowldgeBase.size() == 0)
+	if (knowldgeBase.size() == 0)
 		error.set("an error occurred and the KnowledgeBase may be incomplete");
 	return { error, knowldgeBase };
 }
