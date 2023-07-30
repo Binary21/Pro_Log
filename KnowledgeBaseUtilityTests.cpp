@@ -88,10 +88,48 @@ TEST_CASE("")
 	}
 	SECTION("Test standardize apart (and apply)") {
 		ExpressionTreeNode t1 = makeCompound("f", { makeVariable("X") });
-		cout << t1.toString() << endl;
 		SubstitutionData substData;
 		standardizeApart(t1, substData);
 		//REQUIRE(t1.toString() == "f(X_1)");
+	}
+	SECTION("Apply")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeAtom("a"));
+		
+		string input = "f(X)";
+		pair<ParseError, ExpressionTreeNode> root;
+		root = parseExpression(input);
+
+		ExpressionTreeNode result;
+		result = apply(root.second, subst);
+		REQUIRE(result.toString() == "(f(a))");
+	}
+	SECTION("Apply 2")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeCompound("g", { makeAtom("a") }));
+
+		string input = "f(X)";
+		pair<ParseError, ExpressionTreeNode> root;
+		root = parseExpression(input);
+
+		ExpressionTreeNode result;
+		result = apply(root.second, subst);
+		REQUIRE(result.toString() == "(f(g(a)))");
+	}
+	SECTION("Apply 2")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeVariable("Y"));
+
+		string input = "f(X)";
+		pair<ParseError, ExpressionTreeNode> root;
+		root = parseExpression(input);
+
+		ExpressionTreeNode result;
+		result = apply(root.second, subst);
+		REQUIRE(result.toString() == "(f(Y))");
 	}
 	SECTION("Applying substitution to expression list - further")
 	{
@@ -104,6 +142,6 @@ TEST_CASE("")
 		root = parseExpression(input);
 		ExpressionTreeNode result;
 		result = apply(root.second, subst);
-		//REQUIRE(result.toString() == "(f(a),g(b))");
+		REQUIRE(result.toString() == "(f(a),g(b))");
 	}
 }
