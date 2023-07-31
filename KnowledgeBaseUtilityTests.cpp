@@ -25,7 +25,7 @@ TEST_CASE("")
 
 		tree1 = parseExpression(treeInput1);
 		tree2 = parseExpression(treeInput2);
-		
+
 		UnificationResult result;
 		unify(tree1.second, tree2.second, result);
 		//REQUIRE(result.failed == false);
@@ -86,12 +86,33 @@ TEST_CASE("")
 		it++;
 		//REQUIRE(it->toString() == "(b)");
 	}
+	SECTION("apart - Example given in project description")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X) :- g(X,a). g(X,Y) :- h(X),h(Y).";
+		kb = parseKnowledgeBase(input);
+
+		KnowledgeBase result;
+		for (Clause clause : get<1>(kb))
+		{
+			result.tell(apart(clause));
+		}
+		for (Clause clause : result)
+		{
+			cout << "head: " << clause.head.toString() << " body: " << clause.body.toString() << endl;
+		}
+	}
+	/**
 	SECTION("Test standardize apart (and apply)") {
 		ExpressionTreeNode t1 = makeCompound("f", { makeVariable("X") });
 		SubstitutionData substData;
 		standardizeApart(t1, substData);
-		//REQUIRE(t1.toString() == "f(X_1)");
-	}
+		REQUIRE(t1.toString() == "f(X_1)");
+	}**/
+	
+}
+TEST_CASE("APPLY")
+{
 	SECTION("Apply")
 	{
 		Substitution subst;
@@ -143,5 +164,39 @@ TEST_CASE("")
 		ExpressionTreeNode result;
 		result = apply(root.second, subst);
 		REQUIRE(result.toString() == "(f(a),g(b))");
+	}
+	SECTION("Applying substitution to expression list - without root node")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeAtom("a"));
+		subst.insert(makeVariable("Y"), makeAtom("b"));
+
+		ExpressionTreeNode X = makeVariable("X");
+		ExpressionTreeNode Y = makeVariable("Y");
+		ExpressionTreeNode f = makeCompound("f", {X});
+		ExpressionTreeNode g = makeCompound("g", {Y});
+		ExpressionTreeNode root;
+		root.children = { f, g };
+		ExpressionTreeNode result;
+		result = apply(root, subst);
+		REQUIRE(result.toString() == "(f(a),g(b))");
+	}
+	SECTION("Unifying two incompatible lists")
+	{
+		Substitution subst;
+		subst.insert(makeVariable("X"), makeAtom("a"));
+		subst.insert(makeVariable("Y"), makeAtom("b"));
+
+		pair<ParseError, ExpressionTreeNode> root1;
+		pair<ParseError, ExpressionTreeNode> root2;
+		string input1 = "f(X). g(Y).";
+		string input2 = "f(a). g(b).";
+		root1 = parseExpression(input1);
+		root2 = parseExpression(input2);
+
+		ExpressionTreeNode result;
+		result = apply(root1.second, subst);
+
+		REQUIRE(result.toString() == root2.second.toString());
 	}
 }
