@@ -41,13 +41,19 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 {
 	ExpressionTreeNode X = x;
 	ExpressionTreeNode Y = y;
-	if (x.type == ExpressionTreeNodeType::ROOT)
+	if (x.type == ExpressionTreeNodeType::ROOT && y.type == ExpressionTreeNodeType::ROOT)
 	{
-		X = x.children.front();
-	}
-	if (y.type == ExpressionTreeNodeType::ROOT)
-	{
-		Y = y.children.front();
+		auto current_x = X.children.begin();
+		auto current_y = Y.children.begin();
+
+		while (current_x != X.children.end())
+		{
+			unify(*current_x, *current_y, subst);
+			++current_x;
+			++current_y;
+		}
+		return;
+
 	}
 
 	if (subst.failed == true)

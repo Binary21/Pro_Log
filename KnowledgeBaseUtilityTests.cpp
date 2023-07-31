@@ -113,6 +113,7 @@ TEST_CASE("")
 }
 TEST_CASE("APPLY")
 {
+	
 	SECTION("Apply")
 	{
 		Substitution subst;
@@ -152,21 +153,34 @@ TEST_CASE("APPLY")
 		result = apply(root.second, subst);
 		REQUIRE(result.toString() == "(f(Y))");
 	}
+	// this problem
 	SECTION("Applying substitution to expression list - further")
 	{
-		Substitution subst;
-		subst.insert(makeVariable("X"), makeAtom("a"));
-		subst.insert(makeVariable("Y"), makeAtom("b"));
+		UnificationResult subst;
 
 		pair<ParseError, ExpressionTreeNode> root;
 		string input = "f(X),g(Y)";
+		pair<ParseError, ExpressionTreeNode> root2;
+		string input2 = "f(a),g(b)";
+
+
+		root2 = parseExpression(input2);
 		root = parseExpression(input);
+		//cout << root.second.toString() << endl;
+
+		unify(root.second, root2.second, subst);
+		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.substitution.data)
+		{
+			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+		}
+
 		ExpressionTreeNode result;
-		result = apply(root.second, subst);
+		result = apply(root.second, subst.substitution);
 		REQUIRE(result.toString() == "(f(a),g(b))");
 	}
 	SECTION("Applying substitution to expression list - without root node")
 	{
+
 		Substitution subst;
 		subst.insert(makeVariable("X"), makeAtom("a"));
 		subst.insert(makeVariable("Y"), makeAtom("b"));
@@ -181,6 +195,7 @@ TEST_CASE("APPLY")
 		result = apply(root, subst);
 		REQUIRE(result.toString() == "(f(a),g(b))");
 	}
+	// 
 	SECTION("Unifying two incompatible lists")
 	{
 		Substitution subst;
@@ -222,10 +237,13 @@ TEST_CASE("APPLY")
 		subst2.insert(makeVariable("Y"), makeAtom("b"));
 
 		pair<ParseError, ExpressionTreeNode> tree;
-		string treeInput = "f(X,g(a),Y)";
+		string treeInput = "f(X,g(a),a,g(c,g),g(Y,X),Y)";
 
 		tree = parseExpression(treeInput);
 		ExpressionTreeNode test = apply(tree.second, subst1);
 		REQUIRE(apply(tree.second, compose(subst1, subst2)).toString() == apply(apply(tree.second, subst1), subst2).toString());
 	}
+	// X/Y, Z/b
+	// Y/a, comp, lookup (X,Y,Z) trying to get (a, a, b)
+	// lookup for x currently not returning anything
 }

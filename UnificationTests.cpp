@@ -276,4 +276,5 @@ TEST_CASE("")
 		REQUIRE(result.substitution.lookup(makeVariable("Y1")).size() == 1);
 		REQUIRE(result.substitution.lookup(makeVariable("X1")).size() == 1);
 	}
+	
 }
