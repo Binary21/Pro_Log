@@ -163,7 +163,6 @@ TEST_CASE("APPLY")
 		pair<ParseError, ExpressionTreeNode> root2;
 		string input2 = "f(a),g(b)";
 
-
 		root2 = parseExpression(input2);
 		root = parseExpression(input);
 		//cout << root.second.toString() << endl;
@@ -176,6 +175,38 @@ TEST_CASE("APPLY")
 
 		ExpressionTreeNode result;
 		result = apply(root.second, subst.substitution);
+		REQUIRE(result.toString() == "(f(a),g(b))");
+	}
+	SECTION("Applying substitution to expression list - further")
+	{
+		UnificationResult subst;
+
+		ExpressionTreeNode X = makeVariable("X");
+		ExpressionTreeNode Y = makeVariable("Y");
+		ExpressionTreeNode f1 = makeCompound("f", { X });
+		ExpressionTreeNode g1 = makeCompound("g", { Y });
+
+		ExpressionTreeNode none1;
+		none1.children = { f1, g1 };
+
+		ExpressionTreeNode a = makeAtom("a");
+		ExpressionTreeNode b = makeAtom("b");
+		ExpressionTreeNode f2 = makeCompound("f", { a });
+		ExpressionTreeNode g2 = makeCompound("g", { b });
+
+		ExpressionTreeNode none2;
+		none2.children = { f2, g2 };
+
+		//cout << root.second.toString() << endl;
+
+		unify(none1, none2, subst);
+		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.substitution.data)
+		{
+			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+		}
+
+		ExpressionTreeNode result;
+		result = apply(none1, subst.substitution);
 		REQUIRE(result.toString() == "(f(a),g(b))");
 	}
 	SECTION("Applying substitution to expression list - without root node")
