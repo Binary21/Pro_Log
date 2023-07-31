@@ -37,6 +37,8 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 		}
 		return result;
 	}
+	else if (isAtom(t))
+		result = t;
 	return result;
 }
 
@@ -86,8 +88,36 @@ Clause vtpl::apart(const Clause& clause)
 
 Substitution vtpl::compose(const Substitution& s1, const Substitution& s2)
 {
-	int i = 0;
-	if (i == 1)
-		return s1;
-	return s2;
+	Substitution result;
+	for (auto it = s1.constBegin(); it != s1.constEnd(); it++)
+	{
+		ExpressionTreeNode k = it->first;
+		ExpressionTreeNode v1 = it->second;
+
+
+		list<ExpressionTreeNode> v2 = s2.lookup(k);
+		if (v2.size() == 0)
+		{
+			result.insert(k, v1);
+		}
+		else
+		{
+			for (ExpressionTreeNode v2node : v2)
+			{
+				result.insert(k, apply(v2node, s1));
+			}
+		}
+	}
+
+	for (auto it = s2.constBegin(); it != s2.constEnd(); it++)
+	{
+		ExpressionTreeNode k = it->first;
+		if (result.lookup(k).size() == 0)
+		{
+			ExpressionTreeNode k = it->first;
+			ExpressionTreeNode v2 = it->second;
+			result.insert(k, v2);
+		}
+	}
+	return result;
 }

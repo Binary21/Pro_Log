@@ -199,4 +199,33 @@ TEST_CASE("APPLY")
 
 		REQUIRE(result.toString() == root2.second.toString());
 	}
+
+	SECTION("Compose test")
+	{
+		Substitution subst1;
+		subst1.insert(makeVariable("X"), makeAtom("a"));
+		Substitution subst2;
+		subst2.insert(makeVariable("Y"), makeAtom("b"));
+
+		pair<ParseError, ExpressionTreeNode> tree;
+		string treeInput = "f(X, Y)";
+
+		tree = parseExpression(treeInput);
+		ExpressionTreeNode test = apply(tree.second, subst1);
+		REQUIRE(apply(tree.second, compose(subst1, subst2)).toString() == apply(apply(tree.second, subst1), subst2).toString());
+	}
+	SECTION("Compose test")
+	{
+		Substitution subst1;
+		subst1.insert(makeVariable("X"), makeAtom("a"));
+		Substitution subst2;
+		subst2.insert(makeVariable("Y"), makeAtom("b"));
+
+		pair<ParseError, ExpressionTreeNode> tree;
+		string treeInput = "f(X,g(a),Y)";
+
+		tree = parseExpression(treeInput);
+		ExpressionTreeNode test = apply(tree.second, subst1);
+		REQUIRE(apply(tree.second, compose(subst1, subst2)).toString() == apply(apply(tree.second, subst1), subst2).toString());
+	}
 }
