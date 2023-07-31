@@ -103,7 +103,7 @@ Substitution vtpl::compose(const Substitution& s1, const Substitution& s2)
 		ExpressionTreeNode v1 = it->second;
 
 
-		list<ExpressionTreeNode> v2 = s2.lookup(k);
+		list<ExpressionTreeNode> v2 = s2.lookup(v1);
 		if (v2.size() == 0)
 		{
 			result.insert(k, v1);

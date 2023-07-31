@@ -41,7 +41,7 @@ void vtpl::unify(const ExpressionTreeNode& x, const ExpressionTreeNode& y, Unifi
 {
 	ExpressionTreeNode X = x;
 	ExpressionTreeNode Y = y;
-	if ((x.type == ExpressionTreeNodeType::ROOT && y.type == ExpressionTreeNodeType::ROOT) || ((x.contents == "" && x.children.size() > 0) && (y.contents == "" && y.children.size() > 0)))
+	if (((x.type == ExpressionTreeNodeType::ROOT && y.type == ExpressionTreeNodeType::ROOT) || ((x.contents == "" && x.children.size() > 0) && (y.contents == "" && y.children.size() > 0))) && x.children.size() == y.children.size())
 	{
 		auto current_x = X.children.begin();
 		auto current_y = Y.children.begin();

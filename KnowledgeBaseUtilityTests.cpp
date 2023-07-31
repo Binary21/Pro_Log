@@ -362,6 +362,16 @@ TEST_CASE("Test unification with expression list failure", "[unification]") {
 
 		REQUIRE(result.failed == true);
 	}
+	SECTION("")
+	{
+		pair<ParseError, ExpressionTreeNode> exp1 = parseExpression("f(a),g(b)");
+		pair<ParseError, ExpressionTreeNode> exp2 = parseExpression("f(X)");
+
+		vtpl::UnificationResult result;
+		vtpl::unify(exp1.second, exp2.second, result);
+
+		REQUIRE(result.failed == true);
+	}
 	SECTION("Applying substitution to expression list - failure")
 	{
 		vtpl::UnificationResult subst;
@@ -404,4 +414,23 @@ TEST_CASE("Test unification with expression list failure", "[unification]") {
 		result = apply(root1.second, subst.substitution);
 		// What to REQUIRE here depends on how your code handles applying a failed unification.
 	}**/
+	SECTION("composition test")
+	{
+		Substitution subst1;
+		subst1.insert(makeVariable("X"), makeVariable("Y"));
+		Substitution subst2;
+		subst2.insert(makeVariable("Y"), makeAtom("a"));
+
+		Substitution subst;
+		subst = compose(subst1, subst2);
+
+		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
+		{
+			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+		}
+		REQUIRE(subst.data.size() == 2);
+		REQUIRE(subst.lookup(makeVariable("X")).front() == makeAtom("a"));
+		REQUIRE(subst.lookup(makeVariable("Y")).front() == makeAtom("a"));
+
+	}
 }
