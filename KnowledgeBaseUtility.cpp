@@ -3,12 +3,9 @@
 using namespace vtpl;
 using namespace std;
 
-static std::unordered_map<std::string, int> counterDict;
-//static int counter;
 
 ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitution& sub)
 {
-	//cout << t.toString() << endl;
 	ExpressionTreeNode result;
 	if (t.type == ExpressionTreeNodeType::ROOT || (t.contents == "" && t.children.size() > 0))
 	{
@@ -23,11 +20,7 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 	{
 		auto subResult = sub.lookup(t);
 		if (!subResult.empty())
-		{
-			cout << subResult.front().toString() << endl;
 			return subResult.front();
-		}
-			
 		else
 			return t;
 	}
@@ -55,7 +48,6 @@ ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& 
 
 void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter, bool isBody)
 {
-	cout << node.toString() << endl;
 	if (isVariable(node))
 	{
 		auto it = substitutionData.find(node);
@@ -64,6 +56,7 @@ void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitu
 			//counterDict[node.contents]++;
 			counter++;
 			string newNameStr = node.contents + "_" + to_string(counter);
+			//string newNameStr = node.contents + "_" + to_string(counterDict[node.contents]);
 			ExpressionTreeNode newName;
 			newName.type = ExpressionTreeNodeType::VARIABLE;
 			newName.contents = newNameStr;

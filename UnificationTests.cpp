@@ -32,7 +32,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(x, y, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(y).front().contents == x.contents);
+		REQUIRE(result.substitution.lookup(y).front().contents == x.contents);
 	}
 	SECTION("")
 	{
@@ -48,7 +48,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(f1, f2, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(X).front() == a);
+		REQUIRE(result.substitution.lookup(X).front() == a);
 	}
 	SECTION("")
 	{
@@ -64,7 +64,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(f1, f2, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(X).front() == a);
+		REQUIRE(result.substitution.lookup(X).front() == a);
 	}
 
 	SECTION("")
@@ -79,7 +79,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(tree1.second, tree2.second, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(makeVariable("X")).front() == makeAtom("a"));
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front() == makeAtom("a"));
 	}
 
 	SECTION("")
@@ -94,7 +94,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(tree1.second, tree2.second, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(makeVariable("X")).front() == makeAtom("a"));
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front() == makeAtom("a"));
 		REQUIRE(result.substitution.data.size() == 2);
 	}
 	SECTION("")
@@ -109,7 +109,7 @@ TEST_CASE("")
 		UnificationResult result;
 		vtpl::unify(tree1.second, tree2.second, result);
 		REQUIRE(result.failed == false);
-		//REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "g(x)");
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front().toString() == "g(x)");
 		REQUIRE(result.substitution.data.size() == 2);
 	}
 

@@ -10,5 +10,6 @@ namespace vtpl {
 	Clause apart(const Clause& clause);
 	Substitution compose(const Substitution& s1, const Substitution& s2);
 	void standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter, bool isBody);
+	//static std::unordered_map<std::string, int> counterDict;
 }
 #endif // !KNOWLEDGEBASEUTILITY_HPP
