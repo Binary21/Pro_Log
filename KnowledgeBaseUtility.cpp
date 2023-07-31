@@ -8,6 +8,7 @@ static std::unordered_map<std::string, int> counterDict;
 
 ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitution& sub)
 {
+	//cout << t.toString() << endl;
 	ExpressionTreeNode result;
 	if (t.type == ExpressionTreeNodeType::ROOT || (t.contents == "" && t.children.size() > 0))
 	{
@@ -20,8 +21,13 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 	}
 	else if (isVariable(t))
 	{
-		if (!sub.lookup(t).empty())
-			return sub.lookup(t).front();
+		auto subResult = sub.lookup(t);
+		if (!subResult.empty())
+		{
+			cout << subResult.front().toString() << endl;
+			return subResult.front();
+		}
+			
 		else
 			return t;
 	}
@@ -47,12 +53,13 @@ ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& 
 	return (applyHelper(t, sub));
 }
 
-void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter)
+void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter, bool isBody)
 {
+	cout << node.toString() << endl;
 	if (isVariable(node))
 	{
 		auto it = substitutionData.find(node);
-		if (it == substitutionData.end())
+		if (it == substitutionData.end() && isBody == false)
 		{
 			//counterDict[node.contents]++;
 			counter++;
@@ -63,26 +70,27 @@ void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitu
 			substitutionData.insert({ node, newName });
 			node.contents = newNameStr;
 		}
-		else
+		else if (it != substitutionData.end())
 		{
 			node.contents = it->second.contents;
 		}
 	}
 	for (auto& child : node.children)
 	{
-		standardizeApart(child, substitutionData, counter);
+		standardizeApart(child, substitutionData, counter, isBody);
 	}
 }
 
 Clause vtpl::apart(const Clause& clause)
 {
 	static int counter = 0;
-	
+	bool isBody = false;
 	Clause newClause = clause;
 	SubstitutionData substData;
 
-	standardizeApart(newClause.head, substData, counter);
-	standardizeApart(newClause.body, substData, counter);
+	standardizeApart(newClause.head, substData, counter, isBody);
+	isBody = true;
+	standardizeApart(newClause.body, substData, counter, isBody);
 	return newClause;
 }
 

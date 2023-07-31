@@ -9,6 +9,6 @@ namespace vtpl {
 	ExpressionTreeNode applyHelper(const ExpressionTreeNode& t, const Substitution& sub);
 	Clause apart(const Clause& clause);
 	Substitution compose(const Substitution& s1, const Substitution& s2);
-	void standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter);
+	void standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter, bool isBody);
 }
 #endif // !KNOWLEDGEBASEUTILITY_HPP

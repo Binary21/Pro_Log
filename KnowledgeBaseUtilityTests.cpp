@@ -15,6 +15,7 @@ using namespace std;
 
 TEST_CASE("")
 {
+
 	SECTION("")
 	{
 		pair<ParseError, ExpressionTreeNode> tree1;
@@ -89,7 +90,7 @@ TEST_CASE("")
 	SECTION("apart - Example given in project description")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
-		string input = "f(X) :- g(X,a). g(X,Y) :- h(X),h(Y).";
+		string input = "f(X) :- g(X,a). g(X,Y) :- h(X),h(Z).";
 		kb = parseKnowledgeBase(input);
 
 		KnowledgeBase result;
@@ -154,6 +155,7 @@ TEST_CASE("APPLY")
 		REQUIRE(result.toString() == "(f(Y))");
 	}
 	// this problem
+	
 	SECTION("Applying substitution to expression list - further")
 	{
 		UnificationResult subst;
@@ -258,7 +260,7 @@ TEST_CASE("APPLY")
 
 		tree = parseExpression(treeInput);
 		ExpressionTreeNode test = apply(tree.second, subst1);
-		REQUIRE(apply(tree.second, compose(subst1, subst2)).toString() == apply(apply(tree.second, subst1), subst2).toString());
+		REQUIRE(apply(tree.second, compose(subst1, subst2)) == apply(apply(tree.second, subst1), subst2));
 	}
 	SECTION("Compose test")
 	{
@@ -272,9 +274,134 @@ TEST_CASE("APPLY")
 
 		tree = parseExpression(treeInput);
 		ExpressionTreeNode test = apply(tree.second, subst1);
-		REQUIRE(apply(tree.second, compose(subst1, subst2)).toString() == apply(apply(tree.second, subst1), subst2).toString());
+		REQUIRE(apply(tree.second, compose(subst1, subst2)) == apply(apply(tree.second, subst1), subst2));
 	}
 	// X/Y, Z/b
 	// Y/a, comp, lookup (X,Y,Z) trying to get (a, a, b)
 	// lookup for x currently not returning anything
+	SECTION("Compose test")
+	{
+		Substitution subst1;
+		subst1.insert(makeVariable("X"), makeVariable("Y"));
+		subst1.insert(makeVariable("Z"), makeAtom("b"));
+		Substitution subst2;
+		subst2.insert(makeVariable("Y"), makeAtom("a"));
+
+		pair<ParseError, ExpressionTreeNode> tree;
+		string treeInput = "f(X,Y,Z)";
+
+		tree = parseExpression(treeInput);
+		ExpressionTreeNode test = apply(tree.second, subst1);
+		//cout << apply(tree.second, compose(subst1, subst2)).toString() << endl;
+		cout << test.toString() << endl;
+		cout << apply(test, subst2).toString() << endl;
+		
+	}
+	/**
+	SECTION("Applying substitution to expression list - failure")
+	{
+		vtpl::UnificationResult subst1;
+		vtpl::UnificationResult subst2;
+
+		std::pair<ParseError, ExpressionTreeNode> root1;
+		std::pair<ParseError, ExpressionTreeNode> root2;
+		std::pair<ParseError, ExpressionTreeNode> root3;
+		std::pair<ParseError, ExpressionTreeNode> root4;
+
+		std::string input1 = "f(X)";
+		std::string input2 = "f(Y)";
+		std::string input3 = "f(Y,Z)";
+		std::string input4 = "f(a,b)";
+
+		root1 = parseExpression(input1);
+		root2 = parseExpression(input2);
+		root3 = parseExpression(input3);
+		root4 = parseExpression(input4);
+
+		unify(root1.second, root2.second, subst1);
+		unify(root3.second, root4.second, subst2);
+
+
+		pair<ParseError, ExpressionTreeNode> tree;
+		string treeInput = "f(X,Y,Z)";
+
+		tree = parseExpression(treeInput);
+		ExpressionTreeNode test = apply(tree.second, subst1.substitution);
+		cout << apply(tree.second, compose(subst1, subst2)).toString() << endl;
+		cout << test.toString() << endl;
+		cout << apply(test, subst2.substitution).toString() << endl;
+	}**/
+	SECTION("apart - Example given in project description")
+	{
+		tuple<ParseError, KnowledgeBase> kb1;
+		string input = "f(X) :- g(X,a). g(X,Y) :- h(X),h(Y).";
+		tuple<ParseError, KnowledgeBase> kb2;
+		//string input = "f(g) :- g(w,a). g(X,Y) :- h(X),h(Y).";
+		kb1 = parseKnowledgeBase(input);
+
+		KnowledgeBase result;
+		for (Clause clause : get<1>(kb1))
+		{
+			result.tell(apart(clause));
+		}
+		for (Clause clause : result)
+		{
+			cout << "head: " << clause.head.toString() << " body: " << clause.body.toString() << endl;
+		}
+	}
+
+}
+TEST_CASE("Test unification with expression list failure", "[unification]") {
+	SECTION("")
+	{
+		pair<ParseError, ExpressionTreeNode> exp1 = parseExpression("f(a, b)");
+		pair<ParseError, ExpressionTreeNode> exp2 = parseExpression("f(X, c)");
+
+		vtpl::UnificationResult result;
+		vtpl::unify(exp1.second, exp2.second, result);
+
+		REQUIRE(result.failed == true);
+	}
+	SECTION("Applying substitution to expression list - failure")
+	{
+		vtpl::UnificationResult subst;
+
+		std::pair<ParseError, ExpressionTreeNode> root1;
+		std::string input1 = "X";
+
+		std::pair<ParseError, ExpressionTreeNode> root2;
+		std::string input2 = "f(X)";
+
+		root1 = parseExpression(input1);
+		root2 = parseExpression(input2);
+
+		unify(root1.second, root2.second, subst);
+		REQUIRE(subst.failed == true);  // expect the unification to fail
+
+		
+		vtpl::ExpressionTreeNode result;
+		result = apply(root1.second, subst.substitution);
+	}/**
+	SECTION("Unification failure due to unequal term structures")
+	{
+		vtpl::UnificationResult subst;
+
+		std::pair<ParseError, ExpressionTreeNode> root1;
+		std::string input1 = "f(g(X), Y)";
+
+		std::pair<ParseError, ExpressionTreeNode> root2;
+		std::string input2 = "f(X, g(Y))";
+
+		root1 = parseExpression(input1);
+		root2 = parseExpression(input2);
+
+		unify(root1.second, root2.second, subst);
+		REQUIRE(subst.failed == true);  // expect the unification to fail due to unequal term structures
+
+		// If unification fails, we should not attempt to apply the substitution.
+		// In a real test, you might skip this part or check that the result is undefined or throws an exception.
+		vtpl::ExpressionTreeNode result;
+		result = apply(root1.second, subst.substitution);
+		// What to REQUIRE here depends on how your code handles applying a failed unification.
+	}**/
 }
