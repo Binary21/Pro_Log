@@ -14,6 +14,7 @@
 #include <iostream>
 #include "Lexer.hpp"
 #include "ExpressionTree.hpp"
+#include "Unification.hpp"
 #include "Token.hpp"
 
 using namespace std;
@@ -35,6 +36,12 @@ public:
 	// add a clause to the database
 	void tell(const Clause& clause);
 
+	list<Substitution> ask(const ExpressionTreeNode& query) const;
+
+	list<Substitution> folbc(KnowledgeBase kb, list<ExpressionTreeNode> query, Substitution& s) const;
+
+	
+
 	// return the number of clauses in the database
 	size_t size() const; 
 
@@ -49,6 +56,7 @@ public:
 private:
 	vector<Clause>clauses;
 };
+	list<Substitution> unionize(list<Substitution> s2, list<Substitution> s);
 };
 
 #endif

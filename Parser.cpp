@@ -25,7 +25,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		error.set("Invalid Head");
 		return { error, root };
 	}
-	if (current->type() == TokenType::OPEN)
+	else if (current->type() == TokenType::OPEN)
 	{
 		end--;
 		if (end->type() == TokenType::CLOSE)
@@ -90,60 +90,35 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 	if (current->type() == TokenType::STRING && current != end)
 	{
 		error.set("Missing Comma");
-		if (isupper(value[0]))
-		{
-			return makeVariable(value);
-		}
-		return makeAtom(value);
+		return type(value);
 	}
 	else if (current == end || current->type() != TokenType::OPEN) {
-		if (isupper(value[0]))
-		{
-			return makeVariable(value);
-		}
-		return makeAtom(value);
+		return type(value);
 	}
 	else {
 		depth++;
-		if (current != end) {
-			current++;
-		}
+		current++;
+
 		if (current == end)
 		{
 			error.set("Truncated input");
-			if (isupper(value[0]))
-			{
-				return makeVariable(value);
-			}
-			return makeAtom(value);
+			return type(value);
 		}
 		if (current->type() == TokenType::CLOSE)
 		{
 			depth--;
 			error.set("Missmatched Parenthesis");
-			if (isupper(value[0]))
-			{
-				return makeVariable(value);
-			}
-			return makeAtom(value);
+			return type(value);
 		}
 		else if (current->type() == TokenType::COMMA)
 		{
 			error.set("incorrenct comma location");
-			if (isupper(value[0]))
-			{
-				return makeVariable(value);
-			}
-			return makeAtom(value);
+			return type(value);
 		}
 		else if (current->type() == TokenType::OPEN && depth > 0)
 		{
 			error.set("incorrenct comma location");
-			if (isupper(value[0]))
-			{
-				return makeVariable(value);
-			}
-			return makeAtom(value);
+			return type(value);
 		}
 		list<ExpressionTreeNode> compound = parseChildren(current, end, error, depth, diffinput);
 		if (compound.size() == 0)
@@ -397,4 +372,13 @@ string vtpl::printString(Token& token)
 	if (token.type() == TokenType::END)
 		return ".";
 	return " ";
+}
+
+ExpressionTreeNode vtpl::type(string value)
+{
+	if (isupper(value[0]))
+	{
+		return makeVariable(value);
+	}
+	return makeAtom(value);
 }

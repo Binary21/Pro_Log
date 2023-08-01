@@ -347,3 +347,72 @@ TEST_CASE("Parse KnowledgeBase")
 		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
 }
+TEST_CASE("Ask tests")
+{
+	SECTION("")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza).";
+		kb = parseKnowledgeBase(input);
+
+		ExpressionTreeNode query = parseExpression("freinds(sally,X)").second;
+		cout << query.toString() << endl;
+		list<Substitution> result = std::get<1>(kb).ask(query);
+
+		Substitution expectedSubst;
+		expectedSubst.insert(makeVariable("X"), makeAtom("bill"));
+
+		for (Substitution subst : result)
+		{
+			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
+			{
+				cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+			}
+		}
+	}
+}
+/**
+TEST_CASE("Unionize")
+{
+	list<Substitution> s;
+	list<Substitution> s2;
+	list<Substitution> result;
+
+	Substitution subst1;
+	Substitution subst2;
+	Substitution subst3;
+	Substitution subst4;
+	Substitution subst5;
+	Substitution subst6;
+	Substitution subst7;
+
+	subst1.insert(makeVariable("X"), makeAtom("l"));
+	subst1.insert(makeVariable("Y"), makeAtom("a"));
+	subst3.insert(makeVariable("Y"), makeAtom("a"));
+	subst2.insert(makeVariable("Z"), makeAtom("g"));
+	subst4.insert(makeVariable("Q"), makeAtom("q"));
+	subst5.insert(makeVariable("G"), makeAtom("l"));
+	subst6.insert(makeVariable("B"), makeAtom("z"));
+	subst7.insert(makeVariable("N"), makeAtom("w"));
+
+	s.push_back(subst1);
+	s.push_back(subst2);
+	s.push_back(subst7);
+	s.push_back(subst4);
+
+	s2.push_back(subst3);
+	s2.push_back(subst4);
+	s2.push_back(subst5);
+	s2.push_back(subst6);
+	s2.push_back(subst7);
+
+	result = unionize(s2, s);
+
+	for (Substitution subst : result)
+	{
+		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
+		{
+			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+		}
+	}
+}**/

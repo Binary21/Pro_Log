@@ -44,6 +44,7 @@ namespace vtpl {
 	string printString(TokenList::const_iterator& current);
 	string printString(Token& token);
 
+	ExpressionTreeNode type(string value);
 };
 
 #endif
