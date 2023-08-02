@@ -30,18 +30,18 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 
 
 	list<Substitution> answers;
-	cout << "pre application " << goals.front().toString() << endl;
+	//cout << "pre application " << goals.front().toString() << endl;
 	ExpressionTreeNode q1 = apply(goals.front(), s);
-	cout << "application: " << q1.toString() << endl;
+	//cout << "application: " << q1.toString() << endl;
 	Iterator it = begin();
 	while (it != end())
 	{
 		Clause apartClause = apart(*it);
 		UnificationResult result;
 		unify(apartClause.head, q1, result);
-		string pass = "SUCCEEDED";
-		if (result.failed == false)
-			cout << "Atempting to unify " << apartClause.head.toString() << " and " << q1.toString() << " " << pass << endl;
+		//string pass = "SUCCEEDED";
+		//if (result.failed == false)
+			//cout << "Atempting to unify " << apartClause.head.toString() << " and " << q1.toString() << " " << pass << endl;
 		if (result.failed == false)
 		{
 			list<ExpressionTreeNode> newGoals = goals;
@@ -51,7 +51,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
-					cout << "newGoal: " << children.toString() << endl;
+					//cout << "newGoal: " << children.toString() << endl;
 					newGoals.push_front(children);
 				}
 			}

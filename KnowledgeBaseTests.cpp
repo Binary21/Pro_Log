@@ -385,7 +385,7 @@ TEST_CASE("Ask tests")
 		//ExpressionTreeNode query = makeCompound("friends", { makeAtom("sally"), makeVariable("X") });
 		ExpressionTreeNode query = parseExpression("hangout(X,Y)").second;
 		list<Substitution> result = std::get<1>(kb).ask(query);
-
+		/**
 		for (Substitution subst : result)
 		{
 			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
@@ -394,12 +394,13 @@ TEST_CASE("Ask tests")
 					cout << sub.first.toString() << "/" << sub.second.toString() << endl;
 
 			}
-		}
+		}**/
 		for (Substitution subst : result)
 		{
 			ExpressionTreeNode application = apply(query, subst);
-			cout << application.toString() << endl;
+			//cout << application.toString() << endl;
 		}
+		REQUIRE(true);
 	}
 }
 
@@ -442,11 +443,12 @@ TEST_CASE("Unionize")
 
 	result = unionize(s2, s);
 
-	for (Substitution subst : result)
+	/**for (Substitution subst : result)
 	{
 		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
 		{
 			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
 		}
-	}
+	}**/
+	REQUIRE(true);
 }
