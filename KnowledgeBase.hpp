@@ -38,7 +38,7 @@ public:
 
 	list<Substitution> ask(const ExpressionTreeNode& query) const;
 
-	list<Substitution> folbc(KnowledgeBase kb, list<ExpressionTreeNode> query, Substitution& s) const;
+	list<Substitution> folbc(list<ExpressionTreeNode>& query, Substitution& s) const;
 
 	
 

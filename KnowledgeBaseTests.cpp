@@ -7,6 +7,7 @@
 #include "ExpressionTree.hpp"
 #include "Lexer.hpp"
 #include "KnowledgeBase.hpp"
+#include "KnowledgeBaseUtility.hpp"
 #include <sstream>
 #include <string>
 #include "test_config.hpp"
@@ -349,13 +350,15 @@ TEST_CASE("Parse KnowledgeBase")
 }
 TEST_CASE("Ask tests")
 {
-	SECTION("")
+	/**
+	SECTION("First milestone Example")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
 		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza).";
 		kb = parseKnowledgeBase(input);
 
-		ExpressionTreeNode query = parseExpression("freinds(sally,X)").second;
+		//ExpressionTreeNode query = makeCompound("friends", { makeAtom("sally"), makeVariable("X") });
+		ExpressionTreeNode query = parseExpression("friends(sally,X)").second;
 		cout << query.toString() << endl;
 		list<Substitution> result = std::get<1>(kb).ask(query);
 
@@ -367,11 +370,39 @@ TEST_CASE("Ask tests")
 			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
 			{
 				cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+				
 			}
+			ExpressionTreeNode application = apply(query, subst);
+			cout << application.toString() << endl;
+		}
+	}**/
+	SECTION("Second milestone Example")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "hangout(X,Y) :- friends(X,Y),intown(X),intown(Y). friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza). likes(joe, movies). intown(bill). intown(sally). intown(bob).";
+		kb = parseKnowledgeBase(input);
+
+		//ExpressionTreeNode query = makeCompound("friends", { makeAtom("sally"), makeVariable("X") });
+		ExpressionTreeNode query = parseExpression("hangout(X,Y)").second;
+		list<Substitution> result = std::get<1>(kb).ask(query);
+
+		for (Substitution subst : result)
+		{
+			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
+			{
+				if (sub.first.toString() == "X" || sub.first.toString() == "Y");
+					cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+
+			}
+		}
+		for (Substitution subst : result)
+		{
+			ExpressionTreeNode application = apply(query, subst);
+			cout << application.toString() << endl;
 		}
 	}
 }
-/**
+
 TEST_CASE("Unionize")
 {
 	list<Substitution> s;
@@ -388,7 +419,10 @@ TEST_CASE("Unionize")
 
 	subst1.insert(makeVariable("X"), makeAtom("l"));
 	subst1.insert(makeVariable("Y"), makeAtom("a"));
+
+
 	subst3.insert(makeVariable("Y"), makeAtom("a"));
+
 	subst2.insert(makeVariable("Z"), makeAtom("g"));
 	subst4.insert(makeVariable("Q"), makeAtom("q"));
 	subst5.insert(makeVariable("G"), makeAtom("l"));
@@ -415,4 +449,4 @@ TEST_CASE("Unionize")
 			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
 		}
 	}
-}**/
+}

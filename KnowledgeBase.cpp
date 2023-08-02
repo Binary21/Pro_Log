@@ -13,53 +13,51 @@ void vtpl::KnowledgeBase::tell(const Clause& clause)
 
 list<vtpl::Substitution> vtpl::KnowledgeBase::ask(const ExpressionTreeNode& query) const
 {
-	list<ExpressionTreeNode> goals = { query };
+	ExpressionTreeNode input;
+	if (query.type == ExpressionTreeNodeType::ROOT)
+		input = query.children.front();
+	else
+		input = query;
+	list<ExpressionTreeNode> goals = { input };
 	Substitution result;
-	return folbc(*this, goals, result);
+	return folbc(goals, result);
 }
 
-list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(KnowledgeBase kb, list<ExpressionTreeNode> goals, Substitution& s) const
+list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& goals, Substitution& s) const
 {
 	if (goals.empty())
 		return { s }; //  just return s
 
 
 	list<Substitution> answers;
+	cout << "pre application " << goals.front().toString() << endl;
 	ExpressionTreeNode q1 = apply(goals.front(), s);
-	cout << "q1: " << q1.toString() << endl;
-
-	for (Clause r : kb)
+	cout << "application: " << q1.toString() << endl;
+	Iterator it = begin();
+	while (it != end())
 	{
-		Clause apartClause = apart(r);
-		// where s2 = unify(q2, q1, s) succeeds is unification of apartClause.head and q1
+		Clause apartClause = apart(*it);
 		UnificationResult result;
-		result.substitution = s;
 		unify(apartClause.head, q1, result);
 		string pass = "SUCCEEDED";
 		if (result.failed == false)
-			pass = "FAILED";
-		cout << "Attempting to unify " << apartClause.head.toString() << " and " << q1.toString() << pass << endl;
-		if (result.failed != false)
+			cout << "Atempting to unify " << apartClause.head.toString() << " and " << q1.toString() << " " << pass << endl;
+		if (result.failed == false)
 		{
-			list<ExpressionTreeNode> newGoals;
-			newGoals = goals;
+			list<ExpressionTreeNode> newGoals = goals;
+			newGoals.pop_front();
+
 			if (apartClause.body.type == ExpressionTreeNodeType::ROOT)
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
+					cout << "newGoal: " << children.toString() << endl;
 					newGoals.push_front(children);
 				}
 			}
-			cout << "NEW GOALS:-----------------------------------------------------" << endl;
-			for (ExpressionTreeNode node : newGoals)
-			{
-				cout << node.toString() << endl;
-			}
-			answers = unionize(folbc(kb, newGoals, compose(result.substitution, s)), answers);
+			answers = unionize(folbc(newGoals, compose(result.substitution, s)), answers);
 		}
-		// new goals is body of q2 plus already existing goals
-
-		// write my own union function
+		it++;
 	}
 	return answers;
 }
@@ -79,10 +77,10 @@ list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution
 			{
 				for (auto pair1 : subst1.data) // assuming data is a list of pairs
 				{
-					cout << "comparing: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
+					//cout << "comparing: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 					if (pair1 == pair2)
 					{
-						cout << "successful: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
+						//cout << "successful: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 						found = true;
 						break;
 					}
@@ -92,7 +90,7 @@ list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution
 			}
 			if (!found)
 			{
-				cout << "inserting: {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
+				//cout << "inserting: {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 				newSubstitution.data.insert(pair2);
 			}
 		}
