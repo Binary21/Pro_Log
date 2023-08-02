@@ -55,7 +55,8 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 					newGoals.push_front(children);
 				}
 			}
-			answers = unionize(folbc(newGoals, compose(result.substitution, s)), answers);
+			Substitution composedSub = compose(result.substitution, s);
+			answers = unionize(folbc(newGoals, composedSub), answers);
 		}
 		it++;
 	}
