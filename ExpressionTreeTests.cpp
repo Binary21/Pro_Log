@@ -11,9 +11,9 @@ using namespace vtpl;
 using namespace std;
 
 
-TEST_CASE("") 
+TEST_CASE("")
 {
-	
+
 	SECTION("Empty Node")
 	{
 		ExpressionTreeNode atom;
@@ -78,7 +78,7 @@ TEST_CASE("")
 
 	SECTION("Equal operator")
 	{
-		ExpressionTreeNode atom1A= makeAtom("a");
+		ExpressionTreeNode atom1A = makeAtom("a");
 		ExpressionTreeNode atom2A = makeAtom("a");
 		REQUIRE(atom1A == atom2A);
 		ExpressionTreeNodeHasher hasher;
@@ -94,7 +94,7 @@ TEST_CASE("")
 	ExpressionTreeNode root;
 	root.type = ExpressionTreeNodeType::ROOT;
 	REQUIRE(isNone(root) == false);
-	
+
 }
 
 TEST_CASE("Manual Tests Expression Tree")
@@ -105,7 +105,7 @@ TEST_CASE("Manual Tests Expression Tree")
 		root = makeAtom("a&^*");
 		REQUIRE(isNone(root));
 	}
-	
+
 	SECTION("makeVariable 1")
 	{
 		root = makeVariable("");
@@ -160,4 +160,3 @@ TEST_CASE("Manual Tests Expression Tree")
 		arity(nodeAtom);
 	}
 }
-
