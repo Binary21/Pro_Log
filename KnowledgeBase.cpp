@@ -31,10 +31,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 	
 
 	list<Substitution> answers;
-	//cout << "pre application " << goals.front().toString() << endl;
 	ExpressionTreeNode q1 = apply(goals.front(), s);
-
-	//cout << "application: " << q1.toString() << endl;
 	Iterator it = begin();
 	while (it != end())
 	{
@@ -42,9 +39,6 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 		UnificationResult result;
 		result.substitution = s;
 		unify(apartClause.head, q1, result);
-		//string pass = "SUCCEEDED";
-		//if (result.failed == false)
-			//cout << "Atempting to unify " << apartClause.head.toString() << " and " << q1.toString() << " " << pass << endl;
 		if (result.failed == false)
 		{
 			list<ExpressionTreeNode> newGoals;
@@ -53,7 +47,6 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
-					//cout << "newGoal: " << children.toString() << endl;
 					newGoals.emplace_back(children);
 				}
 			}
@@ -91,10 +84,8 @@ list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution
 			{
 				for (auto pair1 : subst1.data) // assuming data is a list of pairs
 				{
-					//cout << "comparing: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 					if (pair1 == pair2)
 					{
-						//cout << "successful: {" << pair1.first.toString() << "/" << pair1.second.toString() << "}" << " and {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 						found = true;
 						break;
 					}
@@ -103,10 +94,7 @@ list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution
 					break;
 			}
 			if (!found)
-			{
-				//cout << "inserting: {" << pair2.first.toString() << "/" << pair2.second.toString() << "}" << endl;
 				newSubstitution.data.insert(pair2);
-			}
 		}
 		if(!newSubstitution.data.empty())
 			result.emplace_back(newSubstitution);
