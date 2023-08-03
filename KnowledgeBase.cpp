@@ -18,6 +18,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::ask(const ExpressionTreeNode& quer
 		input = query.children.front();
 	else
 		input = query;
+
 	list<ExpressionTreeNode> goals = { input };
 	Substitution result;
 	list<Substitution> lists = folbc(goals, result);
@@ -38,6 +39,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 		Clause apartClause = apart(*it);
 		UnificationResult result;
 		result.substitution = s;
+
 		unify(apartClause.head, q1, result);
 		if (result.failed == false)
 		{
@@ -47,6 +49,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
+					cout << "body: " << children.toString() << endl;
 					newGoals.emplace_back(children);
 				}
 			}
@@ -61,12 +64,18 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			}
 
 			Substitution composedSub = compose(s, result.substitution);
-			answers = unionize(folbc(newGoals, composedSub), answers);
+			list<Substitution> folbcResult = folbc(newGoals, composedSub);
+			list<Substitution> unioning = unionize(folbcResult, answers);
+
+			for (Substitution subst : unioning)
+			{
+				answers.emplace_back(subst);
+			}
+
+			
 		}
 		it++;
 	}
-	if (answers.empty())
-		answers = { s };
 	return answers;
 }
 

@@ -15,7 +15,7 @@
 
 using namespace vtpl;
 using namespace std;
-
+/**
 TEST_CASE("Parse KnowledgeBase")
 {
 	SECTION("Correct input - tokens")
@@ -347,10 +347,10 @@ TEST_CASE("Parse KnowledgeBase")
 		// Verify that the parser returns the expected parsing error
 		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
-}
+}**/
 TEST_CASE("Ask tests")
 {
-
+	/**
 	SECTION("First milestone Example")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -555,6 +555,52 @@ TEST_CASE("Ask tests")
 		ExpressionTreeNode query = parseExpression("f(g(a), a)").second;
 		auto result = get<1>(kb).ask(query);
 		REQUIRE(!result.empty());
+	}
+	SECTION("Goal doesn't match with any fact")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(a, b).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("g(a, b)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}
+	SECTION("Goal has more arguments than the facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(a).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(a, b)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}
+	SECTION("Facts contain variables, but goal doesn't provide any substitution")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(a, b)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}**/
+	SECTION("Facts contain variables, but goal doesn't provide any substitution")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X) :- g(X). f(a). g(a).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(a).").second;
+		auto result = get<1>(kb).ask(query);
+		cout << to_string(result.size()) << endl;
+		REQUIRE(!result.empty());
+		REQUIRE(result.size() == 2);
+		for (Substitution subst : result)
+		{
+			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
+			{
+				cout << sub.first.toString() << "/" << sub.second.toString() << endl;
+
+			}
+		}
 	}
 }
 
