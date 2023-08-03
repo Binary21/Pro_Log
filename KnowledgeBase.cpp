@@ -57,15 +57,15 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 					newGoals.emplace_back(children);
 				}
 			}
-			int it = 1;
+			int its = 1;
 			for (ExpressionTreeNode nodes : goals)
 			{
-				if (it != 1)
+				if (its != 1)
 				{
 					newGoals.emplace_back(nodes);
 					
 				}
-				it++;
+				its++;
 			}
 
 			Substitution composedSub = compose(result.substitution, s);

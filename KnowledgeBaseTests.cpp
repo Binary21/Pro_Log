@@ -350,7 +350,7 @@ TEST_CASE("Parse KnowledgeBase")
 }
 TEST_CASE("Ask tests")
 {
-	/**
+	
 	SECTION("First milestone Example")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -375,7 +375,7 @@ TEST_CASE("Ask tests")
 			ExpressionTreeNode application = apply(query, subst);
 			cout << application.toString() << endl;
 		}
-	}**/
+	}
 	
 	SECTION("Second milestone Example")
 	{
@@ -389,7 +389,7 @@ TEST_CASE("Ask tests")
 			ExpressionTreeNode application = apply(query, subst);
 			cout << application.toString() << endl;
 		}
-	}/**
+	}
 	SECTION("Testing ask on kb, seeking friends")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -418,7 +418,7 @@ TEST_CASE("Ask tests")
 		ExpressionTreeNode query = parseExpression("likes(sally,movies)").second;
 		list<Substitution> result = std::get<1>(kb).ask(query);
 		REQUIRE(result.empty());
-	}**/
+	}
 	SECTION("Testing ask on tiny kb with rule")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -429,18 +429,7 @@ TEST_CASE("Ask tests")
 		int list = 0;
 		for (Substitution subst : result)
 		{
-			
-			for (pair<ExpressionTreeNode, ExpressionTreeNode> node : subst)
-			{
-				cout << "substitution " << to_string(list) << ": {" << node.first.toString() << "/" << node.second.toString() << "}" << endl;
-				
-			}
-			list++;
-		}
-		for (Substitution subst : result)
-		{
 			ExpressionTreeNode application = apply(query, subst);
-			//cout << application.toString() << endl;  // Expected "friends(bill,sally)" and "friends(sally,bill)"
 		}
 	}
 }
@@ -483,13 +472,5 @@ TEST_CASE("Unionize")
 	s2.push_back(subst7);
 
 	result = unionize(s2, s);
-
-	/**for (Substitution subst : result)
-	{
-		for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
-		{
-			cout << sub.first.toString() << "/" << sub.second.toString() << endl;
-		}
-	}**/
 	REQUIRE(true);
 }

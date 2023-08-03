@@ -15,7 +15,6 @@ using namespace std;
 
 TEST_CASE("")
 {
-	/**
 	SECTION("")
 	{
 		pair<ParseError, ExpressionTreeNode> tree1;
@@ -108,7 +107,6 @@ TEST_CASE("")
 }
 TEST_CASE("APPLY")
 {
-	/**
 	SECTION("Apply")
 	{
 		Substitution subst;
@@ -275,10 +273,10 @@ TEST_CASE("APPLY")
 
 		ExpressionTreeNode test = apply(tree.second, subst1);
 		REQUIRE(apply(test, subst2).toString() == "(f(a,a,b))");
-	}**/
+	}
 }
 TEST_CASE("Test unification with expression list failure", "[unification]") {
-	/**SECTION("")
+	SECTION("")
 	{
 		pair<ParseError, ExpressionTreeNode> exp1 = parseExpression("f(a, b)");
 		pair<ParseError, ExpressionTreeNode> exp2 = parseExpression("f(X, c)");
@@ -328,7 +326,7 @@ TEST_CASE("Test unification with expression list failure", "[unification]") {
 		REQUIRE(subst.data.size() == 2);
 		REQUIRE(subst.lookup(makeVariable("X")).front() == makeAtom("a"));
 		REQUIRE(subst.lookup(makeVariable("Y")).front() == makeAtom("a"));
-	}**/
+	}
 
 	SECTION("Multiple substitutions for same variable and multiple occurrences in expression")
 	{
