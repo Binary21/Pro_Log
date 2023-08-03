@@ -376,31 +376,72 @@ TEST_CASE("Ask tests")
 			cout << application.toString() << endl;
 		}
 	}**/
+	
 	SECTION("Second milestone Example")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
 		string input = "hangout(X,Y) :- friends(X,Y),intown(X),intown(Y). friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza). likes(joe, movies). intown(bill). intown(sally). intown(bob).";
 		kb = parseKnowledgeBase(input);
-
-		//ExpressionTreeNode query = makeCompound("friends", { makeAtom("sally"), makeVariable("X") });
 		ExpressionTreeNode query = parseExpression("hangout(X,Y)").second;
 		list<Substitution> result = std::get<1>(kb).ask(query);
-		/**
-		for (Substitution subst : result)
-		{
-			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
-			{
-				if (sub.first.toString() == "X" || sub.first.toString() == "Y");
-					cout << sub.first.toString() << "/" << sub.second.toString() << endl;
-
-			}
-		}**/
 		for (Substitution subst : result)
 		{
 			ExpressionTreeNode application = apply(query, subst);
-			//cout << application.toString() << endl;
+			cout << application.toString() << endl;
 		}
-		REQUIRE(true);
+	}/**
+	SECTION("Testing ask on kb, seeking friends")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "";
+		kb = parseKnowledgeBase(input);
+
+		ExpressionTreeNode query = parseExpression("friends(sally,X)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}
+	SECTION("Testing ask on kb, seeking friends")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "likes(bill,movies). likes(sally,movies).";
+		kb = parseKnowledgeBase(input);
+
+		ExpressionTreeNode query = parseExpression("likes(bill,movies)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}
+	SECTION("Testing ask on small kb, expect failure.")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "likes(bill,movies).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("likes(sally,movies)").second;
+		list<Substitution> result = std::get<1>(kb).ask(query);
+		REQUIRE(result.empty());
+	}**/
+	SECTION("Testing ask on tiny kb with rule")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill,movies). likes(sally,movies).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("friends(X,Y)").second;
+		list<Substitution> result = std::get<1>(kb).ask(query);
+		int list = 0;
+		for (Substitution subst : result)
+		{
+			
+			for (pair<ExpressionTreeNode, ExpressionTreeNode> node : subst)
+			{
+				cout << "substitution " << to_string(list) << ": {" << node.first.toString() << "/" << node.second.toString() << "}" << endl;
+				
+			}
+			list++;
+		}
+		for (Substitution subst : result)
+		{
+			ExpressionTreeNode application = apply(query, subst);
+			//cout << application.toString() << endl;  // Expected "friends(bill,sally)" and "friends(sally,bill)"
+		}
 	}
 }
 

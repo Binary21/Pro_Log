@@ -6,6 +6,11 @@ using namespace std;
 
 ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitution& sub)
 {
+	//cout << "current node and its children: " << t.toString() << endl;
+	//for (pair<ExpressionTreeNode, ExpressionTreeNode> subst : sub.data)
+	//{
+		//cout << "current substitution: {" << subst.first.toString() << "/" << subst.second.toString() << endl;
+	//}
 	ExpressionTreeNode result;
 	if (t.type == ExpressionTreeNodeType::ROOT || (t.contents == "" && t.children.size() > 0))
 	{
@@ -19,8 +24,12 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 	else if (isVariable(t))
 	{
 		auto subResult = sub.lookup(t);
+
 		if (!subResult.empty())
+		{
+			//cout << "Subtitution Result: " << subResult.front().toString() << endl;
 			return subResult.front();
+		}
 		else
 			return t;
 	}
@@ -62,6 +71,7 @@ void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitu
 			newName.contents = newNameStr;
 			substitutionData.insert({ node, newName });
 			node.contents = newNameStr;
+			
 		}
 		else if (it != substitutionData.end())
 		{

@@ -276,5 +276,16 @@ TEST_CASE("")
 		REQUIRE(result.substitution.lookup(makeVariable("Y1")).size() == 1);
 		REQUIRE(result.substitution.lookup(makeVariable("X1")).size() == 1);
 	}
+	SECTION("unify unary predicate with variable", "[unify]") {
+		pair<ParseError, ExpressionTreeNode>  tree1 = parseExpression("likes(X)");
+		pair<ParseError, ExpressionTreeNode>  tree2 = parseExpression("likes(mary)");
+
+		UnificationResult result;
+		vtpl::unify(tree1.second, tree2.second, result);
+
+		REQUIRE(result.failed == false);
+		REQUIRE(result.substitution.data.size() == 1); // One substitution expected
+		REQUIRE(result.substitution.lookup(makeVariable("X")).front() == makeAtom("mary")); // Expecting the substitution X/mary
+	}
 	
 }

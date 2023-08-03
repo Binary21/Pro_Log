@@ -20,41 +20,54 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::ask(const ExpressionTreeNode& quer
 		input = query;
 	list<ExpressionTreeNode> goals = { input };
 	Substitution result;
-	return folbc(goals, result);
+	list<Substitution> lists = folbc(goals, result);
+	return lists;
 }
 
 list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& goals, Substitution& s) const
 {
 	if (goals.empty())
 		return { s }; //  just return s
-
+	
 
 	list<Substitution> answers;
 	//cout << "pre application " << goals.front().toString() << endl;
 	ExpressionTreeNode q1 = apply(goals.front(), s);
+
 	//cout << "application: " << q1.toString() << endl;
 	Iterator it = begin();
 	while (it != end())
 	{
 		Clause apartClause = apart(*it);
 		UnificationResult result;
+		result.substitution = s;
 		unify(apartClause.head, q1, result);
 		//string pass = "SUCCEEDED";
 		//if (result.failed == false)
 			//cout << "Atempting to unify " << apartClause.head.toString() << " and " << q1.toString() << " " << pass << endl;
 		if (result.failed == false)
 		{
-			list<ExpressionTreeNode> newGoals = goals;
-			newGoals.pop_front();
+			list<ExpressionTreeNode> newGoals;
 
 			if (apartClause.body.type == ExpressionTreeNodeType::ROOT)
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
 					//cout << "newGoal: " << children.toString() << endl;
-					newGoals.push_front(children);
+					newGoals.emplace_back(children);
 				}
 			}
+			int it = 1;
+			for (ExpressionTreeNode nodes : goals)
+			{
+				if (it != 1)
+				{
+					newGoals.emplace_back(nodes);
+					
+				}
+				it++;
+			}
+
 			Substitution composedSub = compose(result.substitution, s);
 			answers = unionize(folbc(newGoals, composedSub), answers);
 		}
