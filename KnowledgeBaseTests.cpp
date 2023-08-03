@@ -426,7 +426,6 @@ TEST_CASE("Ask tests")
 		kb = parseKnowledgeBase(input);
 		ExpressionTreeNode query = parseExpression("friends(X,Y)").second;
 		list<Substitution> result = std::get<1>(kb).ask(query);
-		int list = 0;
 		for (Substitution subst : result)
 		{
 			ExpressionTreeNode application = apply(query, subst);
