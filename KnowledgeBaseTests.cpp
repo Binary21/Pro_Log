@@ -431,6 +431,131 @@ TEST_CASE("Ask tests")
 			ExpressionTreeNode application = apply(query, subst);
 		}
 	}
+	SECTION("Testing ask on tiny kb of facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "likes(bill, X). likes(sally, Y).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("likes(X,Y)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+	SECTION("Testing ask on tiny kb of facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "likes(bill, movies). likes(sally, movies).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("likes(X,movies)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+	// new tests_____________________________________________________________________________________________
+	SECTION("Testing ask on a single fact kb")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(a).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+	SECTION("Testing ask on two-argument fact kb")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "g(b,c).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("g(X,Y)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+
+	SECTION("Testing ask on multi-fact kb")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "h(i,j). k(l).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("h(X,Y)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+
+	SECTION("Testing ask on non-existing fact kb")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "m(n).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("m(X,Y)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(result.empty());
+	}
+	SECTION("Testing ask on empty kb")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(result.empty());
+	}
+	SECTION("Testing ask with kb of single variable facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X). ";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+
+	SECTION("Testing ask with kb of multi-variable facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X, Y, Z). ";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X, Y, Z)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+
+	SECTION("Testing ask with kb of repeated facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X). f(X). ";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+
+	SECTION("Testing ask with kb of different facts")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X). g(X). ";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(X)").second;
+		auto result = get<1>(kb).ask(query);
+
+		REQUIRE(!result.empty());
+	}
+	SECTION("All arguments in facts are variables")
+	{
+		tuple<ParseError, KnowledgeBase> kb;
+		string input = "f(X, Y).";
+		kb = parseKnowledgeBase(input);
+		ExpressionTreeNode query = parseExpression("f(g(a), a)").second;
+		auto result = get<1>(kb).ask(query);
+		REQUIRE(!result.empty());
+	}
 }
 
 TEST_CASE("Unionize")

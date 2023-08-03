@@ -56,16 +56,17 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 				if (its != 1)
 				{
 					newGoals.emplace_back(nodes);
-					
 				}
 				its++;
 			}
 
-			Substitution composedSub = compose(result.substitution, s);
+			Substitution composedSub = compose(s, result.substitution);
 			answers = unionize(folbc(newGoals, composedSub), answers);
 		}
 		it++;
 	}
+	if (answers.empty())
+		answers = { s };
 	return answers;
 }
 
