@@ -53,10 +53,19 @@ public:
 
 	int counter;
 
+	void setTrace(bool trace);
+	bool getTrace();
+	mutable string outputLogs;
+
 private:
 	vector<Clause>clauses;
+	// local logging string in knowledgebase for tracing
+	
+	bool tracing = false;
 };
 	list<Substitution> unionize(list<Substitution> s2, list<Substitution> s);
+
+	
 };
 
 #endif

@@ -43,13 +43,13 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 		unify(apartClause.head, q1, result);
 		if (result.failed == false)
 		{
+			this->outputLogs += "TRACE: Unification of: " + apartClause.head.toString() + " and " + q1.toString() + " was successful\n";
 			list<ExpressionTreeNode> newGoals;
 
 			if (apartClause.body.type == ExpressionTreeNodeType::ROOT)
 			{
 				for (ExpressionTreeNode children : apartClause.body.children)
 				{
-					cout << "body: " << children.toString() << endl;
 					newGoals.emplace_back(children);
 				}
 			}
@@ -58,6 +58,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			{
 				if (its != 1)
 				{
+					this->outputLogs += "TRACE: Adding new Goal: " + nodes.toString() + "\n";
 					newGoals.emplace_back(nodes);
 				}
 				its++;
@@ -66,11 +67,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			Substitution composedSub = compose(s, result.substitution);
 			list<Substitution> folbcResult = folbc(newGoals, composedSub);
 			list<Substitution> unioning = unionize(folbcResult, answers);
-			//for (Substitution subst : unioning)
-			//{
 			answers = unioning;
-				//.emplace_back(subst);
-			//}
 		}
 		it++;
 	}
@@ -132,3 +129,14 @@ vtpl::KnowledgeBase::Iterator vtpl::KnowledgeBase::end() const
 {
 	return clauses.end();
 }
+
+void vtpl::KnowledgeBase::setTrace(bool trace)
+{
+	if (tracing != trace)
+		tracing = trace;
+}
+bool vtpl::KnowledgeBase::getTrace()
+{
+	return tracing;
+}
+
