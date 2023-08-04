@@ -85,8 +85,8 @@ int runREPL(vtpl::KnowledgeBase& kb)
 						if (kb.getTrace() && !kb.outputLogs.empty())
 						{
 							
-							//kb.outputLogs = removeDuplicateLines(kb.outputLogs);
-							//kb.outputLogs.pop_back();
+							kb.outputLogs = removeDuplicateLines(kb.outputLogs);
+							kb.outputLogs.pop_back();
 							cerr << kb.outputLogs << endl;
 						}
 						for (Substitution subst : result)
