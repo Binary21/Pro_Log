@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <cstdlib>
+#include <unordered_set>
 #include "KnowledgeBase.hpp"
 #include "Parser.hpp"
 #include "Lexer.hpp"
@@ -14,6 +15,21 @@
 
 using namespace std;
 using namespace vtpl;
+
+std::string removeDuplicateLines(std::string str) {
+	std::istringstream iss(str);
+	std::unordered_set<std::string> lines;
+	std::string output, line;
+
+	while (std::getline(iss, line)) {
+		if (lines.find(line) == lines.end()) {  // line not found
+			lines.insert(line);
+			output += line + "\n";
+		}
+	}
+
+	return output;
+}
 
 int runREPL(vtpl::KnowledgeBase& kb) 
 {
@@ -42,9 +58,13 @@ int runREPL(vtpl::KnowledgeBase& kb)
 					cerr << "Error: unknown command" << endl;
 			}
 		}
-		else if (line.substr(0, 2) == "? ")
+		else if (line.substr(0, 1) == "?")
 		{
-			string queryString = line.substr(2);
+			string queryString;
+			if (line[1] == ' ')
+				queryString = line.substr(2);
+			else
+				queryString = line.substr(1);
 			queryString.erase(queryString.find_last_not_of(" \n\r\t") + 1);
 			if (queryString.back() != '.') {
 				cerr << "Parse Error: query does not end with a period." << endl;
@@ -62,8 +82,13 @@ int runREPL(vtpl::KnowledgeBase& kb)
 						cerr << "false." << endl;
 					else
 					{
-						if(kb.getTrace())
+						if (kb.getTrace() && !kb.outputLogs.empty())
+						{
+							
+							//kb.outputLogs = removeDuplicateLines(kb.outputLogs);
+							//kb.outputLogs.pop_back();
 							cerr << kb.outputLogs << endl;
+						}
 						for (Substitution subst : result)
 						{
 							ExpressionTreeNode application = apply(query.second, subst);
