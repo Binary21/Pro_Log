@@ -66,13 +66,11 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			Substitution composedSub = compose(s, result.substitution);
 			list<Substitution> folbcResult = folbc(newGoals, composedSub);
 			list<Substitution> unioning = unionize(folbcResult, answers);
-
-			for (Substitution subst : unioning)
-			{
-				answers.emplace_back(subst);
-			}
-
-			
+			//for (Substitution subst : unioning)
+			//{
+			answers = unioning;
+				//.emplace_back(subst);
+			//}
 		}
 		it++;
 	}
@@ -81,6 +79,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 
 list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution> s)
 {
+	bool emptyAdded = false;
 	list<Substitution> result;
 	result = s;
 	for (Substitution subst2 : s2)
@@ -106,6 +105,12 @@ list<vtpl::Substitution> vtpl::unionize(list<Substitution> s2, list<Substitution
 			if (!found)
 				newSubstitution.data.insert(pair2);
 		}
+		if (subst2.data.empty() && emptyAdded == false && s2.size() > 0)
+		{
+			result.emplace_back(subst2);
+			emptyAdded = true;
+		}
+			
 		if(!newSubstitution.data.empty())
 			result.emplace_back(newSubstitution);
 	}
