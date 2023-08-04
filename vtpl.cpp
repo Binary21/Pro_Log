@@ -41,7 +41,7 @@ int runREPL(vtpl::KnowledgeBase& kb)
 
 		if (line == "quit")
 		{
-			return EXIT_FAILURE;
+			return EXIT_SUCCESS;
 		}
 		else if (line.substr(0, 5) == "trace") {
 			if (line.size() > 5)
