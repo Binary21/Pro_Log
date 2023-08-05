@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <cstdlib>
+#include <algorithm>
 #include <unordered_set>
 #include "KnowledgeBase.hpp"
 #include "Parser.hpp"
@@ -29,6 +30,10 @@ std::string removeDuplicateLines(std::string str) {
 	}
 
 	return output;
+}
+
+bool isAllSpaces(const std::string& str) {
+	return std::all_of(str.begin(), str.end(), ::isspace);
 }
 
 int runREPL(vtpl::KnowledgeBase& kb) 
@@ -74,7 +79,7 @@ int runREPL(vtpl::KnowledgeBase& kb)
 				queryString.pop_back();
 				pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
 				if (query.first.isSet())
-					cerr << "Error: unable to parse because " << query.first.message() << endl;
+					cerr << "Parse Error: unable to parse because " << query.first.message() << endl;
 				else
 				{
 					auto result = kb.ask(query.second);
@@ -99,7 +104,7 @@ int runREPL(vtpl::KnowledgeBase& kb)
 				}
 			}
 		}
-		else if (!line.empty())
+		else if (!line.empty() && !isAllSpaces(line))
 			cerr << "Error: Unknown command" << endl;
 	}
 }
@@ -122,7 +127,6 @@ int main(int argc, char** argv)
 	}
 	TokenList t1 = tokenize(file);
 	tuple<ParseError, KnowledgeBase> kb;
-	string line;
 	try
 	{
 		kb = parseKnowledgeBase(t1);
