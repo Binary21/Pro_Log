@@ -6,6 +6,7 @@
 #include <QPlainTextEdit>
 #include <QCheckBox>
 #include <QLabel>
+#include <QMenuBar>
 #include "KnowledgeBase.hpp"
 #include "Parser.hpp"
 #include "Lexer.hpp"
@@ -19,8 +20,18 @@ class Gui : public QWidget {
 public:
     Gui(QWidget* parent = nullptr);
     void setFileName(string filename);
-    void setFileContents(ifstream file);
+    void setFileContents(string file);
 
+    bool openFile(const std::string& filename);
+    bool saveFile(const std::string& filename);
+
+    void newDocument();
+    void openDocument();
+    void saveDocument();
+    void saveAsDocument();
+    void quitApplication();
+    void parseDocument();
+    void runQuery();
 
 private:
     QLineEdit* fileNameLineEdit;
@@ -29,12 +40,13 @@ private:
     QLineEdit* queryLineEdit;
     QCheckBox* toggleCheckBox;
 
-    bool openFile(const string& filename);
     
     QLabel* myLabel;
     QPlainTextEdit* myContents;
     string fileName = "* No File Selected *";
     string fileContents;
+
+    QMenuBar* menu;
 };
 
 #endif // GUI_HPP

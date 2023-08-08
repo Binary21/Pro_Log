@@ -27,37 +27,13 @@ int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
 	Gui hello;
-
 	if (argc == 2)
 	{
 		string filename = argv[1];
-		hello.setFileName(filename);
-		ifstream file(filename);
-		if (!file.is_open())
-		{
-			cerr << "Error: Could not open file: " << filename << endl;
-			return EXIT_FAILURE;
-		}
-		std::stringstream buffer;
-		buffer << file.rdbuf();
-
-		std::string content = buffer.str();
-		//TokenList t1 = tokenize(content);
-		tuple<ParseError, KnowledgeBase> kb;
-
-		kb = vtpl::parseKnowledgeBase(content);
-		/**for (vtpl::Clause clause : std::get<1>(kb))
-		{
-			fileContents += clause.head.toString();
-			if (clause.body.contents != "")
-				fileContents += " :- " + clause.body.toString();
-			fileContents += "\n";
-		}
-
-		hello.setFileContents(fileContents);**/
+		//hello.setFileName(filename);
+		//cout << "two inputs" << endl;
+		hello.openFile(filename);
 	}
-		
-	
 	hello.show();
   return app.exec();
 } 

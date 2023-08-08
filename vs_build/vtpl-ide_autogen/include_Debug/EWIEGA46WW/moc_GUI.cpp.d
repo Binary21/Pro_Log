@@ -107,14 +107,19 @@ C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/incl
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QCheckBox \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QLabel \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QLineEdit \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QMenuBar \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QPlainTextEdit \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QWidget \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qabstractbutton.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qabstractscrollarea.h \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qaction.h \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qactiongroup.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qcheckbox.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qframe.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qlabel.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qlineedit.h \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qmenu.h \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qmenubar.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qplaintextedit.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qsizepolicy.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qtextedit.h \

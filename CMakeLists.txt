@@ -4,14 +4,6 @@ project(VTprolog CXX)
 # You will need to edit these variables as the project progresses
 #-----------------------------------------------------------------------
 
-# IDE file instructions
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
-
-add_executable(vtpl_gui vtpl-ide.cpp GUI.cpp)
-target_link_libraries(vtpl_gui Qt5::Widgets)
-
 # add source for library modules here
 set(LIB_SOURCE
   Token.hpp 
@@ -55,7 +47,7 @@ set(TUI_TEST_SOURCE
 # add source for gui modules here
 set(GUI_SOURCE
   GUI.cpp
-  "GUI.h"
+  GUI.h
   )
 
 # add source for gui functional tests here
