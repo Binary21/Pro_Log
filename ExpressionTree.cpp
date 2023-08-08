@@ -131,7 +131,7 @@ string ExpressionTreeNode::toStringHelper() const
 	ExpressionTreeNode node = *this;
 	string result;
 
-	if (isNone(node))
+	if (isNone(node) && node.children.empty())
 	{
 		result += "";
 	}
@@ -146,6 +146,21 @@ string ExpressionTreeNode::toStringHelper() const
 	else if (isCompound(node))
 	{
 		result += node.contents + "(";
+		bool firstArgument = true;
+		for (ExpressionTreeNode& child : node.children)
+		{
+			if (!firstArgument)
+			{
+				result += ",";
+			}
+			result += child.toStringHelper();
+			firstArgument = false;
+		}
+		result += ")";
+	}
+	else if (node.type == ExpressionTreeNodeType::ROOT)
+	{
+		result += "(";
 		bool firstArgument = true;
 		for (ExpressionTreeNode& child : node.children)
 		{

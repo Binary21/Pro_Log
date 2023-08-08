@@ -103,7 +103,10 @@ bool Gui::openFile(const std::string& filename) {
     {
         fileContents += clause.head.toString();
         if (!clause.body.children.empty())
+        {
+            clause.body.type = ExpressionTreeNodeType::NONE;
             fileContents += " :- " + clause.body.toString();
+        }
         fileContents += ".\n";
     }
     setFileContents(fileContents);
@@ -200,6 +203,13 @@ void Gui::parseDocument(string& input) {
 
     string fileContents;
     knowledgeBase = vtpl::parseKnowledgeBase(t1);
+    for (vtpl::Clause clause : std::get<1>(knowledgeBase))
+    {
+        if (!clause.body.children.empty())
+        {
+            clause.body.type = ExpressionTreeNodeType::NONE;
+        }
+    }
 }
 
 void Gui::runQuery() {
