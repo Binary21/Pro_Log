@@ -5,8 +5,10 @@
 #include <QPlainTextEdit>
 #include <QCheckBox>
 #include <QString>
+#include <QDebug>
 #include <string>
 #include <fstream>
+#include <tuple>
 
 using namespace vtpl;
 
@@ -22,6 +24,11 @@ void Gui::setFileContents(string file)
     fileContentsEdit->setPlainText(file_input);
 }
 
+void Gui::setResultContents(string result)
+{
+    QString result_input(result.c_str());
+    resultsEdit->setPlainText(result_input);
+}
 
 Gui::Gui(QWidget* parent) : QWidget(parent) {
     setWindowTitle("VTProlog IDE");
@@ -42,7 +49,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
    
     // Section for displaying file contents
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
-    QLabel* fileContentsLabel = new QLabel("File Contents:");
+    QLabel* fileContentsLabel = new QLabel("");
     fileContentsEdit = new QPlainTextEdit("string test");
     fileContentLayout->addWidget(fileContentsLabel);
     fileContentLayout->addWidget(fileContentsEdit);
@@ -50,8 +57,8 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     // Section for showing results
     QVBoxLayout* resultLayout = new QVBoxLayout();
-    QLabel* resultsLabel = new QLabel("Results:");
-    QPlainTextEdit* resultsEdit = new QPlainTextEdit();
+    QLabel* resultsLabel = new QLabel("");
+    resultsEdit = new QPlainTextEdit();
     resultsEdit->setReadOnly(true);  // Set this if you want results to be read-only
     resultLayout->addWidget(resultsLabel);
     resultLayout->addWidget(resultsEdit);
@@ -64,6 +71,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     QLineEdit* queryLineEdit = new QLineEdit();
     mainLayout->addWidget(queryLabel);
     mainLayout->addWidget(queryLineEdit);
+    connect(queryLineEdit, &QLineEdit::returnPressed, this, &Gui::onQueryEnterPressed);
 
     // Toggle check box button
     QCheckBox* toggleCheckBox = new QCheckBox("Trace");
@@ -79,10 +87,10 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 bool Gui::openFile(const std::string& filename) {
     ifstream file(filename);
     TokenList t1 = tokenize(file);
-    tuple<ParseError, KnowledgeBase> kb;
+    
     string fileContents;
-    kb = vtpl::parseKnowledgeBase(t1);
-    for (vtpl::Clause clause : std::get<1>(kb))
+    knowledgeBase = vtpl::parseKnowledgeBase(t1);
+    for (vtpl::Clause clause : std::get<1>(knowledgeBase))
     {
         fileContents += clause.head.toString();
         if (clause.body.contents != "")
@@ -124,6 +132,24 @@ void Gui::parseDocument() {
 
 void Gui::runQuery() {
     // Implement this
+}
+
+void Gui::onQueryEnterPressed()
+{
+    QString queryText = queryLineEdit->text();
+    qDebug() << "we made it";
+    //string queryString = queryText.toStdString();
+    //pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
+    /**if (!query.first.isSet())
+    {
+        auto result = std::get<1>(knowledgeBase).ask(query.second);
+        for (Substitution subst : result)
+        {
+            ExpressionTreeNode application = apply(query.second, subst);
+            resultContents += application.toString();
+        }
+    }**/
+
 }
 
 

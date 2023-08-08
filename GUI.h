@@ -11,6 +11,7 @@
 #include "Parser.hpp"
 #include "Lexer.hpp"
 #include "KnowledgeBaseUtility.hpp"
+#include <tuple>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
     Gui(QWidget* parent = nullptr);
     void setFileName(string filename);
     void setFileContents(string file);
+    void setResultContents(string file);
 
     bool openFile(const std::string& filename);
     bool saveFile(const std::string& filename);
@@ -32,6 +34,9 @@ public:
     void quitApplication();
     void parseDocument();
     void runQuery();
+
+private slots:
+    void onQueryEnterPressed();
 
 private:
     QLineEdit* fileNameLineEdit;
@@ -45,8 +50,11 @@ private:
     QPlainTextEdit* myContents;
     string fileName = "* No File Selected *";
     string fileContents;
+    string resultContents;
 
     QMenuBar* menu;
+
+    tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
 };
 
 #endif // GUI_HPP
