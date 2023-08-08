@@ -46,7 +46,6 @@ set(TUI_TEST_SOURCE
 
 # add source for gui modules here
 set(GUI_SOURCE
-  Gui.cpp
   Gui.hpp
   )
 
