@@ -12,7 +12,8 @@
 #include "KnowledgeBase.hpp"
 #include "Parser.hpp"
 #include "Lexer.hpp"
-#include <KnowledgeBaseUtility.hpp>
+#include "KnowledgeBaseUtility.hpp"
+
 
 using namespace std;
 using namespace vtpl;

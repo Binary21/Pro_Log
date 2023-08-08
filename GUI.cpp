@@ -4,6 +4,25 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QCheckBox>
+#include <QString>
+#include <string>
+#include <fstream>
+
+
+
+void Gui::setFileName(string filename)
+{
+    fileName = filename;
+    myLabel->setText(QString::fromLocal8Bit(filename.c_str()));
+}
+
+void Gui::setFileContents(ifstream file)
+{
+    vtpl::TokenList t1 = vtpl::tokenize(file);
+    //fileContents = file;
+    //myContents->setPlainText(QString::fromLocal8Bit(file.c_str()));
+}
+
 
 Gui::Gui(QWidget* parent) : QWidget(parent) {
     setWindowTitle("VTProlog IDE");
@@ -11,10 +30,13 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     // Section for file name
     QLabel* fileLabel = new QLabel("File Name:");
-    QLabel* fileNameDisplayLabel = new QLabel("Some File");
+    //QLabel* fileNameDisplayLabel = new QLabel(QString::fromStdString(fileName));
+    std::string str = fileName;
+    myLabel = new QLabel("* No File Selected *", this);
+    
     QHBoxLayout* fileLayout = new QHBoxLayout();
     fileLayout->addWidget(fileLabel);
-    fileLayout->addWidget(fileNameDisplayLabel);
+    fileLayout->addWidget(myLabel);
     mainLayout->addLayout(fileLayout);
 
     // Horizontal layout to contain both file contents and results
@@ -23,7 +45,8 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     // Section for displaying file contents
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
     QLabel* fileContentsLabel = new QLabel("File Contents:");
-    QPlainTextEdit* fileContentsEdit = new QPlainTextEdit();
+    QPlainTextEdit* fileContentsEdit = new QPlainTextEdit("string test");
+    myContents = new QPlainTextEdit("", this);
     fileContentLayout->addWidget(fileContentsLabel);
     fileContentLayout->addWidget(fileContentsEdit);
     contentResultLayout->addLayout(fileContentLayout);

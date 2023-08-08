@@ -1,8 +1,16 @@
-cmake_minimum_required(VERSION 3.5...3.22)
+cmake_minimum_required(VERSION 3.5)
 project(VTprolog CXX)
 
 # You will need to edit these variables as the project progresses
 #-----------------------------------------------------------------------
+
+# IDE file instructions
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+
+add_executable(vtpl_gui vtpl-ide.cpp GUI.cpp)
+target_link_libraries(vtpl_gui Qt5::Widgets)
 
 # add source for library modules here
 set(LIB_SOURCE
@@ -20,7 +28,7 @@ set(LIB_SOURCE
   Unification.hpp
   KnowledgeBaseUtility.cpp
   KnowledgeBaseUtility.hpp
-  
+
 )
 
 # add source for library unit tests here
@@ -46,6 +54,8 @@ set(TUI_TEST_SOURCE
 
 # add source for gui modules here
 set(GUI_SOURCE
+  GUI.cpp
+  "GUI.h"
   )
 
 # add source for gui functional tests here
@@ -121,6 +131,7 @@ if(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(vtpl pthread)
 endif()
 
+
 # executables with Qt dependency
 if(Qt5_FOUND)
 
@@ -137,7 +148,8 @@ if(Qt5_FOUND)
   else(UNIX AND NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(vtpl-ide Qt5::Widgets)
   endif()
-  
+
+
 endif() # end Qt dependency
 
 # Testing

@@ -1,4 +1,11 @@
 C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/include_Debug/EWIEGA46WW/moc_GUI.cpp: C:/Users/Rick/Documents/Applied\ Software\ Design/GUI.h \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/ExpressionTree.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/KnowledgeBase.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/KnowledgeBaseUtility.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/Lexer.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/Parser.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/Token.hpp \
+  C:/Users/Rick/Documents/Applied\ Software\ Design/Unification.hpp \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtCore/qalgorithms.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtCore/qarraydata.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtCore/qatomic.h \
@@ -98,6 +105,7 @@ C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/incl
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtGui/qwindowdefs.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtGui/qwindowdefs_win.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QCheckBox \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QLabel \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QLineEdit \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QPlainTextEdit \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/QWidget \
@@ -105,6 +113,7 @@ C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/incl
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qabstractscrollarea.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qcheckbox.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qframe.h \
+  C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qlabel.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qlineedit.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qplaintextedit.h \
   C:/Users/Rick/Documents/qtdev/qt5-build/qtdev/qt5-install/include/QtWidgets/qsizepolicy.h \
