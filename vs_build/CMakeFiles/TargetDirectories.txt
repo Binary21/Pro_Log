@@ -1,0 +1,13 @@
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/vtpl_gui.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/unit_tests.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/tui_test.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/vtpl.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/gui_test.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/vtpl-ide.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/Experimental.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/Nightly.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/Continuous.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/NightlyMemoryCheck.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/RUN_TESTS.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Rick/Documents/Applied Software Design/vs_build/CMakeFiles/ZERO_CHECK.dir
