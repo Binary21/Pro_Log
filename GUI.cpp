@@ -8,7 +8,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QDebug>
-#include <string>
+#include <string> vs
 #include <fstream>
 #include <sstream>
 #include <tuple>
