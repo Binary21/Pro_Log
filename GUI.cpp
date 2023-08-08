@@ -8,7 +8,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QDebug>
-#include <string> vs
+#include <string>
 #include <fstream>
 #include <sstream>
 #include <tuple>
@@ -36,7 +36,7 @@ void Gui::setResultContents(string result)
 Gui::Gui(QWidget* parent) : QWidget(parent) {
     setWindowTitle("VTProlog IDE");
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
-    
+
     menu = new QMenuBar(this);
     QMenu* fileMenu = menu->addMenu("File");
     fileMenu->addAction("New", this, &Gui::newDocument);
@@ -49,7 +49,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     mainLayout->addLayout(fileLayout);
     // Horizontal layout to contain both file contents and results
     QHBoxLayout* contentResultLayout = new QHBoxLayout();
-   
+
     // Section for displaying file contents
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
     QLabel* fileContentsLabel = new QLabel("");
@@ -96,7 +96,7 @@ bool Gui::openFile(const std::string& filename) {
         return false;
     }
     TokenList t1 = tokenize(file);
-    
+
     string fileContents;
     knowledgeBase = vtpl::parseKnowledgeBase(t1);
     for (vtpl::Clause clause : std::get<1>(knowledgeBase))
@@ -197,7 +197,7 @@ void Gui::quitApplication() {
 void Gui::parseDocument(string& input) {
     istringstream file(input);
     TokenList t1 = tokenize(file);
-    
+
     string fileContents;
     knowledgeBase = vtpl::parseKnowledgeBase(t1);
 }
@@ -218,7 +218,7 @@ void Gui::onQueryEnterPressed()
     parseDocument(content);
     resultContents = "";
 
-    
+
     if (!query.first.isSet())
     {
         auto result = std::get<1>(knowledgeBase).ask(query.second);
@@ -233,8 +233,3 @@ void Gui::onQueryEnterPressed()
         setResultContents(resultContents);
     }
 }
-
-
-
-
-
