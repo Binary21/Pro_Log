@@ -387,8 +387,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\vtpl-ide.cpp" />
-    <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Gui.cpp" />
     <ClInclude Include="C:\Users\Rick\Documents\Applied Software Design\Gui.hpp" />
+    <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Gui.cpp" />
     <ClInclude Include="C:\Users\Rick\Documents\Applied Software Design\Token.hpp" />
     <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Token.cpp" />
     <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Lexer.cpp" />
