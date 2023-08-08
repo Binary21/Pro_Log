@@ -32,13 +32,14 @@ public:
     void saveDocument();
     void saveAsDocument();
     void quitApplication();
-    void parseDocument();
+    void parseDocument(string& input);
     void runQuery();
 
 private slots:
     void onQueryEnterPressed();
 
 private:
+    QAction* saveAction;
     QLineEdit* fileNameLineEdit;
     QPlainTextEdit* fileContentsEdit;
     QPlainTextEdit* resultsEdit;
@@ -48,13 +49,14 @@ private:
     
     QLabel* myLabel;
     QPlainTextEdit* myContents;
-    string fileName = "* No File Selected *";
     string fileContents;
     string resultContents;
-
+    string fileName;
     QMenuBar* menu;
 
     tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
+    string currentFile;
+    void clear();
 };
 
 #endif // GUI_HPP

@@ -4,10 +4,13 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QCheckBox>
+#include <QMessageBox>
+#include <QFileDialog>
 #include <QString>
 #include <QDebug>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <tuple>
 
 using namespace vtpl;
@@ -38,7 +41,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     QMenu* fileMenu = menu->addMenu("File");
     fileMenu->addAction("New", this, &Gui::newDocument);
     fileMenu->addAction("Open", this, &Gui::openDocument);
-    fileMenu->addAction("Save", this, &Gui::saveDocument);
+    saveAction = fileMenu->addAction("Save", this, &Gui::saveDocument);
     fileMenu->addAction("Save As", this, &Gui::saveAsDocument);
     fileMenu->addAction("Quit", this, &Gui::quitApplication);
 
@@ -68,13 +71,13 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     // Section for adding a query
     QLabel* queryLabel = new QLabel("Enter Query:");
-    QLineEdit* queryLineEdit = new QLineEdit();
+    queryLineEdit = new QLineEdit();
     mainLayout->addWidget(queryLabel);
     mainLayout->addWidget(queryLineEdit);
     connect(queryLineEdit, &QLineEdit::returnPressed, this, &Gui::onQueryEnterPressed);
 
     // Toggle check box button
-    QCheckBox* toggleCheckBox = new QCheckBox("Trace");
+    toggleCheckBox = new QCheckBox("Trace");
     QHBoxLayout* bottomLayout = new QHBoxLayout();
     bottomLayout->addStretch();  // This pushes the checkbox to the right
     bottomLayout->addWidget(toggleCheckBox);
@@ -85,7 +88,13 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 }
 
 bool Gui::openFile(const std::string& filename) {
+    clear();
     ifstream file(filename);
+    if (!file.is_open())
+    {
+        QMessageBox::critical(this, "Error", "Parsing the file failed.");
+        return false;
+    }
     TokenList t1 = tokenize(file);
     
     string fileContents;
@@ -93,41 +102,104 @@ bool Gui::openFile(const std::string& filename) {
     for (vtpl::Clause clause : std::get<1>(knowledgeBase))
     {
         fileContents += clause.head.toString();
-        if (clause.body.contents != "")
+        if (!clause.body.children.empty())
             fileContents += " :- " + clause.body.toString();
-        fileContents += "\n";
+        fileContents += ".\n";
     }
     setFileContents(fileContents);
+    currentFile = filename;
     return true;
 }
 
 bool Gui::saveFile(const std::string& filename) {
-    // Implement this
+    ofstream file(filename);
+
+    if (!file.is_open())
+    {
+        return false;
+    }
+
+    QString contents = fileContentsEdit->toPlainText();
+    file << contents.toStdString();
+    file.close();
     return true;
 }
 
 void Gui::newDocument() {
-    // Implement this
+    saveAction->setEnabled(false);
+    clear();
+}
+
+void Gui::clear()
+{
+    tuple<ParseError, KnowledgeBase> empty;
+    knowledgeBase = empty;
+    resultContents = "";
+    queryLineEdit->clear();
+    toggleCheckBox->setChecked(false);
+    setResultContents(resultContents);
+    setFileContents("");
 }
 
 void Gui::openDocument() {
+    QString qFileName = QFileDialog::getOpenFileName(this, tr("Open Knowledge Base"), "", tr("Text Files (*.txt);;All Files (*)"));
+
+    if (!qFileName.isEmpty())
+    {
+        fileName = qFileName.toStdString();
+        if (!openFile(fileName))
+        {
+            QMessageBox::critical(this, "Error", "Could not parse the knowledge base");
+        }
+    }
+    saveAction->setEnabled(true);
+
 }
 
 
 void Gui::saveDocument() {
-    // Implement this
+    if (currentFile.empty())
+    {
+        QString qFilename = QFileDialog::getSaveFileName(this, "Save File", "", "Text Files (*.txt);;All Files (*)");
+
+        if (qFilename.isEmpty()) {  // User canceled the dialog
+            return;
+        }
+
+        currentFile = qFilename.toStdString();
+    }
+    saveFile(currentFile);
 }
 
 void Gui::saveAsDocument() {
-    // Implement this
+    QString qFilename = QFileDialog::getSaveFileName(this, "Save As");
+
+    if (!qFilename.isEmpty())
+    {
+        QFile file(qFilename);
+
+        if (file.exists())
+        {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "File exists", "The file already exists. Do you want to overwrite it?", QMessageBox::Yes | QMessageBox::No);
+
+            if (reply == QMessageBox::No)
+                return;
+        }
+        saveFile(qFilename.toStdString());
+    }
 }
 
 void Gui::quitApplication() {
-    // Implement this
+    this->close();
 }
 
-void Gui::parseDocument() {
-    // Implement this
+void Gui::parseDocument(string& input) {
+    istringstream file(input);
+    TokenList t1 = tokenize(file);
+    
+    string fileContents;
+    knowledgeBase = vtpl::parseKnowledgeBase(t1);
 }
 
 void Gui::runQuery() {
@@ -137,19 +209,29 @@ void Gui::runQuery() {
 void Gui::onQueryEnterPressed()
 {
     QString queryText = queryLineEdit->text();
-    qDebug() << "we made it";
-    //string queryString = queryText.toStdString();
-    //pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
-    /**if (!query.first.isSet())
+    QString contents = fileContentsEdit->toPlainText();
+    string content = contents.toStdString();
+    string queryString = queryText.toStdString();
+    pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
+
+    content.pop_back();
+    parseDocument(content);
+    resultContents = "";
+
+    
+    if (!query.first.isSet())
     {
         auto result = std::get<1>(knowledgeBase).ask(query.second);
+        if (toggleCheckBox->isChecked())
+            resultContents += get<1>(knowledgeBase).outputLogs;
+
         for (Substitution subst : result)
         {
             ExpressionTreeNode application = apply(query.second, subst);
-            resultContents += application.toString();
+            resultContents += application.toString() + "\n";
         }
-    }**/
-
+        setResultContents(resultContents);
+    }
 }
 
 
