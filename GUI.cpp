@@ -1,4 +1,4 @@
-#include "GUI.h"
+#include "Gui.hpp"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>

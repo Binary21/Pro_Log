@@ -7,7 +7,7 @@
     <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\vtpl-ide.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\GUI.cpp">
+    <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Rick\Documents\Applied Software Design\Token.cpp">
@@ -42,7 +42,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Rick\Documents\Applied Software Design\GUI.h">
+    <ClInclude Include="C:\Users\Rick\Documents\Applied Software Design\Gui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Rick\Documents\Applied Software Design\Token.hpp">

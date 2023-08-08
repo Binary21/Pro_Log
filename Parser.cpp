@@ -43,7 +43,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	root = parseList(current, end, error, depth, diffinput);
 	if (current != end && current->type() != TokenType::COMMA)
 	{
-		error.set("error");
+		error.set("error 1");
 	}
 	rooter.children = { root };
 	if (current == end)
@@ -134,7 +134,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 		children.push_back(value);
 		if (current != end && current->type() == TokenType::STRING)
 		{
-			error.set("error");
+			error.set("error 2");
 		}
 		else if (current != end && current->type() == TokenType::COMMA) {
 			current++;
@@ -204,7 +204,8 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 		root = parseList(current, end, error, depth, diffinput);
 		if (current != end && current->type() != TokenType::COMMA)
 		{
-			error.set("error");
+			cout << printString(current) << endl;
+			error.set("error 3");
 		}
 		rooter.children = { root };
 		while (current->type() == TokenType::COMMA && depth == 0)
@@ -264,7 +265,12 @@ pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(Token
 
 std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const TokenList& tokens)
 {
-
+	auto it = tokens.begin();
+	while (it != tokens.end())
+	{
+		//cout << printString(it) << endl;
+		it++;
+	}
 	ParseError error;
 	KnowledgeBase knowldgeBase;
 	pair<ParseError, ExpressionTreeNode> head;
@@ -297,6 +303,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			if (head.first.isSet() || head.second.children.size() > 1)
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
+				cout << "head: " << head.first.message() << endl;
 				return { error, knowldgeBase };
 			}
 			clause.head = head.second.children.front();
@@ -310,6 +317,7 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			if (body.first.isSet())
 			{
 				error.set("an error occurred and the KnowledgeBase may be incomplete");
+				cout << "body: " << body.first.message() << endl;
 				return { error, knowldgeBase };
 			}
 

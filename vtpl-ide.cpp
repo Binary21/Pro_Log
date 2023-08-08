@@ -4,7 +4,7 @@
 //============================================================================//
 #include <QApplication>
 #include <QLabel>
-#include "GUI.h"
+#include "Gui.hpp"
 
 #include <iostream>
 #include <fstream>

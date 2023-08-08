@@ -161,7 +161,6 @@ string ExpressionTreeNode::toStringHelper() const
 	else
 	{
 		bool firstArgument = true;
-		result += "(";
 		for (ExpressionTreeNode& child : node.children)
 		{
 			if (!firstArgument)
@@ -171,7 +170,6 @@ string ExpressionTreeNode::toStringHelper() const
 			result += child.toStringHelper();
 			firstArgument = false;
 		}
-		result += ")";
 	}
 	return result;
 }

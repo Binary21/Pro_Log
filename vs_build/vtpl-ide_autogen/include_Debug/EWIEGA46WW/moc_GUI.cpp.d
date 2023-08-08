@@ -1,4 +1,4 @@
-C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/include_Debug/EWIEGA46WW/moc_GUI.cpp: C:/Users/Rick/Documents/Applied\ Software\ Design/GUI.h \
+C:/Users/Rick/Documents/Applied\ Software\ Design/vs_build/vtpl-ide_autogen/include_Debug/EWIEGA46WW/moc_Gui.cpp: C:/Users/Rick/Documents/Applied\ Software\ Design/Gui.hpp \
   C:/Users/Rick/Documents/Applied\ Software\ Design/ExpressionTree.hpp \
   C:/Users/Rick/Documents/Applied\ Software\ Design/KnowledgeBase.hpp \
   C:/Users/Rick/Documents/Applied\ Software\ Design/KnowledgeBaseUtility.hpp \

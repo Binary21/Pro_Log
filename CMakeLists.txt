@@ -46,8 +46,8 @@ set(TUI_TEST_SOURCE
 
 # add source for gui modules here
 set(GUI_SOURCE
-  GUI.cpp
-  GUI.h
+  Gui.cpp
+  Gui.hpp
   )
 
 # add source for gui functional tests here
