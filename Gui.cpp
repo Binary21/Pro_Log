@@ -227,9 +227,11 @@ void Gui::onQueryEnterPressed()
     QString contents = fileContentsEdit->toPlainText();
     string content = contents.toStdString();
     string queryString = queryText.toStdString();
-    pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
+    
 
     content.pop_back();
+    queryString.pop_back();
+    pair<ParseError, ExpressionTreeNode> query = parseExpression(queryString);
     parseDocument(content);
     resultContents = "";
 
