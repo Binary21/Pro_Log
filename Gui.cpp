@@ -53,8 +53,8 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     // Section for displaying file contents
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
-    QLabel* fileContentsLabel = new QLabel("");
-    fileContentsEdit = new QPlainTextEdit("string test");
+    QLabel* fileContentsLabel = new QLabel();
+    fileContentsEdit = new QPlainTextEdit();
     fileContentsEdit->setObjectName("editor");
     fileContentLayout->addWidget(fileContentsLabel);
     fileContentLayout->addWidget(fileContentsEdit);
@@ -62,7 +62,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     // Section for showing results
     QVBoxLayout* resultLayout = new QVBoxLayout();
-    QLabel* resultsLabel = new QLabel("");
+    QLabel* resultsLabel = new QLabel();
     resultsEdit = new QPlainTextEdit();
     resultsEdit->setObjectName("results");
     resultsEdit->setReadOnly(true);  // Set this if you want results to be read-only
