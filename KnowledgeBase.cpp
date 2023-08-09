@@ -43,7 +43,10 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 		unify(apartClause.head, q1, result);
 		if (result.failed == false)
 		{
-			this->outputLogs += "TRACE: Unification of: " + apartClause.head.toString() + " and " + q1.toString() + " was successful\n";
+			if(outputLogs.empty())
+				this->outputLogs += "TRACE: Unification of: " + apartClause.head.toString() + " and " + q1.toString() + " was successful";
+			else
+				this->outputLogs += "\nTRACE: Unification of: " + apartClause.head.toString() + " and " + q1.toString() + " was successful";
 			list<ExpressionTreeNode> newGoals;
 
 			if (apartClause.body.type == ExpressionTreeNodeType::ROOT)
@@ -58,7 +61,7 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			{
 				if (its != 1)
 				{
-					this->outputLogs += "TRACE: Adding new Goal: " + nodes.toString() + "\n";
+					this->outputLogs += "\nTRACE: Adding new Goal: " + nodes.toString();
 					newGoals.emplace_back(nodes);
 				}
 				its++;

@@ -33,6 +33,7 @@ std::string removeDuplicateLines(std::string str) {
 	return output;
 }
 
+
 bool isAllSpaces(const std::string& str) {
 	return std::all_of(str.begin(), str.end(), ::isspace);
 }
@@ -90,10 +91,8 @@ int runREPL(vtpl::KnowledgeBase& kb)
 					{
 						if (kb.getTrace() && !kb.outputLogs.empty())
 						{
-							
-							kb.outputLogs = removeDuplicateLines(kb.outputLogs);
-							kb.outputLogs.pop_back();
 							cerr << kb.outputLogs << endl;
+							kb.outputLogs.clear();
 						}
 						for (Substitution subst : result)
 						{
