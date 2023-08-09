@@ -38,6 +38,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
     menu = new QMenuBar(this);
+    menu->setObjectName("menu");
     QMenu* fileMenu = menu->addMenu("File");
     fileMenu->addAction("New", this, &Gui::newDocument);
     fileMenu->addAction("Open", this, &Gui::openDocument);
@@ -54,6 +55,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
     QLabel* fileContentsLabel = new QLabel("");
     fileContentsEdit = new QPlainTextEdit("string test");
+    fileContentsEdit->setObjectName("editor");
     fileContentLayout->addWidget(fileContentsLabel);
     fileContentLayout->addWidget(fileContentsEdit);
     contentResultLayout->addLayout(fileContentLayout);
@@ -62,6 +64,7 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* resultLayout = new QVBoxLayout();
     QLabel* resultsLabel = new QLabel("");
     resultsEdit = new QPlainTextEdit();
+    resultsEdit->setObjectName("results");
     resultsEdit->setReadOnly(true);  // Set this if you want results to be read-only
     resultLayout->addWidget(resultsLabel);
     resultLayout->addWidget(resultsEdit);
@@ -72,12 +75,14 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     // Section for adding a query
     QLabel* queryLabel = new QLabel("Enter Query:");
     queryLineEdit = new QLineEdit();
+    queryLineEdit->setObjectName("query");
     mainLayout->addWidget(queryLabel);
     mainLayout->addWidget(queryLineEdit);
     connect(queryLineEdit, &QLineEdit::returnPressed, this, &Gui::onQueryEnterPressed);
 
     // Toggle check box button
     toggleCheckBox = new QCheckBox("Trace");
+    toggleCheckBox->setObjectName("trace");
     QHBoxLayout* bottomLayout = new QHBoxLayout();
     bottomLayout->addStretch();  // This pushes the checkbox to the right
     bottomLayout->addWidget(toggleCheckBox);
