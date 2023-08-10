@@ -1,4 +1,5 @@
 #include "KnowledgeBaseUtility.hpp"
+#include <atomic>
 
 using namespace vtpl;
 using namespace std;
@@ -55,7 +56,7 @@ ExpressionTreeNode vtpl::apply(const ExpressionTreeNode& t, const Substitution& 
 	return (applyHelper(t, sub));
 }
 
-void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, int& counter, bool isBody)
+void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitutionData, std::atomic<int>& counter, bool isBody)
 {
 	if (isVariable(node))
 	{
@@ -86,7 +87,7 @@ void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitu
 
 Clause vtpl::apart(const Clause& clause)
 {
-	static int counter = 0;
+	std::atomic<int> counter(0);
 	bool isBody = false;
 	Clause newClause = clause;
 	SubstitutionData substData;

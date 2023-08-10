@@ -3,6 +3,7 @@
 #include "KnowledgeBase.hpp"
 #include "KnowledgeBaseUtility.hpp"
 #include "catch.hpp"
+#include <future>
 
 using namespace std;
 
@@ -34,6 +35,8 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 	list<Substitution> answers;
 	ExpressionTreeNode q1 = apply(goals.front(), s);
 	Iterator it = begin();
+
+	list<std::future<list<Substitution>>> futureResults;
 	while (it != end())
 	{
 		Clause apartClause = apart(*it);
@@ -68,12 +71,17 @@ list<vtpl::Substitution> vtpl::KnowledgeBase::folbc(list<ExpressionTreeNode>& go
 			}
 
 			Substitution composedSub = compose(s, result.substitution);
-			list<Substitution> folbcResult = folbc(newGoals, composedSub);
-			list<Substitution> unioning = unionize(folbcResult, answers);
-			answers = unioning;
+			futureResults.push_back(std::async(std::launch::async, &vtpl::KnowledgeBase::folbc, this, newGoals, composedSub));
 		}
 		it++;
 	}
+
+	for (auto& futureResult : futureResults)
+	{
+		list<Substitution> unioning = unionize(futureResult.get(), answers);
+		answers = unioning;
+	}
+
 	return answers;
 }
 

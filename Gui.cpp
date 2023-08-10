@@ -97,7 +97,6 @@ bool Gui::openFile(const std::string& filename) {
     ifstream file(filename);
     if (!file.is_open())
     {
-        QMessageBox::critical(this, "Error", "Parsing the file failed.");
         return false;
     }
     TokenList t1 = tokenize(file);
