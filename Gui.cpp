@@ -48,10 +48,9 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
 
     QHBoxLayout* fileLayout = new QHBoxLayout();
     mainLayout->addLayout(fileLayout);
-    // Horizontal layout to contain both file contents and results
     QHBoxLayout* contentResultLayout = new QHBoxLayout();
 
-    // Section for displaying file contents
+
     QVBoxLayout* fileContentLayout = new QVBoxLayout();
     QLabel* fileContentsLabel = new QLabel();
     fileContentsEdit = new QPlainTextEdit();
@@ -60,19 +59,18 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     fileContentLayout->addWidget(fileContentsEdit);
     contentResultLayout->addLayout(fileContentLayout);
 
-    // Section for showing results
+
     QVBoxLayout* resultLayout = new QVBoxLayout();
     QLabel* resultsLabel = new QLabel();
     resultsEdit = new QPlainTextEdit();
     resultsEdit->setObjectName("results");
-    resultsEdit->setReadOnly(true);  // Set this if you want results to be read-only
+    resultsEdit->setReadOnly(true); 
     resultLayout->addWidget(resultsLabel);
     resultLayout->addWidget(resultsEdit);
     contentResultLayout->addLayout(resultLayout);
 
-    mainLayout->addLayout(contentResultLayout);  // Adding the combined layout to the main layout
+    mainLayout->addLayout(contentResultLayout);
 
-    // Section for adding a query
     QLabel* queryLabel = new QLabel("Enter Query:");
     queryLineEdit = new QLineEdit();
     queryLineEdit->setObjectName("query");
@@ -80,15 +78,13 @@ Gui::Gui(QWidget* parent) : QWidget(parent) {
     mainLayout->addWidget(queryLineEdit);
     connect(queryLineEdit, &QLineEdit::returnPressed, this, &Gui::onQueryEnterPressed);
 
-    // Toggle check box button
     toggleCheckBox = new QCheckBox("Trace");
     toggleCheckBox->setObjectName("trace");
     QHBoxLayout* bottomLayout = new QHBoxLayout();
-    bottomLayout->addStretch();  // This pushes the checkbox to the right
+    bottomLayout->addStretch();  
     bottomLayout->addWidget(toggleCheckBox);
     mainLayout->addLayout(bottomLayout);
 
-    // Set the main layout
     setLayout(mainLayout);
 }
 
@@ -169,7 +165,7 @@ void Gui::saveDocument() {
     {
         QString qFilename = QFileDialog::getSaveFileName(this, "Save File", "", "Text Files (*.txt);;All Files (*)");
 
-        if (qFilename.isEmpty()) {  // User canceled the dialog
+        if (qFilename.isEmpty()) { 
             return;
         }
 
@@ -214,10 +210,6 @@ void Gui::parseDocument(string& input) {
             clause.body.type = ExpressionTreeNodeType::NONE;
         }
     }
-}
-
-void Gui::runQuery() {
-    // Implement this
 }
 
 void Gui::onQueryEnterPressed()

@@ -55,13 +55,10 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "f. \n g. \n h.";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
 		REQUIRE(std::get<1>(knowledgeBase).size() == 3);
 
-		// Verify the clauses and their contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "f");
 		REQUIRE(isNone(it->body));
@@ -81,13 +78,10 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "likes(X).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
 		REQUIRE(std::get<1>(knowledgeBase).size() == 1);
 
-		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "likes(X)");
 		REQUIRE(isNone(it->body));
@@ -99,13 +93,9 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "likes(X,Y).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
 		REQUIRE(std::get<1>(knowledgeBase).size() == 1);
-
-		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "likes(X,Y)");
 		REQUIRE(isNone(it->body));
@@ -117,13 +107,13 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "p :- q.";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
+
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
+
 		REQUIRE(std::get<1>(knowledgeBase).size() == 1);
 
-		// Verify the clause and its contents
+
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "p");
 		REQUIRE(it->body.toString() == "(q)");
@@ -135,13 +125,12 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "likes(john, pizza). likes(mary, ice_cream).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
+
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
+
 		REQUIRE(std::get<1>(knowledgeBase).size() == 2);
 
-		// Verify the clauses and their contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "likes(john,pizza)");
 		REQUIRE(isNone(it->body));
@@ -157,7 +146,7 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "p(X Y).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
@@ -167,7 +156,7 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "p(X, Y,), q(Z).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
@@ -177,7 +166,7 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "p(X, Y)";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
@@ -187,61 +176,55 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "p :- q(X, Y).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
+
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
+
 		REQUIRE(std::get<1>(knowledgeBase).size() == 1);
 
-		// Verify the clause and its contents
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "p");
 		REQUIRE(it->body.toString() == "(q(X,Y))");
 	}
 
-	// Additional Test Cases
-
-	// Test parsing errors for invalid head clause
 	SECTION("Error in clause head")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
 		string input = "p(, X, Y).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
-	// Test parsing errors for missing clause body
 	SECTION("Error: missing clause body")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
 		string input = "p :-";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
-	// Test parsing errors in clause body
+
 	SECTION("Error: in clause body")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
 		string input = "p(X, Y) :- q(X,, Y).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
-	// Test parsing errors for invalid head clause
+
 	SECTION("Error: invalid head clause")
 	{
 		tuple<ParseError, vtpl::KnowledgeBase> knowledgeBase;
 		string input = "p() :- q().";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 	SECTION("Parse simple likes knowledge base")
@@ -250,13 +233,12 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "likes(john, pizza). likes(mary, ice_cream). likes(anna, sushi).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser doesn't return any errors
 		REQUIRE_FALSE(std::get<0>(knowledgeBase).isSet());
 
-		// Verify the number of clauses in the knowledge base
+
 		REQUIRE(std::get<1>(knowledgeBase).size() == 3);
 
-		// Verify the clauses and their contents
+
 		vtpl::KnowledgeBase::Iterator it = std::get<1>(knowledgeBase).begin();
 		REQUIRE(it->head.toString() == "likes(john,pizza)");
 		REQUIRE(isNone(it->body));
@@ -276,7 +258,7 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = " :- g(z,k).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
@@ -286,7 +268,7 @@ TEST_CASE("Parse KnowledgeBase")
 		string input = "g(p,k),g(q,z) :- g(z,k).";
 		knowledgeBase = parseKnowledgeBase(input);
 
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(std::get<0>(knowledgeBase).isSet());
 	}
 
@@ -314,7 +296,7 @@ TEST_CASE("Parse KnowledgeBase")
 		REQUIRE(it->head.toString() == "likes(bob,pizza)");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
-		// Verify that the parser returns the expected parsing error
+
 		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
 	SECTION("")
@@ -343,51 +325,11 @@ TEST_CASE("Parse KnowledgeBase")
 		REQUIRE(it->head.toString() == "likes(bob,pizza)");
 		REQUIRE(it->body.toString() == "");
 		REQUIRE(isNone(it->body));
-		// Verify that the parser returns the expected parsing error
 		REQUIRE(!std::get<0>(knowledgeBase).isSet());
 	}
 }
 TEST_CASE("Ask tests")
 {
-	SECTION("First milestone Example")
-	{
-		tuple<ParseError, KnowledgeBase> kb;
-		string input = "friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza).";
-		kb = parseKnowledgeBase(input);
-
-		//ExpressionTreeNode query = makeCompound("friends", { makeAtom("sally"), makeVariable("X") });
-		ExpressionTreeNode query = parseExpression("friends(sally,X)").second;
-		cout << query.toString() << endl;
-		list<Substitution> result = std::get<1>(kb).ask(query);
-
-		Substitution expectedSubst;
-		expectedSubst.insert(makeVariable("X"), makeAtom("bill"));
-
-		for (Substitution subst : result)
-		{
-			for (pair<ExpressionTreeNode, ExpressionTreeNode> sub : subst.data)
-			{
-				cout << sub.first.toString() << "/" << sub.second.toString() << endl;
-
-			}
-			ExpressionTreeNode application = apply(query, subst);
-			cout << application.toString() << endl;
-		}
-	}
-
-	SECTION("Second milestone Example")
-	{
-		tuple<ParseError, KnowledgeBase> kb;
-		string input = "hangout(X,Y) :- friends(X,Y),intown(X),intown(Y). friends(X,Y) :- likes(X,Z), likes(Y,Z). likes(bill, movies). likes(sally, movies). likes(bob, pizza). likes(joe, movies). intown(bill). intown(sally). intown(bob).";
-		kb = parseKnowledgeBase(input);
-		ExpressionTreeNode query = parseExpression("hangout(X,Y)").second;
-		list<Substitution> result = std::get<1>(kb).ask(query);
-		for (Substitution subst : result)
-		{
-			ExpressionTreeNode application = apply(query, subst);
-			cout << application.toString() << endl;
-		}
-	}
 	SECTION("Testing ask on kb, seeking friends")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -398,16 +340,6 @@ TEST_CASE("Ask tests")
 		auto result = get<1>(kb).ask(query);
 		REQUIRE(result.empty());
 	}
-	/**SECTION("Testing ask on kb, seeking friends")
-	{
-		tuple<ParseError, KnowledgeBase> kb;
-		string input = "likes(bill,movies). likes(sally,movies).";
-		kb = parseKnowledgeBase(input);
-
-		ExpressionTreeNode query = parseExpression("likes(bill,movies)").second;
-		auto result = get<1>(kb).ask(query);
-		REQUIRE(result.empty());
-	}**/
 	SECTION("Testing ask on small kb, expect failure.")
 	{
 		tuple<ParseError, KnowledgeBase> kb;
@@ -449,7 +381,6 @@ TEST_CASE("Ask tests")
 
 		REQUIRE(!result.empty());
 	}
-	// new tests_____________________________________________________________________________________________
 	SECTION("Testing ask on a single fact kb")
 	{
 		tuple<ParseError, KnowledgeBase> kb;

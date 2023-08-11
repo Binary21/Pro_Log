@@ -7,11 +7,6 @@ using namespace std;
 
 ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitution& sub)
 {
-	//cout << "current node and its children: " << t.toString() << endl;
-	//for (pair<ExpressionTreeNode, ExpressionTreeNode> subst : sub.data)
-	//{
-		//cout << "current substitution: {" << subst.first.toString() << "/" << subst.second.toString() << endl;
-	//}
 	ExpressionTreeNode result;
 	if (t.type == ExpressionTreeNodeType::ROOT || (t.contents == "" && t.children.size() > 0))
 	{
@@ -28,7 +23,6 @@ ExpressionTreeNode vtpl::applyHelper(const ExpressionTreeNode& t, const Substitu
 
 		if (!subResult.empty())
 		{
-			//cout << "Subtitution Result: " << subResult.front().toString() << endl;
 			return subResult.front();
 		}
 		else
@@ -63,10 +57,8 @@ void vtpl::standardizeApart(ExpressionTreeNode& node, SubstitutionData& substitu
 		auto it = substitutionData.find(node);
 		if (it == substitutionData.end() && isBody == false)
 		{
-			//counterDict[node.contents]++;
 			counter++;
 			string newNameStr = node.contents + "_" + to_string(counter);
-			//string newNameStr = node.contents + "_" + to_string(counterDict[node.contents]);
 			ExpressionTreeNode newName;
 			newName.type = ExpressionTreeNodeType::VARIABLE;
 			newName.contents = newNameStr;

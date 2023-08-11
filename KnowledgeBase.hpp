@@ -33,7 +33,6 @@ class KnowledgeBase
 public:
 	typedef std::vector<Clause>::const_iterator Iterator;
 
-	// add a clause to the database
 	void tell(const Clause& clause);
 
 	list<Substitution> ask(const ExpressionTreeNode& query) const;
@@ -41,14 +40,10 @@ public:
 	list<Substitution> folbc(list<ExpressionTreeNode>& query, Substitution& s) const;
 
 	
-
-	// return the number of clauses in the database
 	size_t size() const; 
 
-	// get an interator to the first clause
 	Iterator begin() const;
 
-	// get an iterator one-past the last caluse
 	Iterator end() const;
 
 	int counter;
@@ -59,7 +54,6 @@ public:
 
 private:
 	vector<Clause>clauses;
-	// local logging string in knowledgebase for tracing
 	
 	bool tracing = false;
 };

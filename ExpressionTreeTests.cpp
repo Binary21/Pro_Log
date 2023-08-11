@@ -18,13 +18,6 @@ TEST_CASE("")
 	{
 		ExpressionTreeNode atom;
 		REQUIRE(isNone(atom));
-
-
-
-		// member function that does both of these things
-		// never actuall call emplace_back
-		//atom.children.emplace_back(atom2);
-		//atom.type = ExpressionTreeNodeType::COMPOUND;
 	}
 	SECTION("Invalid atom and node")
 	{

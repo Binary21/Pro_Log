@@ -13,9 +13,9 @@
 using namespace vtpl;
 using namespace std;
 
-TEST_CASE("")
+TEST_CASE("Knowledge Base Tests")
 {
-	SECTION("")
+	SECTION("Test two inputs")
 	{
 		pair<ParseError, ExpressionTreeNode> tree1;
 		pair<ParseError, ExpressionTreeNode> tree2;
@@ -74,7 +74,7 @@ TEST_CASE("")
 		REQUIRE(it->toString() == "b");
 	}
 }
-TEST_CASE("APPLY")
+TEST_CASE("Tests Apply tests")
 {
 	SECTION("Apply")
 	{
@@ -115,7 +115,6 @@ TEST_CASE("APPLY")
 		result = apply(root.second, subst);
 		REQUIRE(result.toString() == "(f(Y))");
 	}
-	// this problem
 
 	SECTION("Applying substitution to expression list - further")
 	{
@@ -178,7 +177,6 @@ TEST_CASE("APPLY")
 		result = apply(root, subst);
 		REQUIRE(result.toString() == "(f(a),g(b))");
 	}
-	// 
 	SECTION("Unifying two incompatible lists")
 	{
 		Substitution subst;
@@ -307,12 +305,10 @@ TEST_CASE("Test unification with expression list failure", "[unification]") {
 		pair<ParseError, ExpressionTreeNode> root;
 		root = parseExpression(input);
 
-		// Apply subst1
 		ExpressionTreeNode result1;
 		result1 = apply(root.second, subst1);
 		REQUIRE(result1.toString() == "(friends(bill,bill))");
 
-		// Apply subst2
 		ExpressionTreeNode result2;
 		result2 = apply(root.second, subst2);
 		REQUIRE(result2.toString() == "(friends(sally,sally))");

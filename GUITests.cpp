@@ -11,17 +11,14 @@ class GUITests : public QObject {
 
 private slots:
 
-  // TODO: define tests here
 	void testFindByName();
 	void testInitalUI();
 	void testSimpleKBCreation();
-	//void testFindByType();
 
 private:
 	Gui GUI;
 };
 
-// implement tests here
 
 void GUITests::testFindByName()
 {

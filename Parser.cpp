@@ -16,7 +16,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 
 	ParseError error;
 	ExpressionTreeNode root;
-	bool diffinput = false;
+	bool diffInput = false;
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
@@ -30,7 +30,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 		end--;
 		if (end->type() == TokenType::CLOSE)
 		{
-			diffinput = true;
+			diffInput = true;
 		}
 		else
 		{
@@ -40,7 +40,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	}
 	ExpressionTreeNode rooter;
 	rooter.type = ExpressionTreeNodeType::ROOT;
-	root = parseList(current, end, error, depth, diffinput);
+	root = parseList(current, end, error, depth, diffInput);
 	if (current != end && current->type() != TokenType::COMMA)
 	{
 		error.set("Parse Error: error 1");
@@ -65,7 +65,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 				error.set("Parse Error: Extra trailing comma");
 			}
 		}
-		root = parseList(current, end, error, depth, diffinput);
+		root = parseList(current, end, error, depth, diffInput);
 		rooter.children.emplace_back(root);
 		if (current == end)
 			break;
@@ -78,7 +78,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseExpression(const TokenList& toke
 	return { error, rooter };
 }
 
-ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
+ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffInput) {
 	string value = current->value();
 	if (current->type() == TokenType::ERROR)
 		error.set("Error, invalid argument type");
@@ -120,17 +120,17 @@ ExpressionTreeNode vtpl::parseList(TokenList::const_iterator& current, TokenList
 			error.set("Parse Error: incorrenct comma location");
 			return type(value);
 		}
-		list<ExpressionTreeNode> compound = parseChildren(current, end, error, depth, diffinput);
+		list<ExpressionTreeNode> compound = parseChildren(current, end, error, depth, diffInput);
 		if (compound.size() == 0)
 			return makeAtom(value);
 		return makeCompound(value, compound);
 	}
 }
 
-list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffinput) {
+list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current, TokenList::const_iterator& end, ParseError& error, int& depth, bool diffInput) {
 	list<ExpressionTreeNode> children;
 	while (current != end && current->type() != TokenType::CLOSE) {
-		ExpressionTreeNode value = parseList(current, end, error, depth, diffinput);
+		ExpressionTreeNode value = parseList(current, end, error, depth, diffInput);
 		children.push_back(value);
 		if (current != end && current->type() == TokenType::STRING)
 		{
@@ -150,7 +150,7 @@ list<ExpressionTreeNode> vtpl::parseChildren(TokenList::const_iterator& current,
 		current++;
 		depth--;
 	}
-	else if (diffinput)
+	else if (diffInput)
 	{
 		error.set("Parse Error: Missmatched Parenthesis");
 	}
@@ -191,7 +191,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 {
 	ParseError error;
 	ExpressionTreeNode root;
-	bool diffinput = false;
+	bool diffInput = false;
 	int depth = 0;
 	TokenList::const_iterator current = tokens.begin();
 	TokenList::const_iterator end = tokens.end();
@@ -201,10 +201,9 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 	rooter.type = ExpressionTreeNodeType::ROOT;
 	if (end->type() == TokenType::END)
 	{
-		root = parseList(current, end, error, depth, diffinput);
+		root = parseList(current, end, error, depth, diffInput);
 		if (current != end && current->type() != TokenType::COMMA)
 		{
-			cout << printString(current) << endl;
 			error.set("Parse Error: ");
 		}
 		rooter.children = { root };
@@ -218,7 +217,7 @@ pair<ParseError, ExpressionTreeNode> vtpl::parseQuery(const TokenList& tokens)
 					error.set("Parse Error: Extra trailing comma");
 				}
 			}
-			root = parseList(current, end, error, depth, diffinput);
+			root = parseList(current, end, error, depth, diffInput);
 			rooter.children.emplace_back(root);
 		}
 		return { error, rooter };
@@ -266,11 +265,6 @@ pair<TokenList::const_iterator, TokenList::const_iterator> vtpl::Delimiter(Token
 std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const TokenList& tokens)
 {
 	auto it = tokens.begin();
-	while (it != tokens.end())
-	{
-		//cout << printString(it) << endl;
-		it++;
-	}
 	ParseError error;
 	KnowledgeBase knowldgeBase;
 	pair<ParseError, ExpressionTreeNode> head;
@@ -288,7 +282,6 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 		if (it->type() == TokenType::END)
 		{
 			Clause clause;
-			//auto delimiter = Delimiter(current, it);
 			TokenList headTokens;
 
 			if (delimiterHit)
@@ -303,7 +296,6 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			if (head.first.isSet() || head.second.children.size() > 1)
 			{
 				error.set("Error: an error occurred and the KnowledgeBase may be incomplete");
-				cout << "head: " << head.first.message() << endl;
 				return { error, knowldgeBase };
 			}
 			clause.head = head.second.children.front();
@@ -317,7 +309,6 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const Token
 			if (body.first.isSet())
 			{
 				error.set("Error: an error occurred and the KnowledgeBase may be incomplete");
-				cout << "body: " << body.first.message() << endl;
 				return { error, knowldgeBase };
 			}
 
@@ -350,36 +341,6 @@ std::tuple<ParseError, vtpl::KnowledgeBase> vtpl::parseKnowledgeBase(const strin
 {
 	istringstream iss(input);
 	return parseKnowledgeBase(tokenize(iss));
-}
-
-string vtpl::printString(TokenList::const_iterator& current)
-{
-	if (current->type() == TokenType::CLOSE)
-		return ")";
-	if (current->type() == TokenType::OPEN)
-		return "(";
-	if (current->type() == TokenType::COMMA)
-		return ",";
-	if (current->type() == TokenType::STRING)
-		return current->value();
-	if (current->type() == TokenType::END)
-		return ".";
-	return " ";
-}
-
-string vtpl::printString(Token& token)
-{
-	if (token.type() == TokenType::CLOSE)
-		return ")";
-	if (token.type() == TokenType::OPEN)
-		return "(";
-	if (token.type() == TokenType::COMMA)
-		return ",";
-	if (token.type() == TokenType::STRING)
-		return token.value();
-	if (token.type() == TokenType::END)
-		return ".";
-	return " ";
 }
 
 ExpressionTreeNode vtpl::type(string value)

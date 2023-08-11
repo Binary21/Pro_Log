@@ -16,7 +16,7 @@
 using namespace std;
 
 class Gui : public QWidget {
-    Q_OBJECT  // This macro is required for any object that uses Qt's signal-slot system
+    Q_OBJECT 
 
 public:
     Gui(QWidget* parent = nullptr);
@@ -33,7 +33,6 @@ public:
     void saveAsDocument();
     void quitApplication();
     void parseDocument(string& input);
-    void runQuery();
 
 private slots:
     void onQueryEnterPressed();

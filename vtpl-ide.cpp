@@ -30,8 +30,6 @@ int main(int argc, char** argv)
 	if (argc == 2)
 	{
 		string filename = argv[1];
-		//hello.setFileName(filename);
-		//cout << "two inputs" << endl;
 		hello.openFile(filename);
 	}
 	hello.show();
